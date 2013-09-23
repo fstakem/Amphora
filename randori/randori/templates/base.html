@@ -1,0 +1,47 @@
+{% load static from staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/randori/page_layout.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/randori/header.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/randori/main.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/randori/footer.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/randori/pages.css' %}" />
+
+<div id="page">
+	<div id="page-header">
+		<div id="header-logo">
+			<a href="{% url 'randori.views.landing' %}"><img src="{% static 'images/randori/logo_big.png' %}" alt="landing" /></a>
+		</div>
+
+		<div id="main-menu">
+			<ul>
+		    	<li><a href="{% url 'randori.views.register' %}">Register</a></li>
+		    	<li><a href="{% url 'randori.views.login' %}">Login</a></li>
+		        <li><a href="{% url 'randori.views.blog' %}">Blog</a></li>
+		        <li><a href="{% url 'randori.views.features' %}">Features</a></li>
+		    </ul>
+		</div>
+	</div>
+
+	<div id="page-main">
+		<div id="main-content-title">
+
+		</div>
+
+		<div id="main-content">
+		{% block content %}
+			This is the content area
+		{% endblock %}
+		</div>
+	</div>
+
+	<div id="page-footer">
+		<div id="footer-menu">
+			<ul>
+		        <li><a href="{% url 'randori.views.terms' %}">Terms</a> </li>
+		        <li><a href="{% url 'randori.views.privacy' %}">Privacy</a></li>
+		        <li><a href="{% url 'randori.views.about' %}">About</a></li>
+		        <li><a href="{% url 'randori.views.contact' %}">Contact</a></li>
+		    </ul>
+		</div>
+	</div>
+</div>
