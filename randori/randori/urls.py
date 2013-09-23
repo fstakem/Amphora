@@ -10,3 +10,6 @@ urlpatterns = patterns('',
     # Social auth
     url('', include('social.apps.django_app.urls', namespace='social'))
 )
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+urlpatterns += staticfiles_urlpatterns()
