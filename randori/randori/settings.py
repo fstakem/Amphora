@@ -128,7 +128,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     # User apps
-    # None
+    'socialnet'
 )
 
 # A sample logging configuration. The only tangible logging
