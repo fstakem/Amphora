@@ -18,12 +18,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/Users/fstakem/projects/Amphora/randori/db/randori.db', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'randori', 
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      
-        'PORT': '',                      
+        'HOST': 'localhost',                      
+        'PORT': '5432',                      
     }
 }
 
@@ -128,8 +128,20 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     # User apps
-    'socialnet'
+    'socialnet',
+
+    # Python social auth
+    'social.apps.django_app.default',
 )
+
+AUTHENTICATION_BACKENDS = (
+      'social.backends.open_id.OpenIdAuth',
+      'social.backends.google.GoogleOpenId',
+      'social.backends.google.GoogleOAuth2',
+      'social.backends.google.GoogleOAuth',
+      'social.backends.github.GithubOAuth2',
+      'django.contrib.auth.backends.ModelBackend',
+  )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
