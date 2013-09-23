@@ -1,1 +1,1 @@
-web: gunicorn randori.wsgi
+web: gunicorn --pythonpath randori randori.wsgi
