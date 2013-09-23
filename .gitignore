@@ -3,6 +3,10 @@
 bin/
 gen/
 
+# Virtualenv #
+##############
+my_python/
+
 # Eclipse files #
 #################
 proguard.cfg
