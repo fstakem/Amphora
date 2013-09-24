@@ -1,11 +1,11 @@
-{% extends "social/base.html" %}
+{% extends "socialnet/base.html" %}
 
 {% block content %}
 
 	{% if private %}
-		{% include "project_private.html"%}
+		{% include "socialnet/project_private.html"%}
 	{% else %}
-		{% include "project_public.html"%}
+		{% include "socialnet/project_public.html"%}
 	{% endif %}
 
 {% endblock %}

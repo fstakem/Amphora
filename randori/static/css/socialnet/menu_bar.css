@@ -1,0 +1,130 @@
+#main-menu
+{
+
+}
+
+#main-menu
+{
+    padding-top: 10px;
+    padding-left: 40px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#main-menu ul
+{
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    float: left;
+}
+
+#main-menu li
+{
+    float: left;
+    margin-right: 0.5em;
+    position: relative;
+}
+
+#main-menu-item-home
+{
+    width: 40px;
+    height: 20px;
+    display:block;
+    background:transparent url('../../images/randori/menu/home.png') center no-repeat;
+}
+
+#main-menu-item-home:hover
+{
+    background-image: url('../../images/randori/menu/home_2.png');
+}
+
+#main-menu-item-project
+{
+    width: 40px;
+    height: 20px;
+    display:block;
+    background:transparent url('../../images/randori/menu/project.png') center no-repeat;
+}
+
+#main-menu-item-project:hover
+{
+    background-image: url('../../images/randori/menu/project_2.png');
+}
+
+#main-menu-item-people
+{
+    width: 40px;
+    height: 20px;
+    display:block;
+    background:transparent url('../../images/randori/menu/people.png') center no-repeat;
+}
+
+#main-menu-item-people:hover
+{
+    background-image: url('../../images/randori/menu/people_2.png');
+}
+
+#main-menu-item-content
+{
+    width: 40px;
+    height: 20px;
+    display:block;
+    background:transparent url('../../images/randori/menu/content.png') center no-repeat;
+}
+
+#main-menu-item-content:hover
+{
+    background-image: url('../../images/randori/menu/content_2.png');
+}
+
+#main-menu-item-settings
+{
+    width: 40px;
+    height: 20px;
+    display:block;
+    background:transparent url('../../images/randori/menu/settings.png') center no-repeat;
+}
+
+#main-menu-item-settings:hover
+{
+    background-image: url('../../images/randori/menu/settings_2.png');
+}
+
+
+#search-menu
+{
+    float: right;
+    margin-right: 120px;
+}
+
+.search-input-text
+{   border-style:solid; 
+    border-color:#000000; 
+    border-width: 1px; 
+    background-color:white;
+}
+
+.search-text
+{
+    float: left;
+}
+
+
+.search-menu-button
+{
+    float: right;
+    width: 30px;
+    height: 25px;
+    display:block;
+    background:transparent url('../../images/randori/menu/search.png') center no-repeat;
+}
+
+.search-menu-button:hover
+{
+    width: 30px;
+    height: 25px;
+    display:block;
+    background:transparent url('../../images/randori/menu/search_2.png') center no-repeat;
+}
+

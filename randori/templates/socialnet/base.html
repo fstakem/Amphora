@@ -1,79 +1,27 @@
 {% load static from staticfiles %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'social/css/misc.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'social/css/menu.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'social/css/main_components.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/page_layout.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/menu_bar.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/header.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/main.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/footer.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/pages.css' %}" />
 
 <div id="page">
-	<div id="main-menu-bar">
-		
+	<div id="page-personal-menu-bar">
 		<div id="main-menu">
 			<ul>
 			{% if private %}
-			<li>
-				<a href="{% url 'views.user' user_name %}?view=Activity" id="main-menu-item-home"></a>
-			</li>
-	    	<li>
-	    		<a href="{% url 'views.user' user_name %}?view=Projects" id="main-menu-item-project" class="main-menu-item"></a>
-	    		<div id="main-menu-project" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'views.user' user_name %}?view=Friends" id="main-menu-item-people" class="main-menu-item"></a>
-	    		<div id="main-menu-people" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'views.user' user_name %}?view=Content" id="main-menu-item-content" class="main-menu-item"></a>
-	    		<div id="main-menu-content" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'views.user' user_name %}?view=Settings" id="main-menu-item-settings" class="main-menu-item"></a>
-	    		<div id="main-menu-settings" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
+				{% include "socialnet/private_main_menu.html"%}
 			{% else %}
-			<li>
-				<a href="{% url 'ulanzer.views.landing' %}" id="main-menu-item-home" class="main-menu-item"></a>
-				<div id="main-menu-home" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-			</li>
-	    	<li>
-	    		<a href="{% url 'ulanzer.views.landing' %}" id="main-menu-item-project" class="main-menu-item"></a>
-	    		<div id="main-menu-project" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'ulanzer.views.landing' %}" id="main-menu-item-people" class="main-menu-item"></a>
-	    		<div id="main-menu-people" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'ulanzer.views.landing' %}" id="main-menu-item-content"  class="main-menu-item"></a>
-	    		<div id="main-menu-content" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
-	    	<li>
-	    		<a href="{% url 'ulanzer.views.landing' %}" id="main-menu-item-settings" class="main-menu-item"></a>
-	    		<div id="main-menu-settings" class="compound-menu">
-					<div class="user-photo-small"></div>
-				</div>
-	    	</li>
+				{% include "socialnet/public_main_menu.html"%}
 			{% endif %}
 		    </ul>
 		</div>
-		<div id="search-bar">
-			<input type="text" class="search-text" value="" class="search-input-text" />
-			<a href="{% url 'ulanzer.views.landing' %}" class="main-menu-search"></a>
+
+		<div id="search-menu">
+			<input type="text" class="search-text" value="" class="search-menu-text" />
+			<a href="{% url 'randori.views.landing' %}" class="search-menu-button"></a>
 		</div>
 	</div>
 
@@ -81,13 +29,13 @@
 		This is the content area
 	{% endblock %}
 
-	<div id="footer">
+	<div id="page-footer">
 		<div id="footer-menu">
-		    <ul>
-		        <li><a href="{% url 'ulanzer.views.terms' %}">Terms</a> </li>
-		        <li><a href="{% url 'ulanzer.views.privacy' %}">Privacy</a></li>
-		        <li><a href="{% url 'ulanzer.views.about' %}">About</a></li>
-		        <li><a href="{% url 'ulanzer.views.contact' %}">Contact</a></li>
+			<ul>
+		        <li><a href="{% url 'randori.views.terms' %}">Terms</a> </li>
+		        <li><a href="{% url 'randori.views.privacy' %}">Privacy</a></li>
+		        <li><a href="{% url 'randori.views.about' %}">About</a></li>
+		        <li><a href="{% url 'randori.views.contact' %}">Contact</a></li>
 		    </ul>
 		</div>
 	</div>

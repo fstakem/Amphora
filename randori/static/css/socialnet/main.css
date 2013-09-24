@@ -1,0 +1,33 @@
+#main-content-title
+{
+	position: relative;
+	margin-left: -30px;
+	margin-top: -60px;
+	height: 40px;
+	width: 200px;
+
+}
+
+#main-content-title-text
+{
+	line-height: 40px;
+	color: white;
+	background-color: #090974;
+	font-family: 'Calibri', sans-serif;
+    font-size: 28;
+    font-weight: lighter;
+    text-align: center;
+}
+
+#main-content
+{
+	margin-right: 110px;
+    margin-left: 110px;
+    padding: 0px;
+    background-color: #E3DADA;
+    font-family: 'Calibri', sans-serif;
+    font-size: 22;
+    padding-top: 25px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

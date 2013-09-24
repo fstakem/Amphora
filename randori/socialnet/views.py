@@ -32,7 +32,7 @@ def user(request, user_name):
 		else:
 			data['private'] = False
 
-		return render_to_response('user.html', data)
+		return render_to_response('./socialnet/user.html', data)
 
 	return HttpResponse(status=404)
 
@@ -64,7 +64,7 @@ def project(request, user_name, project_name):
 		else:
 			data['private'] = False
 
-		return render_to_response('project.html', data)
+		return render_to_response('./socialnet/project.html', data)
 	
 	return HttpResponse(status=404)
 	
@@ -90,7 +90,7 @@ def attachment(request, user_name, project_name, attachment_name):
 		else:
 			data['private'] = False
 
-		return render_to_response('attachment.html', data)
+		return render_to_response('./socialnet/attachment.html', data)
 
 	return HttpResponse(status=404)
 
