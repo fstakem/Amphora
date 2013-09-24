@@ -1,0 +1,38 @@
+html, body 
+{
+    padding: 0;
+    margin: 0;
+} 
+
+#page
+{
+	min-height: 100%;
+    position: relative;
+}
+
+#page-header
+{
+	position: relative;
+	height: 260px;
+    margin: 0px;
+    padding: 0px;
+    background-image: url('../../images/randori/blue_metal.jpg');
+    width: 100%
+}
+
+#page-main
+{
+	padding-top: 60px;
+    background-color: #FFFFFF;
+    height: 50%;
+}
+
+#page-footer
+{
+	height: 35px;
+	padding: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-image: url('../../images/randori/blue_metal.jpg');
+}

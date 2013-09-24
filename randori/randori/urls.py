@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import views
 
 admin.autodiscover()
 
@@ -8,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # Social auth
-    url('', include('social.apps.django_app.urls', namespace='social'))
+    url('', include('social.apps.django_app.urls', namespace='social')),
 
     # Landing
     url(r'^$', views.landing, name='randori.views.landing'),
@@ -27,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^register$', views.register, name='randori.views.register'),
 
     # Users
-    url(r'^(?P<user_name>[\w\-]+)', include('social.urls')),
+    #url(r'^(?P<user_name>[\w\-]+)', include('social.urls')),
 )
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

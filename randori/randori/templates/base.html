@@ -9,7 +9,7 @@
 <div id="page">
 	<div id="page-header">
 		<div id="header-logo">
-			<a href="{% url 'randori.views.landing' %}"><img src="{% static 'images/randori/logo_big.png' %}" alt="landing" /></a>
+			<a href="{% url 'randori.views.landing' %}"><img src="{% static 'images/randori/logo_big_2.png' %}" alt="landing" /></a>
 		</div>
 
 		<div id="main-menu">
@@ -23,14 +23,10 @@
 	</div>
 
 	<div id="page-main">
-		<div id="main-content-title">
-
-		</div>
-
 		<div id="main-content">
-		{% block content %}
+			{% block content %}
 			This is the content area
-		{% endblock %}
+			{% endblock %}
 		</div>
 	</div>
 

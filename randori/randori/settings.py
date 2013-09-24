@@ -114,7 +114,7 @@ ROOT_URLCONF = 'randori.urls'
 WSGI_APPLICATION = 'randori.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_ROOT, 'randori/templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
