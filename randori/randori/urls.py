@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^register$', views.register, name='randori.views.register'),
 
     # Users
-    #url(r'^(?P<user_name>[\w\-]+)', include('social.urls')),
+    url(r'^(?P<user_name>[\w\-]+)', include('socialnet.urls')),
 )
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

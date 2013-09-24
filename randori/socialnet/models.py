@@ -29,3 +29,16 @@ class UserProfile(models.Model):
     def __unicode__(self):
 		return self.user.username
 
+class Project(models.Model):
+    # Attributes
+    name = models.CharField(max_length=200)
+    date_created = models.DateTimeField()
+    last_activity = models.DateTimeField()
+
+    # Relationships
+    owner = models.ForeignKey(User, related_name='owned_project')
+    contributor = models.ManyToManyField(User, related_name='contributed_project')
+
+    def __unicode__(self):
+        return self.name
+

@@ -11,32 +11,32 @@ from django import forms
 # Landing
 def landing(request):
     data = { 'view': 'Home' } 
-    return render_to_response('landing.html', data)
+    return render_to_response('./randori/landing.html', data)
 
 # Misc
 def features(request):
     data = { 'view': 'Features' }
-    return render_to_response('features.html', data)
+    return render_to_response('./randori/features.html', data)
 
 def blog(request):
     data = { 'view': 'Blog' }
-    return render_to_response('blog.html', data)
+    return render_to_response('./randori/blog.html', data)
 
 def terms(request):
     data = { 'view': 'Terms' }
-    return render_to_response('terms.html', data)
+    return render_to_response('./randori/terms.html', data)
 
 def privacy(request):
     data = { 'view': 'Privacy' }
-    return render_to_response('privacy.html', data)
+    return render_to_response('./randori/privacy.html', data)
 
 def about(request):
     data = { 'view': 'About' }
-    return render_to_response('about.html', data)
+    return render_to_response('./randori/about.html', data)
 
 def contact(request):
     data = { 'view': 'Contact' }
-    return render_to_response('contact.html', data)
+    return render_to_response('./randori/contact.html', data)
 
 # Authentication forms
 class LoginForm(forms.Form):
@@ -98,7 +98,7 @@ def login(request):
             auth.login(request, user)
             return HttpResponseRedirect("/" + user.username)
 
-    return render(request, 'login.html', {'login_form': form})
+    return render(request, './randori/login.html', {'login_form': form})
 
 def logout(request):
     auth.logout(request)
@@ -111,7 +111,7 @@ def register(request):
 
         return HttpResponseRedirect("/")# Redirect to a success page.
 
-    return render(request, 'register.html', {'registration_form': form})
+    return render(request, './randori/register.html', {'registration_form': form})
 
 
 

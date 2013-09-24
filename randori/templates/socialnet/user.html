@@ -1,0 +1,11 @@
+{% extends "socialnet_base.html" %}
+
+{% block content %}
+
+	{% if private %}
+		{% include "user_public.html"%}
+	{% else %}
+		{% include "user_public.html"%}
+	{% endif %}
+
+{% endblock %}
