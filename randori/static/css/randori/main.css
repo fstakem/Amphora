@@ -1,15 +1,22 @@
 #main-content-title
 {
-	font-family: 'Calibri', sans-serif;
-    font-size: 28;
-	color: white;
-	background-color: #090974;
+	position: relative;
 	margin-left: -30px;
 	margin-top: -60px;
-	padding-left: 10px;
 	height: 40px;
 	width: 200px;
-	font-weight: lighter;
+
+}
+
+#main-content-title-text
+{
+	line-height: 40px;
+	color: white;
+	background-color: #090974;
+	font-family: 'Calibri', sans-serif;
+    font-size: 28;
+    font-weight: lighter;
+    text-align: center;
 }
 
 #main-content
