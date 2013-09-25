@@ -18,11 +18,21 @@ html, body
     background-image: url('../../images/randori/blue_metal.jpg');
 }
 
-#page-header
+#public-page-header
 {
     height: 260px;
     background-size: 100% 100%;
 	background-image: url('../../images/randori/stock_cover.png');
+    margin-top: 40px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+#private-page-header
+{
+    height: 100px;
+    background-size: 100% 100%;
+    background-image: url('../../images/randori/blue_metal.jpg');
     margin-top: 40px;
     margin-left: 60px;
     margin-right: 60px;

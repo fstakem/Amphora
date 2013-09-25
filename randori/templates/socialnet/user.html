@@ -3,9 +3,9 @@
 {% block content %}
 
 	{% if private %}
-		{% include "socialnet/user_public.html"%}
+		{% include "socialnet/user_private.html"%}
 	{% else %}
-		{% include "socialnet/user_public.html"%}
+		{% include "socialnet/user_private.html"%}
 	{% endif %}
 
 {% endblock %}

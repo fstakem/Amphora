@@ -22,6 +22,20 @@
     padding-left: 10px;
 }
 
+#private-user-title
+{
+	float: left;
+    width: 220px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 40px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 32;
+    font-weight: lighter;
+    color: #FFFFFF;
+    padding-left: 10px;
+}
+
 #public-user-menu
 {
     float: right;
