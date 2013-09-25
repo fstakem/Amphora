@@ -20,12 +20,16 @@ html, body
 
 #page-header
 {
-	
+    height: 260px;
+    background-size: 100% 100%;
+	background-image: url('../../images/randori/stock_cover.png');
+    margin-top: 40px;
+    margin-left: 60px;
+    margin-right: 60px;
 }
 
 #page-main
 {
-	padding-top: 60px;
     background-color: #FFFFFF;
     height: 50%;
 }

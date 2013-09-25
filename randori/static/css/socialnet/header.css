@@ -1,0 +1,63 @@
+#public-user-photo-large
+{
+	float: left;
+    margin-left: 20px;
+    margin-top: 80px;
+    border-color: white;
+    border-style: solid;
+    border-width: 5px;
+}
+
+#public-user-title
+{
+	float: left;
+    width: 380px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 200px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 32;
+    font-weight: lighter;
+    color: #FFFFFF;
+    padding-left: 10px;
+}
+
+#public-user-menu
+{
+    float: right;
+    margin-top: 240px;
+}
+
+#public-user-menu ul
+{
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    float: right;
+}
+
+#public-user-menu a
+{
+    display: block;
+    width: 8em;
+    color: white;
+    background-color: #090974;
+    text-decoration: none;
+    text-align: center;
+    padding-top: 0.3em;
+    border:2px solid #7373d9;;
+}
+
+#public-user-menu a:hover
+{
+    background-color: #4F4FD9;
+}
+
+#public-user-menu li
+{
+    float: right;
+    margin-left: 0.5em;
+    font-family: 'Calibri', sans-serif;
+    font-size: 18;
+    font-weight: lighter;
+}
