@@ -18,7 +18,7 @@ html, body
     background-image: url('../../images/randori/blue_metal.jpg');
 }
 
-#public-page-header
+#large-page-header
 {
     height: 260px;
     background-size: 100% 100%;
@@ -28,7 +28,7 @@ html, body
     margin-right: 60px;
 }
 
-#private-page-header
+#small-page-header
 {
     height: 100px;
     background-size: 100% 100%;
