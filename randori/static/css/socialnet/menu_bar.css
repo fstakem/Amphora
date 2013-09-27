@@ -24,6 +24,46 @@
     float: left;
     margin-right: 0.5em;
     position: relative;
+    padding-bottom: 10px;
+}
+
+#main-menu ul li:hover > ul
+{
+    display: inline-block;
+}
+
+#main-menu ul ul
+{
+    display: none;
+    background: #7373d9;
+    position: absolute;
+    top: 100%;   
+}
+
+#main-menu ul ul li
+{
+    border-top: 1px solid #6b727c;
+    border-bottom: 1px solid #575f6a;
+    text-align: center;
+    margin-right: 0;
+    position: relative;
+}
+
+#main-menu ul ul li a 
+{
+    font-family: 'Calibri', sans-serif;
+    font-size: 18;
+    font-weight: lighter;
+    text-decoration: none;
+    color: #fff;  
+    display: block;
+    width: 140px;
+    padding-top: 10px;
+}   
+
+#main-menu ul ul li:hover 
+{
+    background: #090974;
 }
 
 #main-menu-item-home
@@ -127,4 +167,35 @@
     display:block;
     background:transparent url('../../images/randori/menu/search_2.png') center no-repeat;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
