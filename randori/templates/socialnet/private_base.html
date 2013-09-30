@@ -1,0 +1,71 @@
+{% load static from staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/page_layout.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/menu_bar.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/header.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/main.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/footer.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/pages.css' %}" />
+
+<div id="page">
+	<div id="page-personal-menu-bar">
+		<div id="main-menu">
+			<ul>
+				<li>
+					<a href="{% url 'views.user' user_name %}?view=activity" id="main-menu-item-home"></a>
+				</li>
+				<li>
+					<a href="" id="main-menu-item-project"></a>
+					<ul>
+						<li><a href="{% url 'views.user' user_name %}?view=new_project">New Project</a></li>
+						<li><a href="{% url 'views.user' user_name %}?view=projects">Show Projects</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="" id="main-menu-item-people"></a>
+					<ul>
+						<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+						<li><a href="{% url 'views.user' user_name %}?view=contributors">Contributors</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="" id="main-menu-item-content"></a>
+					<ul>
+						<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+						<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="" id="main-menu-item-settings"></a>
+					<ul>
+						<li><a href="{% url 'views.user' user_name %}?view=settings">Settings</a></li>
+						<li><a href="{% url 'views.user' user_name %}?view=logout">Logout</a></li>
+					</ul>
+				</li>
+		    </ul>
+		</div>
+
+		<div id="search-menu">
+			<input type="text" class="search-text" value="" class="search-menu-text" />
+			<a href="{% url 'randori.views.landing' %}" class="search-menu-button"></a>
+		</div>
+	</div>
+
+	{% block content %}
+		This is the content area
+	{% endblock %}
+
+	<div id="page-footer">
+		<div id="footer-menu">
+			<ul>
+		        <li><a href="{% url 'randori.views.terms' %}">Terms</a> </li>
+		        <li><a href="{% url 'randori.views.privacy' %}">Privacy</a></li>
+		        <li><a href="{% url 'randori.views.about' %}">About</a></li>
+		        <li><a href="{% url 'randori.views.contact' %}">Contact</a></li>
+		    </ul>
+		</div>
+	</div>
+</div>
+
+
+￼
