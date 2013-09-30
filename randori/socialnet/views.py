@@ -28,6 +28,7 @@ def user(request, user_name):
 		pass
 
 	viewer = request.user
+	print viewer
 	user_page = list( User.objects.filter(username=user_name) )
 
 	if user_page:
@@ -73,6 +74,7 @@ def userPublicActivity(request, user_name, user_page, viewer):
 	data = { 'user_name': user_page.username, 
 			 'first_name': user_page.first_name,
 			 'last_name': user_page.last_name,
+			 'viewer_name': viewer.username,
 			 'view': 'Activity' }
 	return render_to_response('./socialnet/user_public_activity.html', data)
 
@@ -94,6 +96,7 @@ def userPublicProjects(request, user_name, user_page, viewer):
 	data = { 'user_name': user_page.username, 
 			 'first_name': user_page.first_name,
 			 'last_name': user_page.last_name,
+			 'viewer_name': viewer.username,
 			 'view': 'Projects' }
 	return render_to_response('./socialnet/user_public_projects.html', data)
 
@@ -108,6 +111,7 @@ def userPublicFriends(request, user_name, user_page, viewer):
 	data = { 'user_name': user_page.username, 
 			 'first_name': user_page.first_name,
 			 'last_name': user_page.last_name,
+			 'viewer_name': viewer.username,
 			 'view': 'Friends' }
 	return render_to_response('./socialnet/user_public_friends.html', data)
 
@@ -129,6 +133,7 @@ def userPublicData(request, user_name, user_page, viewer):
 	data = { 'user_name': user_page.username, 
 			 'first_name': user_page.first_name,
 			 'last_name': user_page.last_name,
+			 'viewer_name': viewer.username,
 			 'view': 'Data' }
 	return render_to_response('./socialnet/user_public_data.html', data)
 
@@ -143,6 +148,7 @@ def userPublicAnalysis(request, user_name, user_page, viewer):
 	data = { 'user_name': user_page.username, 
 			 'first_name': user_page.first_name,
 			 'last_name': user_page.last_name,
+			 'viewer_name': viewer.username,
 			 'view': 'Analysis' }
 	return render_to_response('./socialnet/user_public_analysis.html', data)
 
