@@ -1,26 +1,24 @@
+{% load static from staticfiles %}
+
 <div id="small-page-header">
 	<div id="private-project-title"><span>{{ project_name }}</span></div>
 	<div id="private-project-menu">
 	    <ul>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=Settings">Settings</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=Content">Content</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=People">People</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=Activity">Activity</a></li>
+	    	<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    	<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>
 	    </ul>
 	</div>
 </div>
-<div id="page-main">
-	<div id="main-content">
-		<h3>{{ view }}</h3>
-		{% if  view == 'Activity' %}
-		{% elif view == 'People' %}
-		{% elif view == 'Content' %}
-		{% elif view == 'Settings' %}
-		{% endif %}
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</br>
-	</div>
-</div>
+
+
+
+
+
+
+
 
 
 
