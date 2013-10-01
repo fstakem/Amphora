@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from models import UserProfile, Project
 from collections import Set
 
+user_view_types = {'public': 'public', 'private': 'private'}
 user_views = set([ 'activity', 
 				   'new_project',
 				   'projects', 
@@ -13,6 +14,7 @@ user_views = set([ 'activity',
 				   'analysis', 
 				   'settings' ])
 
+project_view_types = {'public': 'public', 'contributor': 'contributor', 'owner': 'owner'}
 project_views = set([ 'activity', 
 					  'people', 
 					  'data',
@@ -22,8 +24,7 @@ project_views = set([ 'activity',
 # User
 def user(request, user_name):
 	view = 'activity'
-	view_types = {'public': 0, 'private': 1}
-	view_type = view_types['public']
+	view_type = user_view_types['public']
 
 	try:
 		view_param = request.GET['view']
@@ -39,35 +40,35 @@ def user(request, user_name):
 		user_to_be_viewed = user_to_be_viewed[0]
 
 		if isUsersPageAndLoggedIn(viewer, user_to_be_viewed):
-			view_type = view_types['private']
+			view_type = user_view_types['private']
 		else:
-			view_type = view_types['public']
+			view_type = user_view_types['public']
 
-		if view == 'activity' and view_type == view_types['private']:
+		if view == 'activity' and view_type == user_view_types['private']:
 			return userPrivateActivity(user_to_be_viewed)
-		elif view == 'activity' and view_type == view_types['public']:
+		elif view == 'activity' and view_type == user_view_types['public']:
 			return userPublicActivity(user_to_be_viewed, viewer)
-		elif view == 'new_project' and view_type == view_types['private']:
+		elif view == 'new_project' and view_type == user_view_types['private']:
 			return userPrivateNewProject(user_to_be_viewed)
-		elif view == 'projects' and view_type == view_types['private']:
+		elif view == 'projects' and view_type == user_view_types['private']:
 			return userPrivateProjects(user_to_be_viewed)
-		elif view == 'projects' and view_type == view_types['public']:
+		elif view == 'projects' and view_type == user_view_types['public']:
 			return userPublicProjects(user_to_be_viewed, viewer)
-		elif view == 'friends' and view_type == view_types['private']:
+		elif view == 'friends' and view_type == user_view_types['private']:
 			return userPrivateFriends(user_to_be_viewed)
-		elif view == 'friends' and view_type == view_types['public']:
+		elif view == 'friends' and view_type == user_view_types['public']:
 			return userPublicFriends(user_to_be_viewed, viewer)
-		elif view == 'contributors' and view_type == view_types['private']:
+		elif view == 'contributors' and view_type == user_view_types['private']:
 			return userPrivateContributors(user_to_be_viewed)
-		elif view == 'data' and view_type == view_types['private']:
+		elif view == 'data' and view_type == user_view_types['private']:
 			return userPrivateData(user_to_be_viewed)
-		elif view == 'data' and view_type == view_types['public']:
+		elif view == 'data' and view_type == user_view_types['public']:
 			return userPublicData(user_to_be_viewed, viewer)
-		elif view == 'analysis' and view_type == view_types['private']:
+		elif view == 'analysis' and view_type == user_view_types['private']:
 			return userPrivateAnalysis(user_to_be_viewed)
-		elif view == 'analysis' and view_type == view_types['public']:
+		elif view == 'analysis' and view_type == user_view_types['public']:
 			return userPublicAnalysis(user_to_be_viewed, viewer)
-		elif view == 'settings' and view_type == view_types['private']:
+		elif view == 'settings' and view_type == user_view_types['private']:
 			return userPrivateSettings(user_to_be_viewed)
 		else:
 			return HttpResponse(status=404)
@@ -174,8 +175,7 @@ def userPrivateSettings(user_to_be_viewed):
 # Project
 def project(request, user_name, project_name):
 	view = 'activity'
-	view_types = {'public': 0, 'contributor': 1, 'owner': 2}
-	view_type = view_types['public']
+	view_type = project_view_types['public']
 
 	try:
 		view_param = request.GET['view']
@@ -185,43 +185,38 @@ def project(request, user_name, project_name):
 		pass
 
 	viewer = request.user
-	user_page = list( User.objects.filter(username=user_name) )
-	project_page = list( Project.objects.filter(name=project_name, owner__username=user_name) )
+	project_owner = list( User.objects.filter(username=user_name) )
+	project_to_be_viewed = list( Project.objects.filter(name=project_name, owner__username=user_name) )
 
-	if user_page and project_page:
-		user_page = user_page[0]
-		project_page = project_page[0]
+	if project_to_be_viewed and project_owner:
+		project_owner = project_owner[0]
+		project_to_be_viewed = project_to_be_viewed[0]
 		
-		if isUsersPageAndLoggedIn(viewer, user_page):
-			private = True
-		else:
-			private = False
+		# TODO set vars
 
-		if project_page.owner.username == viewer.username:
-			owner = True
-		else:
-			owner = False
-
-		print owner
-
-		if view == 'activity' and private == True:
-			return projectPrivateActivity(user_page, project_page, owner)
-		elif view == 'activity' and private == False:
-			return projectPublicActivity(user_page, project_page, viewer)
-		elif view == 'people' and private == True:
-			return projectPrivatePeople(user_page, project_page, owner)
-		elif view == 'people' and private == False:
-			return projectPublicPeople(user_page, project_page, viewer)
-		elif view == 'data' and private == True:
-			return projectPrivateData(user_page, project_page, owner)
-		elif view == 'data' and private == False:
-			return projectPublicData(user_page, project_page, viewer)
-		elif view == 'analysis' and private == True:
-			return projectPrivateAnalysis(user_page, project_page, owner)
-		elif view == 'analysis' and private == False:
-			return projectPublicAnalysis(user_page, project_page, viewer)
-		elif view == 'settings' and private == True:
-			return projectPrivateSettings(user_page, project_page, owner)
+		if view == 'activity' and \
+		   (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+			return projectPrivateActivity(project_owner, project_to_be_viewed, view_type)
+		elif view == 'activity' and view_type == project_view_types['public']:
+			return projectPublicActivity(project_owner, project_to_be_viewed, viewer)
+		elif view == 'people' and \
+			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+			return projectPrivatePeople(project_owner, project_to_be_viewed, view_type)
+		elif view == 'people' and view_type == project_view_types['public']:
+			return projectPublicPeople(project_owner, project_to_be_viewed, viewer)
+		elif view == 'data' and \
+			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+			return projectPrivateData(project_owner, project_to_be_viewed, view_type)
+		elif view == 'data' and view_type == project_view_types['public']:
+			return projectPublicData(project_owner, project_to_be_viewed, viewer)
+		elif view == 'analysis' and \
+			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+			return projectPrivateAnalysis(project_owner, project_to_be_viewed, view_type)
+		elif view == 'analysis' and view_type == project_view_types['public']:
+			return projectPublicAnalysis(project_owner, project_to_be_viewed, viewer)
+		elif view == 'settings' and \
+			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+			return projectPrivateSettings(project_owner, project_to_be_viewed, view_type)
 		else:
 			return HttpResponse(status=404)
 
@@ -229,79 +224,85 @@ def project(request, user_name, project_name):
 	
 	return HttpResponse(status=404)
 
-def projectPublicActivity(user_page, project_page, viewer):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
+def projectPublicActivity(project_owner, project_to_be_viewed, viewer):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
 			 'viewer_name': viewer.username,
-			 'project_name':  project_page.name,
+			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Activity' }
 	return render_to_response('./socialnet/project_public_activity.html', data)
 
-def projectPrivateActivity(user_page, project_page, owner):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
-			 'project_name':  project_page.name,
+def projectPrivateActivity(project_owner, project_to_be_viewed, view_type):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
+			 'project_name':  project_to_be_viewed.name,
+			 'view_type': view_type,
 			 'view': 'Activity' }
+
 	return render_to_response('./socialnet/project_private_activity.html', data)
 
-def projectPublicPeople(user_page, project_page, viewer):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
+def projectPublicPeople(project_owner, project_to_be_viewed, viewer):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
 			 'viewer_name': viewer.username,
-			 'project_name':  project_page.name,
+			 'project_name':  project_to_be_viewed.name,
 			 'view': 'People' }
 	return render_to_response('./socialnet/project_public_people.html', data)
 
-def projectPrivatePeople(user_page, project_page, owner):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
-			 'project_name':  project_page.name,
+def projectPrivatePeople(project_owner, project_to_be_viewed, view_type):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
+			 'project_name':  project_to_be_viewed.name,
+			 'view_type': view_type,
 			 'view': 'People' }
 	return render_to_response('./socialnet/project_private_people.html', data)
 
-def projectPublicData(user_page, project_page, viewer):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
+def projectPublicData(project_owner, project_to_be_viewed, viewer):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
 			 'viewer_name': viewer.username,
-			 'project_name':  project_page.name,
+			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Data' }
 	return render_to_response('./socialnet/project_public_data.html', data)
 
-def projectPrivateData(user_page, project_page, owner):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
-			 'project_name':  project_page.name,
+def projectPrivateData(project_owner, project_to_be_viewed, view_type):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
+			 'project_name':  project_to_be_viewed.name,
+			 'view_type': view_type,
 			 'view': 'Data' }
 	return render_to_response('./socialnet/project_private_data.html', data)
 
-def projectPublicAnalysis(user_page, project_page, viewer):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
+def projectPublicAnalysis(project_owner, project_to_be_viewed, viewer):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
 			 'viewer_name': viewer.username,
-			 'project_name':  project_page.name,
+			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Analysis' }
 	return render_to_response('./socialnet/project_public_analysis.html', data)
 
-def projectPrivateAnalysis(user_page, project_page, owner):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
-			 'project_name':  project_page.name,
+def projectPrivateAnalysis(project_owner, project_to_be_viewed, view_type):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
+			 'project_name':  project_to_be_viewed.name,
+			 'view_type': view_type,
 			 'view': 'Analysis' }
 	return render_to_response('./socialnet/project_private_analysis.html', data)
 
-def projectPrivateSettings(user_page, project_page, owner):
-	data = { 'user_name': user_page.username, 
-			 'first_name': user_page.first_name,
-			 'last_name': user_page.last_name,
-			 'project_name':  project_page.name,
+def projectPrivateSettings(project_owner, project_to_be_viewed, view_type):
+	data = { 'user_name': project_owner.username, 
+			 'first_name': project_owner.first_name,
+			 'last_name': project_owner.last_name,
+			 'project_name':  project_to_be_viewed.name,
+			 'view_type': view_type,
 			 'view': 'Settings' }
 	return render_to_response('./socialnet/project_private_settings.html', data)
 
@@ -312,17 +313,17 @@ def projectPrivateSettings(user_page, project_page, owner):
 def attachment(request, user_name, project_name, attachment_name):
 	user = request.user
 	user_page = list( User.objects.filter(username=user_name) )
-	project_page = list( Project.objects.filter(name=project_name, owner__username=user_name) )
+	project_to_be_viewed = list( Project.objects.filter(name=project_name, owner__username=user_name) )
 	attachment_page = list( Attachment.objects.filter(name=attachment_name, project__name=project_name) )
 
-	if user_page and project_page and attachment_page:
+	if user_page and project_to_be_viewed and attachment_page:
 		user_page = user_page[0]
-		project_page = project_page[0]
+		project_to_be_viewed = project_to_be_viewed[0]
 		attachment_page = attachment_page[0]
 		data = { 'user_name': user_page.username, 
 				 'first_name': user_page.first_name,
 				 'last_name': user_page.last_name,
-				 'project_name':  project_page.name,
+				 'project_name':  project_to_be_viewed.name,
 				 'attachment_name': attachment_page.name }
 
 		if isUsersPageAndLoggedIn(user, user_page):
