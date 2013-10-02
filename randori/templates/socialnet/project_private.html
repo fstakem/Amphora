@@ -4,7 +4,9 @@
 	<div id="private-project-title"><span>{{ project_name }}</span></div>
 	<div id="private-project-menu">
 	    <ul>
-	    	<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    	{% if view_type == 'owner' %}
+	    		<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    	{% endif %}
 	    	<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
 	        <li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
 	        <li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
