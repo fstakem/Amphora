@@ -1,3 +1,4 @@
+{% if viewer_name == '' %}
 <li>
 	<a href="{% url 'randori.views.landing' %}" id="main-menu-item-home"></a>
 </li>
@@ -13,3 +14,36 @@
 <li>
 	<a href="{% url 'randori.views.landing' %}" id="main-menu-item-settings"></a>
 </li>
+{% else %}
+	<li>
+		<a href="{% url 'views.user' viewer_name %}?view=activity" id="main-menu-item-home"></a>
+	</li>
+	<li>
+		<a href="" id="main-menu-item-project"></a>
+		<ul>
+			<li><a href="{% url 'views.user' viewer_name %}?view=new_project">New Project</a></li>
+			<li><a href="{% url 'views.user' viewer_name %}?view=projects">Show Projects</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="" id="main-menu-item-people"></a>
+		<ul>
+			<li><a href="{% url 'views.user' viewer_name %}?view=friends">Friends</a></li>
+			<li><a href="{% url 'views.user' viewer_name %}?view=contributors">Contributors</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="" id="main-menu-item-content"></a>
+		<ul>
+			<li><a href="{% url 'views.user' viewer_name %}?view=data">Data</a></li>
+			<li><a href="{% url 'views.user' viewer_name %}?view=analysis">Analysis</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="" id="main-menu-item-settings"></a>
+		<ul>
+			<li><a href="{% url 'views.user' viewer_name %}?view=settings">Settings</a></li>
+			<li><a href="{% url 'views.user' viewer_name %}?view=logout">Logout</a></li>
+		</ul>
+	</li>
+{% endif %}

@@ -44,140 +44,142 @@ def user(request, user_name):
 		else:
 			view_type = user_view_types['public']
 
-		if view == 'activity' and view_type == user_view_types['private']:
-			return userPrivateActivity(user_to_be_viewed, viewer)
-		elif view == 'activity' and view_type == user_view_types['public']:
-			return userPublicActivity(user_to_be_viewed, viewer)
+		if view == 'activity':
+			return userActivity(user_to_be_viewed, view_type, viewer)
+		
 		elif view == 'new_project' and view_type == user_view_types['private']:
-			return userPrivateNewProject(user_to_be_viewed, viewer)
-		elif view == 'projects' and view_type == user_view_types['private']:
-			return userPrivateProjects(user_to_be_viewed, viewer)
-		elif view == 'projects' and view_type == user_view_types['public']:
-			return userPublicProjects(user_to_be_viewed, viewer)
-		elif view == 'friends' and view_type == user_view_types['private']:
-			return userPrivateFriends(user_to_be_viewed, viewer)
-		elif view == 'friends' and view_type == user_view_types['public']:
-			return userPublicFriends(user_to_be_viewed, viewer)
+			return userNewProject(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'projects':
+			return userProjects(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'friends':
+			return userFriends(user_to_be_viewed, view_type, viewer)
+
 		elif view == 'contributors' and view_type == user_view_types['private']:
-			return userPrivateContributors(user_to_be_viewed, viewer)
-		elif view == 'data' and view_type == user_view_types['private']:
-			return userPrivateData(user_to_be_viewed, viewer)
-		elif view == 'data' and view_type == user_view_types['public']:
-			return userPublicData(user_to_be_viewed, viewer)
-		elif view == 'analysis' and view_type == user_view_types['private']:
-			return userPrivateAnalysis(user_to_be_viewed, viewer)
-		elif view == 'analysis' and view_type == user_view_types['public']:
-			return userPublicAnalysis(user_to_be_viewed, viewer)
+			return userContributors(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'data':
+			return userData(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'analysis':
+			return userAnalysis(user_to_be_viewed, view_type, viewer)
+
 		elif view == 'settings' and view_type == user_view_types['private']:
-			return userPrivateSettings(user_to_be_viewed, viewer)
+			return userSettings(user_to_be_viewed, view_type, viewer)
+
 		else:
 			return HttpResponse(status=404)
 
 	return HttpResponse(status=404)
 
-def userPublicActivity(user_to_be_viewed, viewer):
+def userActivity(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Activity' }
-	return render_to_response('./socialnet/user_public_activity.html', data)
 
-def userPrivateActivity(user_to_be_viewed, viewer):
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
+
+	return render_to_response('./socialnet/user/activity.html', data)
+
+def userNewProject(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
-			 'view': 'Activity' }
-	return render_to_response('./socialnet/user_private_activity.html', data)
-
-def userPrivateNewProject(user_to_be_viewed, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'New Project' }
-	return render_to_response('./socialnet/user_private_new_project.html', data)
 
-def userPublicProjects(user_to_be_viewed, viewer):
+	return render_to_response('./socialnet/user/new_project.html', data)
+
+def userProjects(user_to_be_viewed, view_type, viewer):
+	projects = list( Project.objects.filter(owner__username=user_to_be_viewed.username) )
+
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
+			 'view_type': view_type,
+			 'projects': projects,
 			 'view': 'Projects' }
-	return render_to_response('./socialnet/user_public_projects.html', data)
 
-def userPrivateProjects(user_to_be_viewed, viewer):
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
+
+	return render_to_response('./socialnet/user/projects.html', data)
+
+def userFriends(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
-			 'view': 'Projects' }
-	return render_to_response('./socialnet/user_private_projects.html', data)
-
-def userPublicFriends(user_to_be_viewed, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Friends' }
-	return render_to_response('./socialnet/user_public_friends.html', data)
 
-def userPrivateFriends(user_to_be_viewed, viewer):
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
+
+	return render_to_response('./socialnet/user/friends.html', data)
+
+def userContributors(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
-			 'view': 'Friends' }
-	return render_to_response('./socialnet/user_private_friends.html', data)
-
-def userPrivateContributors(user_to_be_viewed, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Contributors' }
-	return render_to_response('./socialnet/user_private_contributors.html', data)
 
-def userPublicData(user_to_be_viewed, viewer):
+	return render_to_response('./socialnet/user/contributors.html', data)
+
+def userData(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Data' }
-	return render_to_response('./socialnet/user_public_data.html', data)
+	
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
 
-def userPrivateData(user_to_be_viewed, viewer):
+	return render_to_response('./socialnet/user/data.html', data)
+
+def userAnalysis(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
-			 'view': 'Data' }
-	return render_to_response('./socialnet/user_private_data.html', data)
-
-def userPublicAnalysis(user_to_be_viewed, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Analysis' }
-	return render_to_response('./socialnet/user_public_analysis.html', data)
+	
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
 
-def userPrivateAnalysis(user_to_be_viewed, viewer):
+	return render_to_response('./socialnet/user/analysis.html', data)
+
+def userSettings(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
-			 'view': 'Analysis' }
-	return render_to_response('./socialnet/user_private_analysis.html', data)
-
-def userPrivateSettings(user_to_be_viewed, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
+			 'view_type': view_type,
 			 'view': 'Settings' }
-	return render_to_response('./socialnet/user_private_settings.html', data)
+
+	return render_to_response('./socialnet/user/settings.html', data)
 
 
 # Project
@@ -214,22 +216,22 @@ def project(request, user_name, project_name):
 		   (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
 			return projectPrivateActivity(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'activity' and view_type == project_view_types['public']:
-			return projectPublicActivity(project_owner, project_to_be_viewed, viewer)
+			return projectPublicActivity(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'people' and \
 			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
 			return projectPrivatePeople(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'people' and view_type == project_view_types['public']:
-			return projectPublicPeople(project_owner, project_to_be_viewed, viewer)
+			return projectPublicPeople(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'data' and \
 			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
 			return projectPrivateData(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'data' and view_type == project_view_types['public']:
-			return projectPublicData(project_owner, project_to_be_viewed, viewer)
+			return projectPublicData(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'analysis' and \
 			 (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
 			return projectPrivateAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'analysis' and view_type == project_view_types['public']:
-			return projectPublicAnalysis(project_owner, project_to_be_viewed, viewer)
+			return projectPublicAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
 		elif view == 'settings' and \
 			 (view_type == project_view_types['owner']):
 			return projectPrivateSettings(project_owner, project_to_be_viewed, view_type, viewer)
@@ -240,10 +242,11 @@ def project(request, user_name, project_name):
 	
 	return HttpResponse(status=404)
 
-def projectPublicActivity(project_owner, project_to_be_viewed, viewer):
+def projectPublicActivity(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
 			 'first_name': project_owner.first_name,
 			 'last_name': project_owner.last_name,
+			 'view_type': view_type,
 			 'viewer_name': viewer.username,
 			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Activity' }
@@ -259,10 +262,11 @@ def projectPrivateActivity(project_owner, project_to_be_viewed, view_type, viewe
 			 'view': 'Activity' }
 	return render_to_response('./socialnet/project_private_activity.html', data)
 
-def projectPublicPeople(project_owner, project_to_be_viewed, viewer):
+def projectPublicPeople(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
 			 'first_name': project_owner.first_name,
 			 'last_name': project_owner.last_name,
+			 'view_type': view_type,
 			 'viewer_name': viewer.username,
 			 'project_name':  project_to_be_viewed.name,
 			 'view': 'People' }
@@ -278,10 +282,11 @@ def projectPrivatePeople(project_owner, project_to_be_viewed, view_type, viewer)
 			 'view': 'People' }
 	return render_to_response('./socialnet/project_private_people.html', data)
 
-def projectPublicData(project_owner, project_to_be_viewed, viewer):
+def projectPublicData(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
 			 'first_name': project_owner.first_name,
 			 'last_name': project_owner.last_name,
+			 'view_type': view_type,
 			 'viewer_name': viewer.username,
 			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Data' }
@@ -297,10 +302,11 @@ def projectPrivateData(project_owner, project_to_be_viewed, view_type, viewer):
 			 'view': 'Data' }
 	return render_to_response('./socialnet/project_private_data.html', data)
 
-def projectPublicAnalysis(project_owner, project_to_be_viewed, viewer):
+def projectPublicAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
 			 'first_name': project_owner.first_name,
 			 'last_name': project_owner.last_name,
+			 'view_type': view_type,
 			 'viewer_name': viewer.username,
 			 'project_name':  project_to_be_viewed.name,
 			 'view': 'Analysis' }

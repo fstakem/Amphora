@@ -11,37 +11,11 @@
 	<div id="page-personal-menu-bar">
 		<div id="main-menu">
 			<ul>
-				<li>
-					<a href="{% url 'views.user' viewer_name %}?view=activity" id="main-menu-item-home"></a>
-				</li>
-				<li>
-					<a href="" id="main-menu-item-project"></a>
-					<ul>
-						<li><a href="{% url 'views.user' viewer_name %}?view=new_project">New Project</a></li>
-						<li><a href="{% url 'views.user' viewer_name %}?view=projects">Show Projects</a></li>
-					</ul>
-				</li>
-				<li>
-					<a href="" id="main-menu-item-people"></a>
-					<ul>
-						<li><a href="{% url 'views.user' viewer_name %}?view=friends">Friends</a></li>
-						<li><a href="{% url 'views.user' viewer_name %}?view=contributors">Contributors</a></li>
-					</ul>
-				</li>
-				<li>
-					<a href="" id="main-menu-item-content"></a>
-					<ul>
-						<li><a href="{% url 'views.user' viewer_name %}?view=data">Data</a></li>
-						<li><a href="{% url 'views.user' viewer_name %}?view=analysis">Analysis</a></li>
-					</ul>
-				</li>
-				<li>
-					<a href="" id="main-menu-item-settings"></a>
-					<ul>
-						<li><a href="{% url 'views.user' viewer_name %}?view=settings">Settings</a></li>
-						<li><a href="{% url 'views.user' viewer_name %}?view=logout">Logout</a></li>
-					</ul>
-				</li>
+				{% if view_type == 'public' %}
+					{% include "socialnet/public_main_menu.html"%}
+				{% else%}
+					{% include "socialnet/private_main_menu.html"%}
+				{% endif %}
 		    </ul>
 		</div>
 
@@ -51,9 +25,23 @@
 		</div>
 	</div>
 
-	{% block content %}
-		This is the content area
-	{% endblock %}
+	{% if view_type == 'public' %}
+		{% include "socialnet/user/public_header.html"%}
+	{% else%}
+		{% include "socialnet/user/private_header.html"%}
+	{% endif %}
+
+	<div id="page-main">
+		<div id="main-content">
+			<div id="main-debug">
+				<h3>View: {{ view_type }}</h3>
+				<h3>Viewer: {{ viewer_name }}</h3>
+			</div>
+		{% block content %}
+			This is the content area
+		{% endblock %}
+		</div>
+	</div>
 
 	<div id="page-footer">
 		<div id="footer-menu">

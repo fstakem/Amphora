@@ -34,6 +34,8 @@ class Project(models.Model):
     name = models.CharField(max_length=200)
     date_created = models.DateTimeField()
     last_activity = models.DateTimeField()
+    #public = models.BooleanField()
+    #description = models.CharField()
 
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_project')
