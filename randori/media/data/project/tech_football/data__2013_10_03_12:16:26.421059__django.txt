@@ -1,0 +1,59 @@
+# Generic django commands
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Create project
+django-admin.py startproject mysite
+
+# Run server
+python manage.py runserver
+
+# Create app
+python manage.py startapp myapp
+
+# Show sql commands to create
+python manage.py sql myapp
+
+# Remove tables
+python manage.py reset myapp
+
+# Open python shell with django
+python manage.py shell
+
+# Pulls static files into new dir
+python manage.py collectstatic
+
+# Synch the db - without south
+python manage.py syncdb
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# Database redo
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# List all databases from psql
+\l
+
+# Delete old database
+DROP DATABASE mydb;
+
+# Create new database
+CREATE DATABASE mydb WITH OWNER fstakem;
+
+# Sync up new database
+python manage.py syncdb
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# Generic psql commands
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# List all databases from psql
+\l
+
+# Get help
+\?
+\h <command>
+
+# List all tables
+\d
+
+# Postgres commands
+http://www.postgresql.org/docs/9.1/static/sql-commands.html
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from models import UserProfile, Project
+from models import UserProfile, Project, Analysis, Data
 from collections import Set
 
 user_view_types = {'public': 'public', 'private': 'private'}
@@ -99,7 +99,7 @@ def userNewProject(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/new_project.html', data)
 
 def userProjects(user_to_be_viewed, view_type, viewer):
-	projects = list( Project.objects.filter(owner__username=user_to_be_viewed.username) )
+	projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id) )
 
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
@@ -117,11 +117,14 @@ def userProjects(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/projects.html', data)
 
 def userFriends(user_to_be_viewed, view_type, viewer):
+	friends = list( User.objects.filter(friend__id=user_to_be_viewed.id) )
+
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
 			 'view_type': view_type,
+			 'friends': friends,
 			 'view': 'Friends' }
 
 	if view_type == user_view_types['private']:
@@ -142,11 +145,18 @@ def userContributors(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/contributors.html', data)
 
 def userData(user_to_be_viewed, view_type, viewer):
+	data_sets = []
+	projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id) )
+	
+	for project in projects:
+		data_sets.extend( list( Data.objects.filter(project__id=project.id) ) )
+
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
 			 'view_type': view_type,
+			 'data_sets': data_sets,
 			 'view': 'Data' }
 	
 	if view_type == user_view_types['private']:
