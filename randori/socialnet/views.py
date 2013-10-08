@@ -1,8 +1,10 @@
 from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from models import UserProfile, Project, Analysis, Data
 from collections import Set
+from django import forms
 
 user_view_types = {'public': 'public', 'private': 'private'}
 user_views = set([ 'activity', 
@@ -48,7 +50,7 @@ def user(request, user_name):
 			return userActivity(user_to_be_viewed, view_type, viewer)
 		
 		elif view == 'new_project' and view_type == user_view_types['private']:
-			return userNewProject(user_to_be_viewed, view_type, viewer)
+			return userNewProject(request, user_to_be_viewed, view_type, viewer)
 
 		elif view == 'projects':
 			return userProjects(user_to_be_viewed, view_type, viewer)
@@ -88,15 +90,26 @@ def userActivity(user_to_be_viewed, view_type, viewer):
 
 	return render_to_response('./socialnet/user/activity.html', data)
 
-def userNewProject(user_to_be_viewed, view_type, viewer):
-	data = { 'user_name': user_to_be_viewed.username, 
-			 'first_name': user_to_be_viewed.first_name,
-			 'last_name': user_to_be_viewed.last_name,
-			 'viewer_name': viewer.username,
-			 'view_type': view_type,
-			 'view': 'New Project' }
+def userNewProject(request, user_to_be_viewed, view_type, viewer):
+    form = NewProjectForm(request.POST or None)
 
-	return render_to_response('./socialnet/user/new_project.html', data)
+    data = { 'user_name': user_to_be_viewed.username, 
+             'first_name': user_to_be_viewed.first_name,
+             'last_name': user_to_be_viewed.last_name,
+             'viewer_name': viewer.username,
+             'view_type': view_type,
+             'new_project_form': form,
+             'view': 'New Project' }
+
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
+
+
+    return render(request, './socialnet/user/new_project.html', data)
 
 def userProjects(user_to_be_viewed, view_type, viewer):
 	projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id) )
@@ -149,7 +162,9 @@ def userData(user_to_be_viewed, view_type, viewer):
 	projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id) )
 	
 	for project in projects:
-		data_sets.extend( list( Data.objects.filter(project__id=project.id) ) )
+		data_set = list( Data.objects.filter(project__id=project.id) )
+		for d in data_set:
+			data_sets.append( (project, d) )
 
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
@@ -167,11 +182,22 @@ def userData(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/data.html', data)
 
 def userAnalysis(user_to_be_viewed, view_type, viewer):
+	analysis_sets = []
+	projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id) )
+	
+	for project in projects:
+		analysis_set = list( Analysis.objects.filter(project__id=project.id) )
+		for a in analysis_set:
+			analysis_sets.append( (project, a) )
+
+	print analysis_sets
+
 	data = { 'user_name': user_to_be_viewed.username, 
 			 'first_name': user_to_be_viewed.first_name,
 			 'last_name': user_to_be_viewed.last_name,
 			 'viewer_name': viewer.username,
 			 'view_type': view_type,
+			 'analysis_sets': analysis_sets,
 			 'view': 'Analysis' }
 	
 	if view_type == user_view_types['private']:
@@ -317,34 +343,35 @@ def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
 
 	return render_to_response('./socialnet/project/settings.html', data)
 
+# Data
+def data(request, user_name, project_name, data_name):
+	data = { 'user_name': user_name, 
+			 'project_name': project_name,
+			 'data_name': data_name,
+			 'view': 'Data' }
 
+	return render_to_response('./socialnet/data/tmp.html', data)
+
+# Analysis
+def analysis(request, user_name, project_name, analysis_name):
+	data = { 'user_name': user_name, 
+			 'project_name': project_name,
+			 'analysis_name': analysis_name,
+			 'view': 'Data' }
+
+	return render_to_response('./socialnet/analysis/tmp.html', data)
 
 	
-# Attachment
-def attachment(request, user_name, project_name, attachment_name):
-	user = request.user
-	user_page = list( User.objects.filter(username=user_name) )
-	project_to_be_viewed = list( Project.objects.filter(name=project_name, owner__username=user_name) )
-	attachment_page = list( Attachment.objects.filter(name=attachment_name, project__name=project_name) )
+# Forms
+class NewProjectForm(forms.Form):
+    name = forms.CharField(max_length=200)
+    date_created = forms.DateTimeField()
+    last_activity = forms.DateTimeField()
+    public = forms.BooleanField()
+    description = forms.CharField(max_length=400)
 
-	if user_page and project_to_be_viewed and attachment_page:
-		user_page = user_page[0]
-		project_to_be_viewed = project_to_be_viewed[0]
-		attachment_page = attachment_page[0]
-		data = { 'user_name': user_page.username, 
-				 'first_name': user_page.first_name,
-				 'last_name': user_page.last_name,
-				 'project_name':  project_to_be_viewed.name,
-				 'attachment_name': attachment_page.name }
-
-		if isUsersPageAndLoggedIn(user, user_page):
-			data['private'] = True
-		else:
-			data['private'] = False
-
-		return render_to_response('./socialnet/attachment.html', data)
-
-	return HttpResponse(status=404)
+    owner = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+    contributor = forms.ModelMultipleChoiceField(queryset=User.objects.all())
 
 
 # Misc

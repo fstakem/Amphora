@@ -132,6 +132,12 @@ INSTALLED_APPS = (
 
     # Python social auth
     'social.apps.django_app.default',
+
+    # Bootstrap integration
+    #'bootstrap3',
+
+    # Crispy forms integration
+    'crispy_forms',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -188,4 +194,12 @@ ALLOWED_HOSTS = ['*']
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # END: For Heroku
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# START: For Crispy Forms
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# END: For Crispy Forms
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++

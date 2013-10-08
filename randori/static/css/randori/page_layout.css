@@ -2,37 +2,25 @@ html, body
 {
     padding: 0;
     margin: 0;
+    height: 100%;
 } 
 
-#page
+#page-body
 {
-	min-height: 100%;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    overflow:auto;
+    padding-bottom: 40px;
+}
+
+
+#page-footer 
+{
     position: relative;
+    margin-top: -40px; /* negative value of footer height */
+    height: 40px;
+    clear:both;
+    background-color: #eee;
 }
 
-#page-header
-{
-	position: relative;
-	height: 260px;
-    margin: 0px;
-    padding: 0px;
-    background-image: url('../../images/randori/blue_metal.jpg');
-    width: 100%
-}
-
-#page-main
-{
-	padding-top: 60px;
-    background-color: #FFFFFF;
-    height: 50%;
-}
-
-#page-footer
-{
-	height: 35px;
-	padding: 20px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-image: url('../../images/randori/blue_metal.jpg');
-}

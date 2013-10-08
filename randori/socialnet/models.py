@@ -51,6 +51,7 @@ class Project(models.Model):
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_project')
     contributor = models.ManyToManyField(User, related_name='contributed_project')
+    # observer
 
     def __unicode__(self):
         return self.name
@@ -61,6 +62,7 @@ class Data(models.Model):
     date_created = models.DateTimeField()
     description = models.CharField(max_length=200)
     file_data = models.FileField(upload_to=getDataPath, blank=True, null=True)
+    # public = models.BooleanField()
 
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_data')
@@ -75,6 +77,7 @@ class Analysis(models.Model):
     date_created = models.DateTimeField()
     last_activity = models.DateTimeField()
     description = models.CharField(max_length=200)
+    # public = models.BooleanField()
 
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_analysis')

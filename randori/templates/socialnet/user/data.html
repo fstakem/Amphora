@@ -5,8 +5,8 @@
 	<h3>{{ view }}</h3>
 	<div id="user-data">
 		<ul>
-			{% for data in data_sets %}
-				<li><h4><a href="{% url 'views.user' user_name %}">{{ data.name }}</a></h4></li>
+			{% for d in data_sets %}
+				<li><h4><a href="{% url 'views.data' user_name  d.0.name d.1.name %}">{{ d.1.name }}</a></h4></li>
 			{% endfor %}
 			</br>
 		</ul>

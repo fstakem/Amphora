@@ -4,6 +4,7 @@
     position:relative;
     left:-50%;
     text-align:left;
+    padding-top: 10px;
 }
 
 #footer-menu ul
@@ -18,26 +19,14 @@
 #footer-menu a
 {
     display: block;
-    width: 8em;
-    color: white;
-    background-color: #090974;
+    width: 5em;
     text-decoration: none;
     text-align: center;
-}
-
-#footer-menu a:hover
-{
-    background-color: #4F4FD9;
 }
 
 #footer-menu li
 {
     float: left;
-    margin-right: 0.5em;
-    font-family: 'Calibri', sans-serif;
-    font-size: 12;
+    margin-right: 0.3em;
     position:relative;
-    border-style: solid;
-    border-color: #7373d9;
-    border-width: 2px;
 }

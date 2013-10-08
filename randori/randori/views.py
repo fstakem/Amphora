@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.conf import settings
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 
 # Landing
@@ -74,6 +76,17 @@ class RegistrationForm(forms.Form):
     password_b = forms.CharField(widget=forms.PasswordInput,
                                 label="Password (again)")
 
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-registrationForm'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'submit_survey'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
+
     def clean_username(self):
         return self.cleaned_data['username']
         # existing = User.objects.filter(username__iexact=self.cleaned_data['username'])
@@ -111,7 +124,7 @@ def register(request):
 
         return HttpResponseRedirect("/")# Redirect to a success page.
 
-    return render(request, './randori/register.html', {'registration_form': form})
+    return render(request, './randori/register.html', {'registration_form': form, 'view': 'Register'})
 
 
 

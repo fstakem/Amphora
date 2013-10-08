@@ -3,7 +3,18 @@
 {% block content %}
 	
 	<h3>{{ view }}</h3>
-	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	{% if new_project_form.non_field_errors %}
+    <ul class='form-errors'>
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+	{% endif %}
+
+	<form action="/" method="post">{% csrf_token %}
+	{{ new_project_form.as_p }}
+	<input type="submit" value="Submit" />
+	</form>
 	</br>
 
 {% endblock %}

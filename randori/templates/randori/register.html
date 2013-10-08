@@ -1,4 +1,6 @@
 {% extends "randori/base.html" %} 
+{% load crispy_forms_tags %}
+{% crispy registration_form registration_form.helper %}
 
 {% block content %}
 	<div id="registration-main-content">
@@ -16,9 +18,31 @@
 	    </ul>
 		{% endif %}
 
-		<form action="/register" method="post">{% csrf_token %}
-		{{ registration_form.as_p }}
-		<input type="submit" value="Submit" />
+		<div class="row top-buffer-large"></div>
+    	<div class="row top-buffer-large"></div>
+    	<div class="row top-buffer-large"></div>
+    	<div class="row top-buffer-large"></div>
+    	<div class="row top-buffer-large"></div>
+
+		<div class="container">
+		    <div class="jumbotron">
+	        	<h1>Registration</h1>
+	        </div>
+
+	        <div class="row top-buffer-large"></div>
+
+	         <div class="page-header">
+            	<h1>New User</h1>
+        	</div>
+        	{% crispy registration_form %}
+        	
+			<!--
+		    <form action="/register" method="post">{% csrf_token %}
+			{{ registration_form.as_p }}
+			<input type="submit" value="Submit" /> -->
+	    </div>
+
+		
 		</form>
 		
 		</br>

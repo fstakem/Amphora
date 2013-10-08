@@ -1,3 +1,8 @@
+#form-errors
+{
+
+}
+
 #user-projects
 {
 
@@ -42,3 +47,21 @@
 {
 	text-decoration: none;
 }
+
+#user-analysis
+{
+
+}
+
+#user-analysis ul
+{
+	list-style-type: none;
+}
+
+#user-analysis a
+{
+	text-decoration: none;
+}
+
+
+
