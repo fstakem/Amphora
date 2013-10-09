@@ -7,43 +7,32 @@
 <div class="row top-buffer-large"></div>
 
 <div class="container theme-showcase">
+
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron public-user-profile-cover">
-
-
+    <div id="my-jumbo" class="container">
     	<div class="row">
           	<div class="col-lg-4">
           		<div id="my-image">
-        			<img src="{% static 'images/randori/stock_profile_big.png' %}" alt="landing" class="img-thumbnail"/>
+        			<img src="{% static 'images/socialnet/profile.png' %}" alt="landing" class="img-thumbnail"/>
         		</div>
         	</div>
-        	<div class="col-lg-8">
-        		
-			</div>
+        	<div class="col-lg-8"></div>
 		</div>
-
-    	
     </div>
 
     <div class="row">
-      	<div class="col-lg-2">
-      		<div id="my-image">
-    			
-    		</div>
-    	</div>
+      	<div class="col-lg-2"></div>
     	<div class="col-lg-10">
-    		<div id="xxx_nav">
-	    <div class="navbar navbar-inverse">
-			<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
-			<ul class="nav navbar-nav pull-right">
-				<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
-				<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
-				<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
-				<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-		    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
-		    </ul>
-		</div>
-	</div>
+		    <div class="navbar navbar-inverse">
+				<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
+				<ul class="nav navbar-nav pull-right">
+					<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
+					<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+					<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+					<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+			    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+			    </ul>
+			</div>
 		</div>
 	</div>
 

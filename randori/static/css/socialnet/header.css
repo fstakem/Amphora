@@ -23,16 +23,26 @@
 {
     position: absolute;
     z-index:100;
-    left: -90px;
-    bottom: -240px;
+    left: -50px;
+    bottom: -300px;
 }
 
-#xxx-nav
+
+
+#my-jumbo
 {
-    position: absolute;
-    z-index:100;
-    left: 30px;
-    bottom: 300px;
+    background-color: grey;
+    -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px; 
+    background: url('../../images/socialnet/stock_cover.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    height: 260px;
+    margin-right: 0;
+    padding-right: 0;
 }
 
 
