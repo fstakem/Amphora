@@ -1,3 +1,51 @@
+.public-user-profile-cover
+{
+    height: 260px;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.public-user-photo-large
+{
+    position: absolute;
+    z-index:100;
+    margin: -120px 0 -60px 10px; 
+}
+
+#photo 
+{
+    position: absolute;
+    z-index:100;
+    margin: -120px 0 -60px 10px; 
+}
+
+#my-image
+{
+    position: absolute;
+    z-index:100;
+    left: -90px;
+    bottom: -240px;
+}
+
+#xxx-nav
+{
+    position: absolute;
+    z-index:100;
+    left: 30px;
+    bottom: 300px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 #public-user-photo-large
 {
 	float: left;

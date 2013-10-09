@@ -1,18 +1,54 @@
 {% load static from staticfiles %}
 
-<div id="large-page-header">
-	<img src="{% static 'images/randori/stock_profile_big.png' %}" alt="landing" id="public-user-photo-large"/>
-	<div id="public-user-title"><span>{{ first_name }} {{ last_name }}</span></div>
-	<div id="public-user-menu">
-	    <ul>
-	    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
-	        <li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-	        <li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
-	        <li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
-	        <li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
-	    </ul>
-	</div>
-</div>
+<div class="row top-buffer-large"></div>
+<div class="row top-buffer-large"></div>
+<div class="row top-buffer-large"></div>
+<div class="row top-buffer-large"></div>
+<div class="row top-buffer-large"></div>
+
+<div class="container theme-showcase">
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron public-user-profile-cover">
+
+
+    	<div class="row">
+          	<div class="col-lg-2">
+          		<div id="my-image">
+        			<img src="{% static 'images/randori/stock_profile_big.png' %}" alt="landing" class="img-thumbnail"/>
+        		</div>
+        	</div>
+        	<div class="col-lg-10">
+        		<div id="xxx_nav">
+				    <div class="navbar navbar-inverse">
+						<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
+						<ul class="nav navbar-nav pull-right">
+							<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
+							<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+							<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+							<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+					    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+					    </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    	
+    </div>
+
+   
+</div> <!-- /container -->
+
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+<div class="row bottom-buffer-large"></div>
+
+
 
 
 
