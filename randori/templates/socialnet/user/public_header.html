@@ -12,29 +12,42 @@
 
 
     	<div class="row">
-          	<div class="col-lg-2">
+          	<div class="col-lg-4">
           		<div id="my-image">
         			<img src="{% static 'images/randori/stock_profile_big.png' %}" alt="landing" class="img-thumbnail"/>
         		</div>
         	</div>
-        	<div class="col-lg-10">
-        		<div id="xxx_nav">
-				    <div class="navbar navbar-inverse">
-						<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
-						<ul class="nav navbar-nav pull-right">
-							<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
-							<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
-							<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
-							<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-					    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
-					    </ul>
-					</div>
-				</div>
+        	<div class="col-lg-8">
+        		
 			</div>
 		</div>
 
     	
     </div>
+
+    <div class="row">
+      	<div class="col-lg-2">
+      		<div id="my-image">
+    			
+    		</div>
+    	</div>
+    	<div class="col-lg-10">
+    		<div id="xxx_nav">
+	    <div class="navbar navbar-inverse">
+			<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
+			<ul class="nav navbar-nav pull-right">
+				<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
+				<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+				<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+				<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+		    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+		    </ul>
+		</div>
+	</div>
+		</div>
+	</div>
+
+    
 
    
 </div> <!-- /container -->
