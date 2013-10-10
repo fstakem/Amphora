@@ -1,67 +1,31 @@
-#form-errors
-{
 
-}
 
-#user-projects
-{
-
-}
-
-#user-projects ul
+#user_projects
 {
 	list-style-type: none;
 }
 
-#user-projects a
-{
-	text-decoration: none;
-}
-
-#user-friends
-{
-
-}
-
-#user-friends ul
+#user_projects ul
 {
 	list-style-type: none;
 }
 
-#user-friends a
+#user_projects a
 {
-	text-decoration: none;
+	
 }
 
-#user-data
-{
-
-}
-
-#user-data ul
+#user_friends
 {
 	list-style-type: none;
 }
 
-#user-data a
-{
-	text-decoration: none;
-}
-
-#user-analysis
-{
-
-}
-
-#user-analysis ul
+#user_data
 {
 	list-style-type: none;
 }
 
-#user-analysis a
+#user_analysis
 {
-	text-decoration: none;
+	list-style-type: none;
 }
-
-
-

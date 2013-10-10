@@ -1,15 +1,20 @@
 {% extends "socialnet/user/base.html" %}
 
 {% block content %}
-	
-	<h3>{{ view }}</h3>
-	<div id="user-friends">
-		<ul>
-			{% for friend in friends %}
-				<li><h4><a href="{% url 'views.user' friend.username %}">{{ friend.username }}</a></h4></li>
-			{% endfor %}
-			</br>
-		</ul>
-	</div>
 
+	<div class="container">
+		<div class="panel panel-default">
+	        <div class="panel-heading"><h3>{{ view }}</h3></div>
+	    	</br>
+	    	<div id="user-friends">
+				<ul>
+				{% for friend in friends %}
+					<li><a href="{% url 'views.user' friend.username %}">{{ friend.username }}</a></li>
+				{% endfor %}
+				</br>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
 {% endblock %}

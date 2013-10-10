@@ -2,14 +2,19 @@
 
 {% block content %}
 	
-	<h3>{{ view }}</h3>
-	<div id="user-projects">
-		<ul>
-			{% for project in projects %}
-				<li><h4><a href="{% url 'views.project' user_name project.name %}">{{ project.name }}</a></h4></li>
-			{% endfor %}
-			</br>
-		</ul>
+	<div class="container">
+		<div class="panel panel-default">
+	        <div class="panel-heading"><h3>{{ view }}</h3></div>
+	    	</br>
+	    	<div id="user-projects">
+				<ul>
+				{% for project in projects %}
+					<li><a href="{% url 'views.project' user_name project.name %}">{{ project.name }}</a></li>
+				{% endfor %}
+				</br>
+				</ul>
+			</div>
+		</div>
 	</div>
-	
+
 {% endblock %}

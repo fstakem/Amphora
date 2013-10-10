@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from models import UserProfile, Project, Analysis, Data
 from collections import Set
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 user_view_types = {'public': 'public', 'private': 'private'}
 user_views = set([ 'activity', 
@@ -372,6 +374,17 @@ class NewProjectForm(forms.Form):
 
     owner = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     contributor = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(NewProjectForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-project-form'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_project'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 
 # Misc

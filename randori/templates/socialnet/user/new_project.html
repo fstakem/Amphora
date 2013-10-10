@@ -1,20 +1,22 @@
 {% extends "socialnet/user/base.html" %}
+{% load crispy_forms_tags %}
+{% crispy new_project_form new_project_form.helper %}
 
 {% block content %}
+
+	<div class="container">
+		<div class="panel panel-default" id="content-formatting">
+	        <div class="panel-heading"><h3>{{ view }}</h3></div>
+	        	<div class="row top-buffer-large"></div>
+				<div class="row">
+					<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			{% crispy new_project_form %}
+		    		</div>
+		    		<div class="col-lg-7"></div>
+    			</div>
+    			<div class="row bottom-buffer-large"></div>
+		</div>
+	</div>
 	
-	<h3>{{ view }}</h3>
-	{% if new_project_form.non_field_errors %}
-    <ul class='form-errors'>
-        {% for error in form.non_field_errors %}
-            <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-	{% endif %}
-
-	<form action="/" method="post">{% csrf_token %}
-	{{ new_project_form.as_p }}
-	<input type="submit" value="Submit" />
-	</form>
-	</br>
-
 {% endblock %}
