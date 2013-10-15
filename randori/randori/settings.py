@@ -138,6 +138,9 @@ INSTALLED_APPS = (
 
     # Crispy forms integration
     'crispy_forms',
+
+    # Local 
+    'localflavor',
 )
 
 AUTHENTICATION_BACKENDS = (

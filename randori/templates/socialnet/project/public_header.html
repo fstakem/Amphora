@@ -1,0 +1,33 @@
+{% load static from staticfiles %}
+
+<div class="container theme-showcase">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div id="my-jumbo" class="container">
+    </div>
+
+    <div class="navbar navbar-inverse">
+    	<a href="#" class="navbar-brand">{{ project_name }}</a>
+		<ul class="nav navbar-nav pull-right">
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
+	        <li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
+	    </ul>
+	</div>
+
+</div> <!-- /container -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
