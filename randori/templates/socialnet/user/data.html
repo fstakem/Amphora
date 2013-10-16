@@ -8,8 +8,8 @@
 	    	</br>
 	    	<div id="user-data">
 				<ul>
-				{% for d in data_sets %}
-					<li><a href="{% url 'views.data' user_name  d.0.name d.1.name %}">{{ d.1.name }}</a></li>
+				{% for d in data %}
+					<li><a href="{% url 'views.data' user_name  d.name %}">{{ d.name }}</a></li>
 				{% endfor %}
 				</br>
 				</ul>
