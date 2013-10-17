@@ -342,9 +342,10 @@ def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/project/settings.html', data)
 
 # Data
-def data(request, user_name, project_name, data_name):
+def data(request, user_name, project_name, host_name, data_name):
 	data = { 'user_name': user_name, 
 			 'project_name': project_name,
+			 'host_name': host_name,
 			 'data_name': data_name,
 			 'view': 'Data' }
 

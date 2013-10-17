@@ -19,12 +19,37 @@
     	<div class="col-lg-10 col-xs-9">
 		    <div class="navbar navbar-inverse">
 				<a href="#" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
+
 				<ul class="nav navbar-nav pull-right">
-					<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
-					<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
-					<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
-					<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-			    	<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+					{% if view == 'Activity' %}
+						<li class="active"><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
+					{% else %}
+						<li><a href="{% url 'views.user' user_name %}?view=activity">Activity</a></li>
+					{% endif %}
+
+					{% if view == 'Projects' %}
+						<li class="active"><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+					{% else %}
+						<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+					{% endif %}
+
+					{% if view == 'Friends' %}
+						<li class="active"><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+					{% else %}
+						<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+					{% endif %}
+
+					{% if view == 'Data' %}
+						<li class="active"><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+					{% else %}
+						<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
+					{% endif %}
+
+					{% if view == 'Analysis' %}
+						<li class="active"><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+					{% else %}
+						<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
+					{% endif %}
 			    </ul>
 			</div>
 		</div>

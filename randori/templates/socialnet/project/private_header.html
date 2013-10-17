@@ -5,13 +5,39 @@
     <div class="navbar navbar-inverse">
 		<a href="#" class="navbar-brand">{{ project_name }}</a>
 		<ul class="nav navbar-nav pull-right">
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
-	        <li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
-	        {% if view_type == 'owner' %}
-	    		<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
-	    	{% endif %}
+			{% if view == 'Activity' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>		
+			{% endif %}
+
+			{% if view == 'People' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>			
+			{% endif %}
+
+			{% if view == 'Data' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>			
+			{% endif %}
+
+			{% if view == 'Analysis' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>		
+			{% endif %}
+
+			{% if view == 'Settings' %}
+				{% if view_type == 'owner' %}
+	    			<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    		{% endif %}
+			{% else %}
+				{% if view_type == 'owner' %}
+	    			<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    		{% endif %}			
+			{% endif %}
 	    </ul>
 	</div>
 
