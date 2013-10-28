@@ -1,0 +1,22 @@
+{% extends "socialnet/user/base.html" %}
+{% load crispy_forms_tags %}
+{% crispy new_data_form new_data_form.helper %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="panel panel-default" id="content-formatting">
+	        <div class="panel-heading"><h3>{{ view }}</h3></div>
+	        	<div class="row top-buffer-large"></div>
+				<div class="row">
+					<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			{% crispy new_data_form %}
+		    		</div>
+		    		<div class="col-lg-7"></div>
+    			</div>
+    			<div class="row bottom-buffer-large"></div>
+		</div>
+	</div>
+	
+{% endblock %}

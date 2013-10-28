@@ -2,20 +2,23 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from models import UserProfile, Project, Analysis, Data
+from models import UserProfile, Project, Analysis, Data, Revision, Location, Host
 from collections import Set
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 user_view_types = {'public': 'public', 'private': 'private'}
-user_views = set([ 'activity', 
+user_views = set([ 'info',
+				   'activity', 
 				   'new_project',
 				   'projects', 
 				   'friends',
-				   'contributors', 
+				   'contributors',
+				   'new_data', 
 				   'data',
-				   'analysis', 
+				   'analysis',
+				   'new_analysis', 
 				   'settings' ])
 
 project_view_types = {'public': 'public', 'contributor': 'contributor', 'owner': 'owner'}
@@ -48,7 +51,10 @@ def user(request, user_name):
 		else:
 			view_type = user_view_types['public']
 
-		if view == 'activity':
+		if view == 'info':
+			return userInfo(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'activity':
 			return userActivity(user_to_be_viewed, view_type, viewer)
 		
 		elif view == 'new_project' and view_type == user_view_types['private']:
@@ -63,8 +69,14 @@ def user(request, user_name):
 		elif view == 'contributors' and view_type == user_view_types['private']:
 			return userContributors(user_to_be_viewed, view_type, viewer)
 
+		elif view == 'new_data' and view_type == user_view_types['private']:
+			return userNewData(request, user_to_be_viewed, view_type, viewer)
+
 		elif view == 'data':
 			return userData(user_to_be_viewed, view_type, viewer)
+
+		elif view == 'new_analysis' and view_type == user_view_types['private']:
+			return userNewAnalysis(request, user_to_be_viewed, view_type, viewer)
 
 		elif view == 'analysis':
 			return userAnalysis(user_to_be_viewed, view_type, viewer)
@@ -76,6 +88,21 @@ def user(request, user_name):
 			return HttpResponse(status=404)
 
 	return HttpResponse(status=404)
+
+def userInfo(user_to_be_viewed, view_type, viewer):
+	data = { 'user_name': user_to_be_viewed.username, 
+			 'first_name': user_to_be_viewed.first_name,
+			 'last_name': user_to_be_viewed.last_name,
+			 'viewer_name': viewer.username,
+			 'view_type': view_type,
+			 'view': 'Info' }
+
+	if view_type == user_view_types['private']:
+		pass
+	elif view_type == user_view_types['public']:
+		pass
+
+	return render_to_response('./socialnet/user/info.html', data)
 
 def userActivity(user_to_be_viewed, view_type, viewer):
 	data = { 'user_name': user_to_be_viewed.username, 
@@ -161,6 +188,27 @@ def userContributors(user_to_be_viewed, view_type, viewer):
 
 	return render_to_response('./socialnet/user/contributors.html', data)
 
+def userNewData(request, user_to_be_viewed, view_type, viewer):
+    form = NewDataForm(request.POST or None)
+
+    data = { 'user_name': user_to_be_viewed.username, 
+             'first_name': user_to_be_viewed.first_name,
+             'last_name': user_to_be_viewed.last_name,
+             'viewer_name': viewer.username,
+             'view_type': view_type,
+             'new_data_form': form,
+             'view': 'New Data' }
+
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
+
+
+    return render(request, './socialnet/user/new_data.html', data)
+
 def userData(user_to_be_viewed, view_type, viewer):
 	collected_data = list( Data.objects.filter(owner__id=user_to_be_viewed.id) )
 	
@@ -178,6 +226,28 @@ def userData(user_to_be_viewed, view_type, viewer):
 		pass
 
 	return render_to_response('./socialnet/user/data.html', data)
+
+def userNewAnalysis(request, user_to_be_viewed, view_type, viewer):
+    form = NewAnalysisForm(request.POST or None)
+
+    data = { 'user_name': user_to_be_viewed.username, 
+             'first_name': user_to_be_viewed.first_name,
+             'last_name': user_to_be_viewed.last_name,
+             'viewer_name': viewer.username,
+             'view_type': view_type,
+             'new_analysis_form': form,
+             'view': 'New Analysis' }
+
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
+
+
+    return render(request, './socialnet/user/new_analysis.html', data)
+
 
 def userAnalysis(user_to_be_viewed, view_type, viewer):
 	analysis_sets = []
@@ -369,20 +439,80 @@ class NewProjectForm(forms.Form):
     public = forms.BooleanField()
     description = forms.CharField(max_length=400)
 
-    owner = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     contributor = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+    observer = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+    current_revision = forms.ModelChoiceField(queryset=Revision.objects.all())
 
     def __init__(self, *args, **kwargs):
         super(NewProjectForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'id-new-project-form'
-        self.helper.form_class = 'blueForms'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
         self.helper.form_method = 'post'
         self.helper.form_action = 'new_project'
         self.helper.help_text_as_placeholder = True
 
         self.helper.add_input(Submit('submit', 'Submit'))
 
+class NewDataForm(forms.Form):
+    name = forms.CharField(max_length=200)
+    date_created = forms.DateTimeField()
+    description = forms.CharField(max_length=400)
+    file_data = forms.FileField()
+
+    revision = forms.ModelChoiceField(queryset=Revision.objects.all())
+    collected_location = forms.ModelChoiceField(queryset=Location.objects.all())
+    host = forms.ModelChoiceField(queryset=Host.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(NewDataForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-data-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_data'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+# Attributes
+#name = models.CharField(max_length=200)
+#date_created = models.DateTimeField()
+#last_activity = models.DateTimeField()
+#description = models.TextField(blank=True, null=True)
+
+# Relationships
+#owner = models.ForeignKey(User, related_name='main_analysis')
+#project = models.ForeignKey('Project', related_name='data_analysis')
+#contributor = models.ManyToManyField(User, blank=True, null=True, related_name='contributed_analysis')
+#data = models.ManyToManyField('Data', blank=True, null=True, related_name='data_analysis')
+
+class NewAnalysisForm(forms.Form):
+    name = forms.CharField(max_length=200)
+    date_created = forms.DateTimeField()
+    last_activity = forms.DateTimeField()
+    description = forms.CharField(max_length=400)
+
+    project = forms.ModelChoiceField(queryset=Project.objects.all())
+    contributor = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+    data = forms.ModelMultipleChoiceField(queryset=Data.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(NewAnalysisForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-analysis-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_analysis'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 # Misc
 def isUsersPageAndLoggedIn(viewer, user_to_be_viewed):
