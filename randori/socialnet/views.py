@@ -13,7 +13,7 @@ user_views = set([ 'info',
 				   'activity', 
 				   'new_project',
 				   'projects', 
-				   'friends',
+				   'friends', 
 				   'contributors',
 				   'new_data', 
 				   'data',
@@ -22,10 +22,13 @@ user_views = set([ 'info',
 				   'settings' ])
 
 project_view_types = {'public': 'public', 'contributor': 'contributor', 'owner': 'owner'}
-project_views = set([ 'activity', 
+project_views = set([ 'info',
+                      'activity', 
 					  'people', 
-					  'data',
+					  'revisions',
+                      'new_revision',
 					  'analysis', 
+                      'new_analysis',
 					  'settings' ])
 
 # User
@@ -189,14 +192,14 @@ def userContributors(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/contributors.html', data)
 
 def userNewData(request, user_to_be_viewed, view_type, viewer):
-    form = NewDataForm(request.POST or None)
+    form = NewUserDataForm(request.POST or None)
 
     data = { 'user_name': user_to_be_viewed.username, 
              'first_name': user_to_be_viewed.first_name,
              'last_name': user_to_be_viewed.last_name,
              'viewer_name': viewer.username,
              'view_type': view_type,
-             'new_data_form': form,
+             'new_user_data_form': form,
              'view': 'New Data' }
 
     if request.POST and form.is_valid():
@@ -228,14 +231,14 @@ def userData(user_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/user/data.html', data)
 
 def userNewAnalysis(request, user_to_be_viewed, view_type, viewer):
-    form = NewAnalysisForm(request.POST or None)
+    form = NewUserAnalysisForm(request.POST or None)
 
     data = { 'user_name': user_to_be_viewed.username, 
              'first_name': user_to_be_viewed.first_name,
              'last_name': user_to_be_viewed.last_name,
              'viewer_name': viewer.username,
              'view_type': view_type,
-             'new_analysis_form': form,
+             'new_user_analysis_form': form,
              'view': 'New Analysis' }
 
     if request.POST and form.is_valid():
@@ -316,25 +319,50 @@ def project(request, user_name, project_name):
 						view_type = project_view_types['contributor']
 						break
 
-		if view == 'activity':
-			return projectActivity(project_owner, project_to_be_viewed, view_type, viewer)
+        if view == 'info':
+            return projectInfo(project_owner, project_to_be_viewed, view_type, viewer)
 
-		elif view == 'people':
-			return projectPeople(project_owner, project_to_be_viewed, view_type, viewer)
+        elif view == 'activity':
+            return projectActivity(project_owner, project_to_be_viewed, view_type, viewer)
 
-		elif view == 'data':
-			return projectData(project_owner, project_to_be_viewed, view_type, viewer)
+        elif view == 'people':
+            return projectPeople(project_owner, project_to_be_viewed, view_type, viewer)
 
-		elif view == 'analysis':
-			return projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
+        elif view == 'revisions':
+            return projectRevisions(project_owner, project_to_be_viewed, view_type, viewer)
 
-		elif view == 'settings' and view_type == project_view_types['owner']:
-			return projectSettings(project_owner, project_to_be_viewed, view_type, viewer)
+        elif view == 'new_revision' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewRevision(project_owner, project_to_be_viewed, view_type, viewer)
 
-		else:
-			return HttpResponse(status=404)
+        elif view == 'analysis':
+            return projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
+
+        elif view == 'new_analysis' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
+
+        elif view == 'settings' and view_type == project_view_types['owner']:
+            return projectSettings(project_owner, project_to_be_viewed, view_type, viewer)
+
+        else:
+            return HttpResponse(status=404)
 
 	return HttpResponse(status=404)
+
+def projectInfo(project_owner, project_to_be_viewed, view_type, viewer):
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'view': 'Info' }
+
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+
+    return render_to_response('./socialnet/project/info.html', data)
 
 def projectActivity(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
@@ -368,21 +396,24 @@ def projectPeople(project_owner, project_to_be_viewed, view_type, viewer):
 
 	return render_to_response('./socialnet/project/people.html', data)
 
-def projectData(project_owner, project_to_be_viewed, view_type, viewer):
+def projectRevisions(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
 			 'first_name': project_owner.first_name,
 			 'last_name': project_owner.last_name,
 			 'view_type': view_type,
 			 'viewer_name': viewer.username,
 			 'project_name':  project_to_be_viewed.name,
-			 'view': 'Data' }
+			 'view': 'Revisions' }
 	
 	if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
 		pass
 	elif view_type == project_view_types['public']:
 		pass
 
-	return render_to_response('./socialnet/project/data.html', data)
+	return render_to_response('./socialnet/project/revisions.html', data)
+
+def projectNewRevision():
+    pass
 
 def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
@@ -399,6 +430,9 @@ def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
 		pass
 
 	return render_to_response('./socialnet/project/analysis.html', data)
+
+def projectNewAnalysis():
+    pass
 
 def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
 	data = { 'user_name': project_owner.username, 
@@ -456,7 +490,7 @@ class NewProjectForm(forms.Form):
 
         self.helper.add_input(Submit('submit', 'Submit'))
 
-class NewDataForm(forms.Form):
+class NewUserDataForm(forms.Form):
     name = forms.CharField(max_length=200)
     date_created = forms.DateTimeField()
     description = forms.CharField(max_length=400)
@@ -467,9 +501,9 @@ class NewDataForm(forms.Form):
     host = forms.ModelChoiceField(queryset=Host.objects.all())
 
     def __init__(self, *args, **kwargs):
-        super(NewDataForm, self).__init__(*args, **kwargs)
+        super(NewUserDataForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'id-new-data-form'
+        self.helper.form_id = 'id-new-user-data-form'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
@@ -479,19 +513,7 @@ class NewDataForm(forms.Form):
 
         self.helper.add_input(Submit('submit', 'Submit'))
 
-# Attributes
-#name = models.CharField(max_length=200)
-#date_created = models.DateTimeField()
-#last_activity = models.DateTimeField()
-#description = models.TextField(blank=True, null=True)
-
-# Relationships
-#owner = models.ForeignKey(User, related_name='main_analysis')
-#project = models.ForeignKey('Project', related_name='data_analysis')
-#contributor = models.ManyToManyField(User, blank=True, null=True, related_name='contributed_analysis')
-#data = models.ManyToManyField('Data', blank=True, null=True, related_name='data_analysis')
-
-class NewAnalysisForm(forms.Form):
+class NewUserAnalysisForm(forms.Form):
     name = forms.CharField(max_length=200)
     date_created = forms.DateTimeField()
     last_activity = forms.DateTimeField()
@@ -502,9 +524,9 @@ class NewAnalysisForm(forms.Form):
     data = forms.ModelMultipleChoiceField(queryset=Data.objects.all())
 
     def __init__(self, *args, **kwargs):
-        super(NewAnalysisForm, self).__init__(*args, **kwargs)
+        super(NewUserAnalysisForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'id-new-analysis-form'
+        self.helper.form_id = 'id-new-user-analysis-form'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'

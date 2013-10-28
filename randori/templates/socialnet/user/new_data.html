@@ -1,6 +1,6 @@
 {% extends "socialnet/user/base.html" %}
 {% load crispy_forms_tags %}
-{% crispy new_data_form new_data_form.helper %}
+{% crispy new_user_data_form new_user_data_form.helper %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
 				<div class="row">
 					<div class="col-lg-1"></div>
 		    		<div class="col-lg-4">
-		    			{% crispy new_data_form %}
+		    			{% crispy new_user_data_form %}
 		    		</div>
 		    		<div class="col-lg-7"></div>
     			</div>
