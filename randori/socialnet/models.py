@@ -67,6 +67,9 @@ class Revision(models.Model):
     # Attributes
 
     # Relationships
+    # Add later tree
+    # -> parent
+    # -> children
     version = models.ForeignKey('Version', related_name='in_revision')
     project = models.ForeignKey('Project', blank=True, null=True, related_name='previous_revision')
     software_stack = models.ManyToManyField('SoftwareStack', blank=True, null=True, related_name='used_for_revision')
@@ -74,8 +77,8 @@ class Revision(models.Model):
     def __unicode__(self):
         return self.version.__unicode__()
 
-    def ageComparison(self, other):
-        pass
+    def name(self):
+        return self.version.name()
 
 class Version(models.Model):
     # Attributes
@@ -92,6 +95,9 @@ class Version(models.Model):
 
     def ageComparison(self, other):
         pass
+
+    def name(self):
+        return '%s_%s_%s' % (str(self.major), str(self.minor), str(self.build))
 
 class Host(models.Model):
     # Attributes

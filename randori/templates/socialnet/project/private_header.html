@@ -18,15 +18,39 @@
 			{% endif %}
 
 			{% if view == 'Revisions' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=revisions">Revisions</a></li>
+				<li class="dropdown active">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Revisions <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_revision">New Revision</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">All Revisions</a></li>
+                  	</ul>
+                </li>
 			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">Revisions</a></li>		
+				<li class="dropdown">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Revisions <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_revision">New Revision</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">All Revisions</a></li>
+                  	</ul>
+                </li>		
 			{% endif %}
 
 			{% if view == 'Analysis' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
+				<li class="dropdown active">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_analysis">New Analysis</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">All Analysis</a></li>
+                  	</ul>
+                </li>
 			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>		
+				<li class="dropdown">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_analysis">New Analysis</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">All Analysis</a></li>
+                  	</ul>
+                </li>		
 			{% endif %}
 
 			{% if view == 'Settings' %}

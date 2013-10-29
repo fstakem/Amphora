@@ -381,55 +381,68 @@ def projectActivity(project_owner, project_to_be_viewed, view_type, viewer):
 	return render_to_response('./socialnet/project/activity.html', data)
 
 def projectPeople(project_owner, project_to_be_viewed, view_type, viewer):
-	data = { 'user_name': project_owner.username, 
-			 'first_name': project_owner.first_name,
-			 'last_name': project_owner.last_name,
-			 'view_type': view_type,
-			 'viewer_name': viewer.username,
-			 'project_name':  project_to_be_viewed.name,
-			 'view': 'People' }
-	
-	if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
-		pass
-	elif view_type == project_view_types['public']:
-		pass
+    owner = project_to_be_viewed.owner
+    contributors = list( User.objects.filter(contributed_project__id=project_to_be_viewed.id) )
+    observers = list( User.objects.filter(watched_project__id=project_to_be_viewed.id) )
 
-	return render_to_response('./socialnet/project/people.html', data)
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name': project_to_be_viewed.name,
+             'owner': owner,
+             'contributors': contributors,
+             'observers': observers,
+             'view': 'People' }
+	
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+
+    return render_to_response('./socialnet/project/people.html', data)
 
 def projectRevisions(project_owner, project_to_be_viewed, view_type, viewer):
-	data = { 'user_name': project_owner.username, 
-			 'first_name': project_owner.first_name,
-			 'last_name': project_owner.last_name,
-			 'view_type': view_type,
-			 'viewer_name': viewer.username,
-			 'project_name':  project_to_be_viewed.name,
-			 'view': 'Revisions' }
-	
-	if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
-		pass
-	elif view_type == project_view_types['public']:
-		pass
+    revisions = list( Revision.objects.filter(project__id=project_to_be_viewed.id) )
 
-	return render_to_response('./socialnet/project/revisions.html', data)
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'revisions': revisions,
+             'view': 'Revisions' }
+	
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/revisions.html', data)
 
 def projectNewRevision():
     pass
 
 def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
-	data = { 'user_name': project_owner.username, 
-			 'first_name': project_owner.first_name,
-			 'last_name': project_owner.last_name,
-			 'view_type': view_type,
-			 'viewer_name': viewer.username,
-			 'project_name':  project_to_be_viewed.name,
-			 'view': 'Analysis' }
-	
-	if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
-		pass
-	elif view_type == project_view_types['public']:
-		pass
+    analysis = list( Analysis.objects.filter(project__id=project_to_be_viewed.id) )
 
-	return render_to_response('./socialnet/project/analysis.html', data)
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'analysis': analysis,
+             'view': 'Analysis' }
+	
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+
+    return render_to_response('./socialnet/project/analysis.html', data)
 
 def projectNewAnalysis():
     pass
@@ -444,6 +457,15 @@ def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
 			 'view': 'Settings' }
 
 	return render_to_response('./socialnet/project/settings.html', data)
+
+# Revision
+def revision(request, user_name, project_name, revision):
+    data = { 'user_name': user_name, 
+             'project_name': project_name,
+             'revision': revision,
+             'view': 'Revision' }
+
+    return render_to_response('./socialnet/revision/tmp.html', data)
 
 # Data
 def data(request, user_name, project_name, host_name, data_name):
