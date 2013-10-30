@@ -80,6 +80,9 @@ class Revision(models.Model):
     def name(self):
         return self.version.name()
 
+    def dotName(self):
+        return self.version.dotName()
+
 class Version(models.Model):
     # Attributes
     major = models.PositiveIntegerField()
@@ -98,6 +101,9 @@ class Version(models.Model):
 
     def name(self):
         return '%s_%s_%s' % (str(self.major), str(self.minor), str(self.build))
+
+    def dotName(self):
+        return '%s.%s.%s' % (str(self.major), str(self.minor), str(self.build))
 
 class Host(models.Model):
     # Attributes

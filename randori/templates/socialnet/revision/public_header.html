@@ -7,30 +7,13 @@
     </div>
 
     <div class="navbar navbar-inverse">
-    	<a href="{% url 'views.project' user_name project_name %}?view=info" class="navbar-brand">{{ project_name }}</a>
+    	<a href="{% url 'views.project' user_name project_name %}?view=activity" class="navbar-brand">{{ project_name }}</a>
+
 		<ul class="nav navbar-nav pull-right">
-	        {% if view == 'Activity' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>
+	        {% if view == 'Info' %}
+				<li class="active"><a href="{% url 'views.revision' user_name project_name revision_name %}?view=info">Info</a></li>
 			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=activity">Activity</a></li>		
-			{% endif %}
-
-			{% if view == 'People' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
-			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>			
-			{% endif %}
-
-			{% if view == 'Revisions' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=revisions">Revisions</a></li>
-			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">Revisions</a></li>		
-			{% endif %}
-
-			{% if view == 'Analysis' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>
-			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>		
+				<li><a href="{% url 'views.revision' user_name project_name revision_name %}?view=info">Info</a></li>		
 			{% endif %}
 	    </ul>
 	</div>
