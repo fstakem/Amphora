@@ -1,0 +1,88 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta name="description" content="Randori is a research site. More details to follow.">
+	    <meta name="author" content="Fredrick Stakem">
+
+		<title>Randori</title>
+		
+		<!-- Custom styles for this template -->
+		<link href="{% static 'bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
+	    <link href="jumbotron.css" rel="stylesheet">
+	    <link href="sticky-footer.css" rel="stylesheet">
+	    <link href="{% static 'bootstrap/dist/css/bootstrap.icon-large.min.css' %}" rel="stylesheet">
+
+	    <link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/components.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/page_layout.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/menu_bar.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/pages.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/footer.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/header.css' %}" />
+		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/randori/main.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/randori/footer.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/randori/pages.css' %}" />-->
+
+
+	    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!--[if lt IE 9]>
+	      <script src="../../assets/js/html5shiv.js"></script>
+	      <script src="../../assets/js/respond.min.js"></script>
+	    <![endif]-->
+
+	</head>
+
+	<body>
+		{% if view_type == 'public' %}
+			{% include "socialnet/public_main_menu.html"%}
+		{% else%}
+			{% include "socialnet/private_main_menu.html"%}
+		{% endif %}
+
+		{% if view_type == 'public' %}
+			{% include "socialnet/data/public_header.html"%}
+		{% else%}
+			{% include "socialnet/data/private_header.html"%}
+		{% endif %}
+
+		
+
+		<div id="page-body">
+		    {% block content %}
+			This is the content area
+			{% endblock %}
+		</div>
+
+		<div id="page-footer">
+			<div class="container" id="page-footer">
+				<div id="footer-menu">
+					<ul>
+				        <li><a class="text-muted credit" href="{% url 'randori.views.terms' %}">Terms</a> </li>
+				        <li><a class="text-muted credit" href="{% url 'randori.views.privacy' %}">Privacy</a></li>
+				        <li><a class="text-muted credit" href="{% url 'randori.views.about' %}">About</a></li>
+				        <li><a class="text-muted credit" href="{% url 'randori.views.contact' %}">Contact</a></li>
+				    </ul>
+				</div>
+			</div>
+	    </div>
+
+	    
+	    <!-- Bootstrap core JavaScript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+	    <script src="{% static 'bootstrap/assets/js/jquery.js' %}"></script>
+	    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	    <script src="{% static 'bootstrap/assets/js/holder.js' %}"></script>
+	</body>
+</html>
+
+
+	￼
+
+
+
+
+￼

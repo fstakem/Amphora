@@ -1,0 +1,34 @@
+{% load static from staticfiles %}
+
+<div class="container theme-showcase">
+
+    <div class="navbar navbar-inverse">
+    	
+		<a href="{% url 'views.project' user_name project_name %}?view=activity" class="navbar-brand">{{ project_name }}</a>
+		<a href="#" class="navbar-brand">/</a>
+		<a href="{% url 'views.analysis' user_name project_name analysis_name %}?view=activity" class="navbar-brand">{{ analysis_name }}</a>
+
+		<ul class="nav navbar-nav pull-right">
+			{% if view == 'Info' %}
+				<li class="active"><a href="{% url 'views.analysis' user_name project_name analysis_name %}?view=info">Info</a></li>
+			{% else %}
+				<li><a href="{% url 'views.analysis' user_name project_name analysis_name %}?view=info">Info</a></li>		
+			{% endif %}
+	    </ul>
+	</div>
+
+</div> <!-- /container -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+

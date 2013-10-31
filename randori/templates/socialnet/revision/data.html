@@ -9,7 +9,7 @@
 	    	<div id="user-projects">
 				<ul>
 				{% for d in rev_data %}
-					<li><a href="{% url 'views.revision' user_name project_name d.name %}">{{ d.name }}</a></li>
+					<li><a href="{% url 'views.data' user_name project_name revision_name d.name %}">{{ d.name }}</a></li>
 				{% endfor %}
 				</br>
 				</ul>

@@ -70,6 +70,8 @@ class Revision(models.Model):
     # Add later tree
     # -> parent
     # -> children
+    # Add later
+    # -> owner
     version = models.ForeignKey('Version', related_name='in_revision')
     project = models.ForeignKey('Project', blank=True, null=True, related_name='previous_revision')
     software_stack = models.ManyToManyField('SoftwareStack', blank=True, null=True, related_name='used_for_revision')
