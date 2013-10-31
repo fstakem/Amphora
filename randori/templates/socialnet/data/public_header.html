@@ -9,13 +9,15 @@
     <div class="navbar navbar-inverse">
     	<a href="{% url 'views.project' user_name project_name %}?view=activity" class="navbar-brand">{{ project_name }}</a>
     	<a href="#" class="navbar-brand">/</a>
+		<a href="{% url 'views.revision' user_name project_name revision_name %}?view=activity" class="navbar-brand">{{ revision_name }}</a>
+		<a href="#" class="navbar-brand">/</a>
 		<a href="{% url 'views.data' user_name project_name revision_name data_name %}?view=activity" class="navbar-brand">{{ data_name }}</a>
 
 		<ul class="nav navbar-nav pull-right">
 	        {% if view == 'Info' %}
-				<li class="active"><a href="{% url 'views.analysis' user_name project_name revision_name data_name %}?view=info">Info</a></li>
+				<li class="active"><a href="{% url 'views.data' user_name project_name revision_name data_name %}?view=info">Info</a></li>
 			{% else %}
-				<li><a href="{% url 'views.analysis' user_name project_name revision_name data_name %}?view=info">Info</a></li>		
+				<li><a href="{% url 'views.data' user_name project_name revision_name data_name %}?view=info">Info</a></li>		
 			{% endif %}
 	    </ul>
 	</div>

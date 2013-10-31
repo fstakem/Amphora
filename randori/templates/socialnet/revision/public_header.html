@@ -17,6 +17,11 @@
 			{% else %}
 				<li><a href="{% url 'views.revision' user_name project_name revision_name %}?view=info">Info</a></li>		
 			{% endif %}
+			{% if view == 'Data' %}
+				<li class="active"><a href="{% url 'views.revision' user_name project_name revision_name %}?view=data">Data</a></li>
+			{% else %}
+				<li><a href="{% url 'views.revision' user_name project_name revision_name %}?view=data">Data</a></li>		
+			{% endif %}
 	    </ul>
 	</div>
 

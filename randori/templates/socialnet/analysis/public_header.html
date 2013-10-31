@@ -13,9 +13,9 @@
 
 		<ul class="nav navbar-nav pull-right">
 	        {% if view == 'Info' %}
-				<li class="active"><a href="{% url 'views.analysis' user_name project_name revision_name %}?view=info">Info</a></li>
+				<li class="active"><a href="{% url 'views.analysis' user_name project_name analysis_name %}?view=info">Info</a></li>
 			{% else %}
-				<li><a href="{% url 'views.analysis' user_name project_name revision_name %}?view=info">Info</a></li>		
+				<li><a href="{% url 'views.analysis' user_name project_name analysis_name %}?view=info">Info</a></li>		
 			{% endif %}
 	    </ul>
 	</div>
