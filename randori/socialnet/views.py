@@ -26,10 +26,13 @@ project_views = set([ 'info',
                       'activity', 
 					  'people', 
 					  'revisions',
-                      'new_revision',
+                      'data',
 					  'analysis', 
-                      'new_analysis',
-					  'settings' ])
+                      'settings',
+                      'new_person',
+                      'new_revision',
+                      'new_data',
+                      'new_analysis' ])
 
 revision_view_types = {'public': 'public', 'contributor': 'contributor', 'owner': 'owner'}
 revision_views = set([ 'info',
@@ -334,6 +337,7 @@ def project(request, user_name, project_name):
 						view_type = project_view_types['contributor']
 						break
 
+		# Public views
         if view == 'info':
             return projectInfo(project_owner, project_to_be_viewed, view_type, viewer)
 
@@ -346,22 +350,50 @@ def project(request, user_name, project_name):
         elif view == 'revisions':
             return projectRevisions(project_owner, project_to_be_viewed, view_type, viewer)
 
-        elif view == 'new_revision' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
-            return projectNewRevision(request, project_owner, project_to_be_viewed, view_type, viewer)
+        elif view == 'data':
+            return projectData(project_owner, project_to_be_viewed, view_type, viewer) 
 
         elif view == 'analysis':
             return projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer)
 
-        elif view == 'new_analysis' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
-            return projectNewAnalysis(request, project_owner, project_to_be_viewed, view_type, viewer)
-
+        # Private views
         elif view == 'settings' and view_type == project_view_types['owner']:
             return projectSettings(project_owner, project_to_be_viewed, view_type, viewer)
 
+        elif view == 'new_person' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewPerson(request, project_owner, project_to_be_viewed, view_type, viewer)
+
+        elif view == 'new_revision' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewRevision(request, project_owner, project_to_be_viewed, view_type, viewer)
+        
+        elif view == 'new_data' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewData(request, project_owner, project_to_be_viewed, view_type, viewer)
+
+        elif view == 'new_analysis' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+            return projectNewAnalysis(request, project_owner, project_to_be_viewed, view_type, viewer)
+
+        # No view
         else:
             return HttpResponse(status=404)
 
 	return HttpResponse(status=404)
+
+# Public views
+def projectActivity(project_owner, project_to_be_viewed, view_type, viewer):
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'view': 'Activity' }
+
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+
+    return render_to_response('./socialnet/project/activity.html', data)
 
 def projectInfo(project_owner, project_to_be_viewed, view_type, viewer):
     data = { 'user_name': project_owner.username, 
@@ -378,22 +410,6 @@ def projectInfo(project_owner, project_to_be_viewed, view_type, viewer):
         pass
 
     return render_to_response('./socialnet/project/info.html', data)
-
-def projectActivity(project_owner, project_to_be_viewed, view_type, viewer):
-	data = { 'user_name': project_owner.username, 
-			 'first_name': project_owner.first_name,
-			 'last_name': project_owner.last_name,
-			 'view_type': view_type,
-			 'viewer_name': viewer.username,
-			 'project_name':  project_to_be_viewed.name,
-			 'view': 'Activity' }
-
-	if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
-		pass
-	elif view_type == project_view_types['public']:
-		pass
-
-	return render_to_response('./socialnet/project/activity.html', data)
 
 def projectPeople(project_owner, project_to_be_viewed, view_type, viewer):
     owner = project_to_be_viewed.owner
@@ -437,6 +453,75 @@ def projectRevisions(project_owner, project_to_be_viewed, view_type, viewer):
     
     return render_to_response('./socialnet/project/revisions.html', data)
 
+def projectData(project_owner, project_to_be_viewed, view_type, viewer):
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'view': 'Data' }
+    
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/data.html', data)
+
+def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
+    analysis = list( Analysis.objects.filter(project__id=project_to_be_viewed.id) )
+
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'analysis': analysis,
+             'view': 'Analysis' }
+    
+    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
+        pass
+    elif view_type == project_view_types['public']:
+        pass
+
+    return render_to_response('./socialnet/project/analysis.html', data)
+
+# Private views
+def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'project_name':  project_to_be_viewed.name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'view': 'Settings' }
+
+    return render_to_response('./socialnet/project/settings.html', data)
+
+def projectNewPerson(request, project_owner, project_to_be_viewed, view_type, viewer):
+    form = NewProjectPersonForm(request.POST or None)
+
+    data = { 'user_name': project_owner.username, 
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'new_project_person_form': form,
+             'view': 'New Person' }
+
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
+
+
+    return render(request, './socialnet/project/new_person.html', data)
+
 def projectNewRevision(request, project_owner, project_to_be_viewed, view_type, viewer):
     form = NewProjectRevisionForm(request.POST or None)
 
@@ -459,8 +544,8 @@ def projectNewRevision(request, project_owner, project_to_be_viewed, view_type, 
 
     return render(request, './socialnet/project/new_revision.html', data)
 
-def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
-    analysis = list( Analysis.objects.filter(project__id=project_to_be_viewed.id) )
+def projectNewData(request, project_owner, project_to_be_viewed, view_type, viewer):
+    form = NewProjectDataForm(request.POST or None)
 
     data = { 'user_name': project_owner.username, 
              'first_name': project_owner.first_name,
@@ -468,15 +553,18 @@ def projectAnalysis(project_owner, project_to_be_viewed, view_type, viewer):
              'view_type': view_type,
              'viewer_name': viewer.username,
              'project_name':  project_to_be_viewed.name,
-             'analysis': analysis,
-             'view': 'Analysis' }
-	
-    if view_type == project_view_types['owner'] or view_type == project_view_types['contributor']:
-        pass
-    elif view_type == project_view_types['public']:
-        pass
+             'new_project_data_form': form,
+             'view': 'New Data' }
 
-    return render_to_response('./socialnet/project/analysis.html', data)
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
+
+
+    return render(request, './socialnet/project/new_data.html', data)
 
 def projectNewAnalysis(request, project_owner, project_to_be_viewed, view_type, viewer):
     form = NewProjectAnalysisForm(request.POST or None)
@@ -500,16 +588,6 @@ def projectNewAnalysis(request, project_owner, project_to_be_viewed, view_type, 
 
     return render(request, './socialnet/project/new_analysis.html', data)
 
-def projectSettings(project_owner, project_to_be_viewed, view_type, viewer):
-	data = { 'user_name': project_owner.username, 
-			 'first_name': project_owner.first_name,
-			 'last_name': project_owner.last_name,
-			 'project_name':  project_to_be_viewed.name,
-			 'view_type': view_type,
-			 'viewer_name': viewer.username,
-			 'view': 'Settings' }
-
-	return render_to_response('./socialnet/project/settings.html', data)
 
 # Revision
 revision_views = set([ 'info',
@@ -870,6 +948,23 @@ class NewUserAnalysisForm(forms.Form):
 
         self.helper.add_input(Submit('submit', 'Submit'))
 
+class NewProjectPersonForm(forms.Form):
+    version = forms.ModelChoiceField(queryset=Version.objects.all())
+    software_stack = forms.ModelMultipleChoiceField(queryset=SoftwareStack.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(NewProjectPersonForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-project-person-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_person'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
+
 class NewProjectRevisionForm(forms.Form):
     version = forms.ModelChoiceField(queryset=Version.objects.all())
     software_stack = forms.ModelMultipleChoiceField(queryset=SoftwareStack.objects.all())
@@ -883,6 +978,27 @@ class NewProjectRevisionForm(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.form_method = 'post'
         self.helper.form_action = 'new_revision'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+class NewProjectDataForm(forms.Form):
+    name = forms.CharField(max_length=200)
+    description = forms.CharField(max_length=400)
+    file_data = forms.FileField()
+
+    collected_location = forms.ModelChoiceField(queryset=Location.objects.all())
+    host = forms.ModelChoiceField(queryset=Host.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(NewProjectDataForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-project-data-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_data'
         self.helper.help_text_as_placeholder = True
 
         self.helper.add_input(Submit('submit', 'Submit'))

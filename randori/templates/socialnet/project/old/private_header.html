@@ -1,0 +1,82 @@
+{% load static from staticfiles %}
+
+<div class="container theme-showcase">
+
+    <div class="navbar navbar-inverse">
+		<a href="{% url 'views.project' user_name project_name %}?view=activity" class="navbar-brand">{{ project_name }}</a>
+		<ul class="nav navbar-nav pull-right">
+			{% if view == 'Info' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=info">Info</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=info">Info</a></li>		
+			{% endif %}
+
+			{% if view == 'People' %}
+				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
+			{% else %}
+				<li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>			
+			{% endif %}
+
+			{% if view == 'Revisions' or view == 'New Revision' %}
+				<li class="dropdown active">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Revisions <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_revision">New Revision</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">All Revisions</a></li>
+                  	</ul>
+                </li>
+			{% else %}
+				<li class="dropdown">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Revisions <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_revision">New Revision</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=revisions">All Revisions</a></li>
+                  	</ul>
+                </li>		
+			{% endif %}
+
+			{% if view == 'Analysis' or view == 'New Analysis' %}
+				<li class="dropdown active">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_analysis">New Analysis</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">All Analysis</a></li>
+                  	</ul>
+                </li>
+			{% else %}
+				<li class="dropdown">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Analysis <b class="caret"></b></a>
+              		<ul class="dropdown-menu">
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=new_analysis">New Analysis</a></li>
+                		<li><a href="{% url 'views.project' user_name project_name %}?view=analysis">All Analysis</a></li>
+                  	</ul>
+                </li>		
+			{% endif %}
+
+			{% if view == 'Settings' %}
+				{% if view_type == 'owner' %}
+	    			<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    		{% endif %}
+			{% else %}
+				{% if view_type == 'owner' %}
+	    			<li><a href="{% url 'views.project' user_name project_name %}?view=settings">Settings</a></li>
+	    		{% endif %}			
+			{% endif %}
+	    </ul>
+	</div>
+
+</div> <!-- /container -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+

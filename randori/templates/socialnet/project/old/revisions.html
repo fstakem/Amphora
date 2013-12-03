@@ -1,0 +1,20 @@
+{% extends "socialnet/project/base.html" %}
+
+{% block content %}
+	
+	<div class="container">
+		<div class="panel panel-default">
+	        <div class="panel-heading"><h3>{{ view }}</h3></div>
+	    	</br>
+	    	<div id="user-projects">
+				<ul>
+				{% for revision in revisions %}
+					<li><a href="{% url 'views.revision' user_name project_name revision.name %}">{{ revision.name }}</a></li>
+				{% endfor %}
+				</br>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
