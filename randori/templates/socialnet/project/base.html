@@ -22,9 +22,19 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/pages.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/footer.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/socialnet/header.css' %}" />
-		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/randori/main.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/randori/footer.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/randori/pages.css' %}" />-->
+
+		<!-- Bootstrap core JavaScript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+	    <script src="{% static 'bootstrap/assets/js/jquery.js' %}"></script>
+	    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	    <script src="{% static 'bootstrap/assets/js/holder.js' %}"></script>
+
+	    <script src="{% static 'js/csfr.js' %}"></script>
+
+	    <!-- x-editable (bootstrap version) -->
+	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
 
 	    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -36,6 +46,7 @@
 	</head>
 
 	<body>
+
 		{% if view_type == 'public' %}
 			{% include "socialnet/public_main_menu.html"%}
 		{% else%}
@@ -69,13 +80,6 @@
 			</div>
 	    </div>
 
-	    
-	    <!-- Bootstrap core JavaScript
-	    ================================================== -->
-	    <!-- Placed at the end of the document so the pages load faster -->
-	    <script src="{% static 'bootstrap/assets/js/jquery.js' %}"></script>
-	    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
-	    <script src="{% static 'bootstrap/assets/js/holder.js' %}"></script>
 	</body>
 </html>
 

@@ -1,12 +1,170 @@
 {% extends "socialnet/project/base.html" %}
 
 {% block content %}
+
+	<script>
+		$(document).ready(function() 
+		{
+            
+            var x = '{{revisions}}';
+
+            console.log(x)
+            console.log(typeof x)
+
+		    //toggle `popup` / `inline` mode
+		    $.fn.editable.defaults.mode = 'inline';     
+		    
+            var project_name_data = {
+                                        name: 'name',
+                                        type: 'text',
+                                        url: '{{url}}',
+                                        pk: {{project_id}},
+                                    };
+
+            var public_data = {
+                                name: 'public',
+                                type: 'select',
+                                url: '{{url}}',
+                                pk: {{project_id}},
+                                source: [ 
+                                            { value: 1, text: 'True' }, 
+                                            { value: 0, text: 'False' } 
+                                        ]
+                              };
+
+            if( '{{public}}' == 'True')
+            {
+                public_data['value'] = 1;
+            }
+            else
+            {
+                public_data['value'] = 0;
+            }
+
+            var revision_data = {
+                                    name: 'current_revision',
+                                    type: 'select',
+                                    url: '{{url}}',
+                                    pk: {{project_id}},
+                                    source: [ 
+                                                { value: 1, text: 'True' }, 
+                                                { value: 0, text: 'False' } 
+                                            ]
+
+                                };
+
+            
+            $('#project-name').editable(project_name_data);
+            $('#public').editable(public_data);
+		    $('#revisions').editable(revision_data);
+		    
+
+		    $('#description').editable(
+		    {
+
+		    });
+
+		    $('#owner').editable(
+		    {
+
+		    });
+
+		    $('#contributors').editable(
+		    {
+
+		    });
+
+		    $('#observers').editable(
+		    {
+
+		    });
+		    
+		});
+	</script>
 	
 	<div class="container">
 		<div class="panel panel-default" id="content-formatting">
 	        <div class="panel-heading"><h3>{{ view }}</h3></div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<div class="row top-buffer-large"></div>
+				<div class="row">
+					<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Project Name</span>
+					     	<a href="#" id="project-name">{{ project_name }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+    			</div>
+
+    			<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Public</span>
+					     	<a href="#" id="public">{{ public }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+		    	<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Revision</span>
+					     	<a href="#" id="revisions">{{ owner }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+		    	<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Description</span>
+					     	<a href="#" id="description">{{ owner }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+		    	<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Owner</span>
+					     	<a href="#" id="owner">{{ owner }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+		    	<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Contributors</span>
+					     	<a href="#" id="contributors">{{ owner }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+		    	<div class="row">
+    				<div class="col-lg-1"></div>
+		    		<div class="col-lg-4">
+		    			 <div>
+					     	<span>Observers</span>
+					     	<a href="#" id="observers">{{ owner }}</a>
+					     </div>
+		    		</div>
+		    		<div class="col-lg-7"></div>
+		    	</div>
+
+    			<div class="row bottom-buffer-large"></div>
 		</div>
 	</div>
-
+	
 {% endblock %}
