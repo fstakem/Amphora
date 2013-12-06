@@ -137,6 +137,8 @@ def projectInfo(request, project_owner, project_to_be_viewed, view_type, viewer)
                 value = False
 
             setattr(project, request.POST['name'], value)
+        elif request.POST['name'] == 'owner':
+            print 'Whoa buddy! We need some more logic before you go bout doin that.'
         else:
             setattr(project, request.POST['name'], request.POST['value'])
             
@@ -172,11 +174,24 @@ def projectInfo(request, project_owner, project_to_be_viewed, view_type, viewer)
         return render_to_response('./socialnet/project/info.html', data)
     else:
         revisions = list( Revision.objects.filter(project__id=project_to_be_viewed.id).prefetch_related('version') )
+        revision_data = []
         for revision in revisions:
-            print revision.id 
-            print revision.version
+            revision_data.append( [revision.id, str(revision.version) ] )
+        revision_data = simplejson.dumps(revision_data)
+        current_revision = [project_to_be_viewed.current_revision.id, str(project_to_be_viewed.current_revision.version)]
+        current_revision = simplejson.dumps(current_revision)
+
 
         contributors = list( User.objects.filter(contributed_project__id=project_to_be_viewed.id) )
+        contributor_data = []
+        for contributor in contributors:
+            print contributor
+            contributor_data.append( [contributor.id, str(contributor.username) ] )
+        contributor_data = simplejson.dumps(contributor_data)
+
+        owner = project_to_be_viewed.owner
+        owner_data = simplejson.dumps( [owner.id, str(owner.username) ] )
+
         observers = list( User.objects.filter(watched_project__id=project_to_be_viewed.id) )
         #url = request.META['PATH_INFO'][1:] + '?' + request.META['QUERY_STRING']
         url = '?' + request.META['QUERY_STRING']
@@ -190,11 +205,12 @@ def projectInfo(request, project_owner, project_to_be_viewed, view_type, viewer)
                  'viewer_name': viewer.username,
                  'project_name':  project_to_be_viewed.name,
                  'public': project_to_be_viewed.public,
-                 'current_revision': project_to_be_viewed.current_revision,
-                 'revisions': revisions,
+                 'current_revision': current_revision,
+                 'revisions': revision_data,
                  'description': project_to_be_viewed.description,
-                 'owner': project_to_be_viewed.owner,
-                 'contributors': contributors,
+                 'owner': owner_data,
+                 'contributors': contributor_data,
+                 'contrib_alt': contributors,
                  'observers': observers,
                  'url': url,
                  'ui_data': ui_data,

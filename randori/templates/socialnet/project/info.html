@@ -2,11 +2,15 @@
 
 {% block content %}
 
+    <style>
+        .xedit_text{ width: 500px; }
+    </style>
+
 	<script>
 		$(document).ready(function() 
 		{
             
-            var x = '{{revisions}}';
+            var x = jQuery.parseJSON('{{ revisions|safe }}');
 
             console.log(x)
             console.log(typeof x)
@@ -53,35 +57,60 @@
 
                                 };
 
+            var current_revision = jQuery.parseJSON('{{ current_revision|safe }}');
+            var revisions = jQuery.parseJSON('{{ revisions|safe }}');
+            var source_data = new Array();
+            for(var i = 0; i < revisions.length; i++)
+            {
+                source_data.push( {value: revisions[i][0], text: revisions[i][1]} )
+
+                if( revisions[i][0] == current_revision[0])
+                {
+                    revision_data['value'] = revisions[i][0];
+                }
+            }
+            revision_data['source'] = source_data;
+
+            var description_data = {
+                                        name: 'description',
+                                        type: 'textarea',
+                                        url: '{{url}}',
+                                        rows: 6,
+                                        inputclass: 'xedit_text',
+                                        pk: {{project_id}},
+                                    };
+
+            var contributors = jQuery.parseJSON('{{ contributors|safe }}');
+            var owner = jQuery.parseJSON('{{ owner|safe }}');
+            var owner_data = {
+                                name: 'owner',
+                                type: 'select',
+                                url: '{{url}}',
+                                pk: {{project_id}},
+                            };
+            source_data = new Array();
+            for(var i = 0; i < contributors.length; i++)
+            {
+                source_data.push( {value: contributors[i][0], text: contributors[i][1]} )
+            }
+            source_data.push( {value: owner[0], text: owner[1]} )
+            owner_data['value'] = owner[0];
+            owner_data['source'] = source_data;
+
+            
             
             $('#project-name').editable(project_name_data);
             $('#public').editable(public_data);
 		    $('#revisions').editable(revision_data);
-		    
-
-		    $('#description').editable(
-		    {
-
-		    });
-
-		    $('#owner').editable(
-		    {
-
-		    });
-
-		    $('#contributors').editable(
-		    {
-
-		    });
-
-		    $('#observers').editable(
-		    {
-
-		    });
+            $('#revisions').text(current_revision[1])
+		    $('#description').editable(description_data);
+            $('#owner').editable(owner_data);
+            $('#owner').text(owner[1])
 		    
 		});
 	</script>
-	
+
+    
 	<div class="container">
 		<div class="panel panel-default" id="content-formatting">
 	        <div class="panel-heading"><h3>{{ view }}</h3></div>
@@ -112,8 +141,8 @@
     				<div class="col-lg-1"></div>
 		    		<div class="col-lg-4">
 		    			 <div>
-					     	<span>Revision</span>
-					     	<a href="#" id="revisions">{{ owner }}</a>
+					     	<span>Current Revision</span>
+					     	<a href="#" id="revisions">X</a>
 					     </div>
 		    		</div>
 		    		<div class="col-lg-7"></div>
@@ -124,7 +153,7 @@
 		    		<div class="col-lg-4">
 		    			 <div>
 					     	<span>Description</span>
-					     	<a href="#" id="description">{{ owner }}</a>
+					     	<a href="#" id="description">{{ description }}</a>
 					     </div>
 		    		</div>
 		    		<div class="col-lg-7"></div>
@@ -135,7 +164,7 @@
 		    		<div class="col-lg-4">
 		    			 <div>
 					     	<span>Owner</span>
-					     	<a href="#" id="owner">{{ owner }}</a>
+					     	<a href="#" id="owner">X</a>
 					     </div>
 		    		</div>
 		    		<div class="col-lg-7"></div>
@@ -146,22 +175,64 @@
 		    		<div class="col-lg-4">
 		    			 <div>
 					     	<span>Contributors</span>
-					     	<a href="#" id="contributors">{{ owner }}</a>
+                            <a href="#" id="contributor">John ...</a>
 					     </div>
 		    		</div>
 		    		<div class="col-lg-7"></div>
 		    	</div>
+
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-2">
+                         <div>
+                            <table class="table">
+                                {% for c in contrib_alt %}
+                                <tr>
+                                    <td>{{c}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                         </div>
+                    </div>
+                    <div class="col-lg-10"></div>
+                </div>
 
 		    	<div class="row">
     				<div class="col-lg-1"></div>
 		    		<div class="col-lg-4">
 		    			 <div>
 					     	<span>Observers</span>
-					     	<a href="#" id="observers">{{ owner }}</a>
+					     	<a href="#" id="observers">Joe ...</a>
 					     </div>
 		    		</div>
 		    		<div class="col-lg-7"></div>
 		    	</div>
+
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-2">
+                         <div>
+                            <table class="table">
+                                {% for o in observers %}
+                                <tr>
+                                    <td>{{o}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                         </div>
+                    </div>
+                    <div class="col-lg-10"></div>
+                </div>
 
     			<div class="row bottom-buffer-large"></div>
 		</div>
