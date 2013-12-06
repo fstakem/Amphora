@@ -19,19 +19,13 @@
               	</ul>
             </li>
 
-            {% if view == 'People' or view == 'New Person' %}
-			<li class="dropdown active">
-			{% else %}
-			<li class="dropdown">
-			{% endif %}
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">People <b class="caret"></b></a>
-          		<ul class="dropdown-menu">
-          			<li><a href="{% url 'views.project' user_name project_name %}?view=new_person">New Person</a></li>
-            		<li><a href="{% url 'views.project' user_name project_name %}?view=people">All People</a></li>
-              	</ul>
-            </li>
+      {% if view == 'People' %}
+        <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>
+      {% else %}
+        <li><a href="{% url 'views.project' user_name project_name %}?view=people">People</a></li>      
+      {% endif %}
 
-            {% if view == 'Revisions' or view == 'New Revision' %}
+      {% if view == 'Revisions' or view == 'New Revision' %}
 			<li class="dropdown active">
 			{% else %}
 			<li class="dropdown">
@@ -43,7 +37,7 @@
               	</ul>
             </li>
 
-            {% if view == 'Data' or view == 'New Data' %}
+      {% if view == 'Data' or view == 'New Data' %}
 			<li class="dropdown active">
 			{% else %}
 			<li class="dropdown">
@@ -55,7 +49,7 @@
               	</ul>
             </li>
 
-            {% if view == 'Analysis' or view == 'New Analysis' %}
+      {% if view == 'Analysis' or view == 'New Analysis' %}
 			<li class="dropdown active">
 			{% else %}
 			<li class="dropdown">

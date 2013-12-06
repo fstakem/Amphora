@@ -33,7 +33,6 @@ project_views = set([ 'info',
                       'data',
                       'analysis',
                       'settings',
-                      'new_person',
                       'new_revision',
                       'new_data',
                       'new_analysis' ])
@@ -90,8 +89,8 @@ def project(request, user_name, project_name):
         elif view == 'settings' and view_type == project_view_types['owner']:
             return projectSettings(project_owner, project_to_be_viewed, view_type, viewer)
         
-        elif view == 'new_person' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
-            return projectNewPerson(request, project_owner, project_to_be_viewed, view_type, viewer)
+        #elif view == 'new_person' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
+        #    return projectNewPerson(request, project_owner, project_to_be_viewed, view_type, viewer)
         
         elif view == 'new_revision' and (view_type == project_view_types['owner'] or view_type == project_view_types['contributor']):
             return projectNewRevision(request, project_owner, project_to_be_viewed, view_type, viewer)
