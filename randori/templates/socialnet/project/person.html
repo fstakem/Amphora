@@ -1,0 +1,64 @@
+{% load staticfiles %}
+
+<style>
+    .person
+    {
+        margin-left: 20px;
+        margin-top: 10px;
+        margin-bottom: 12px;
+        margin-right: 20px;
+        border: #d9e0ea 1px solid;
+        padding-right: 6px;
+    }
+
+    .person-img
+    {
+        width: 80px;
+        height: 80px;
+    }
+
+    #heading-column
+    {
+       padding-left: 23px; 
+    }
+
+    #button-column
+    {
+        padding-top: 2px;
+        padding-right: 20px;
+    }
+    
+</style>
+
+<div class="person">
+    <div class="row">
+
+        <div class="col-md-2">
+            <a href="{% url 'views.user' user_name %}?view=activity">
+                <img class="person-img" src="{% static user.3 %}" alt="Peronsal Photo">
+            </a>
+        </div>
+
+        <div class="col-md-9" id="heading-column">
+            <a href="{% url 'views.user' user_name %}?view=activity">
+                {% if user.2 == 'owner' %}
+                    <h4 class="person-heading">{{user.0}} (Owner)</h4>
+                {% else %}
+                    <h4 class="person-heading">{{user.0}}</h4>
+                {% endif %}
+            </a>
+           <span>{{user.1}}</span>
+        </div>
+
+        <div class="col-md-1" id="button-column">
+            {% if view == 'people' %}
+            <button type="button" class="close" aria-hidden="true"><i class="fa fa-times-circle fa"></i></button>
+            {% elif view == 'person_requests' %}
+            <button type="button" class="close" aria-hidden="true"><i class="fa fa-check-circle fa"></i></button>
+            {% elif view == 'add_person' %}
+            <button type="button" class="close" aria-hidden="true"><i class="fa fa-plus-square fa"></i></button>
+            {% endif %}
+        </div>
+
+    </div>
+</div>

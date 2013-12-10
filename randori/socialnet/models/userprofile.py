@@ -25,6 +25,7 @@ class UserProfile(models.Model):
     web_site = models.URLField(max_length=200, blank=True, null=True)
     profile_photo = models.ImageField(upload_to=getProfilePhotoPath, blank=True, null=True)
     cover_photo = models.ImageField(upload_to=getCoverPhotoPath, blank=True, null=True)
+    # title
     bio = models.TextField(blank=True)
 
     # Relationships

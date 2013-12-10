@@ -1,0 +1,52 @@
+{% extends "socialnet/project/base.html" %}
+
+{% block content %}
+
+<style>
+    #people-tabs
+    {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3>People</h3></div>
+
+        <ul class="nav nav-tabs" id="people-tabs">
+
+            {% if view == 'people' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=people">All</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=people">All</a></li>
+            {% endif %}
+
+            {% if view == 'add_person' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=add_person">Add</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=add_person">Add</a></li>
+            {% endif %}
+
+            {% if view_type == 'owner' %}
+                {% if view == 'person_requests' %}
+                <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=person_requests">Requests</a></li>
+                {% else %}
+                <li><a href="{% url 'views.project' user_name project_name %}?view=person_requests">Requests</a></li>
+                {% endif %}
+            {% endif %}
+
+        </ul>
+        
+        {% if view == 'people' %}
+            {% include "socialnet/project/all_people.html"%}
+        {% elif view == 'add_person' %}
+            {% include "socialnet/project/add_person.html"%}
+        {% elif view == 'person_requests' %}
+            {% include "socialnet/project/person_requests.html"%}
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+    

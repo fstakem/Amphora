@@ -26,7 +26,7 @@ def getImagePath(instance, filename, prepend):
         prepend = 'generic'
 
     upload_time = str( datetime.datetime.now() )
-    upload_time = upload_time.replace(' ', '_').replace('-', '_')
+    upload_time = upload_time.replace(' ', '_').replace('-', '_').replace(':', '_').replace('.', '_')
 
     return os.path.join('photos/', str(instance.user.username) + '/', prepend + '/',   prepend + '__' + upload_time + '__' + filename)
 

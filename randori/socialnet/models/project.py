@@ -30,6 +30,7 @@ class Project(models.Model):
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_project')
     contributor = models.ManyToManyField(User, blank=True, null=True, related_name='contributed_project')
+    # added contributor -> not yet accepted
     observer = models.ManyToManyField(User, blank=True, null=True, related_name='watched_project')
     current_revision = models.OneToOneField('Revision', blank=True, null=True, related_name='active_project')
 

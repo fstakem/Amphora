@@ -1,0 +1,27 @@
+<style>
+    #people
+    {
+        margin-top: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+
+
+<div class="row" id="people">
+
+    <div class="col-md-6">
+        {% for user in users_left %}
+            {% include "socialnet/project/person.html"%}
+        {% endfor %}
+    </div>
+
+    <div class="col-md-6">
+        {% for user in users_right %}
+            {% include "socialnet/project/person.html"%}
+        {% endfor %}
+    </div>
+
+</div>
