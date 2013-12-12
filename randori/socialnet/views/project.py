@@ -31,7 +31,8 @@ views = set([ 'info',
               'people',
               'add_person',
               'person_requests',
-              'revisions',
+              'graph_hosts',
+              'tree_hosts',
               'data',
               'analysis',
               'settings',
@@ -78,8 +79,11 @@ def project(request, user_name, project_name):
         elif view == 'people':
             return peopleView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
-        elif view == 'revisions':
-            return revisionsView(project_owner, project_to_be_viewed, view, view_type, viewer)
+        elif view == 'graph_hosts':
+            return graphHostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
+
+        elif view == 'tree_hosts':
+            return treeHostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
         elif view == 'data':
             return dataView(project_owner, project_to_be_viewed, view, view_type, viewer)
@@ -96,9 +100,6 @@ def project(request, user_name, project_name):
 
         elif view == 'person_requests' and view_type == view_types['owner']:
             return personRequestView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
-        
-        elif view == 'new_revision' and (view_type == view_types['owner'] or view_type == view_types['contributor']):
-            return newRevisionView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
         
         elif view == 'new_data' and (view_type == view_types['owner'] or view_type == view_types['contributor']):
             return newDataView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
@@ -270,24 +271,37 @@ def getPersonalInformation(user, owner):
 
     return data
 
-def revisionsView(project_owner, project_to_be_viewed, view, view_type, viewer):
-    revisions = list( Revision.objects.filter(project__id=project_to_be_viewed.id) )
-    
+def graphHostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
     data = { 'user_name': project_owner.username,
              'first_name': project_owner.first_name,
              'last_name': project_owner.last_name,
              'view_type': view_type,
              'viewer_name': viewer.username,
              'project_name':  project_to_be_viewed.name,
-             'revisions': revisions,
-             'view': 'revisions' }
+             'view': 'graph_hosts' }
     
     if view_type == view_types['owner'] or view_type == view_types['contributor']:
         pass
     elif view_type == view_types['public']:
         pass
     
-    return render_to_response('./socialnet/project/revisions.html', data)
+    return render_to_response('./socialnet/project/hosts.html', data)
+
+def treeHostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    data = { 'user_name': project_owner.username,
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'view': 'tree_hosts' }
+    
+    if view_type == view_types['owner'] or view_type == view_types['contributor']:
+        pass
+    elif view_type == view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/hosts.html', data)
 
 def dataView(project_owner, project_to_be_viewed, view, view_type, viewer):
     data = { 'user_name': project_owner.username,
@@ -398,28 +412,6 @@ def personRequestView(request, project_owner, project_to_be_viewed, view, view_t
     
     return render_to_response('./socialnet/project/private_people.html', data)
         
-def newRevisionView(request, project_owner, project_to_be_viewed, view, view_type, viewer):
-    form = NewRevisionForm(request.POST or None)
-    
-    data = { 'user_name': project_owner.username,
-             'first_name': project_owner.first_name,
-             'last_name': project_owner.last_name,
-             'view_type': view_type,
-             'viewer_name': viewer.username,
-             'project_name':  project_to_be_viewed.name,
-             'new_project_revision_form': form,
-             'view': 'new_revision' }
-    
-    if request.POST and form.is_valid():
-        print 'POST form bro'
-        #user = form.login(request)
-        #if user:
-        #    auth.login(request, user)
-        #    return HttpResponseRedirect("/" + user.username)
-
-    
-    return render(request, './socialnet/project/new_revision.html', data)
-
 def newDataView(request, project_owner, project_to_be_viewed, view, view_type, viewer):
     form = NewDataForm(request.POST or None)
     
@@ -477,23 +469,6 @@ class NewPersonForm(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.form_method = 'post'
         self.helper.form_action = 'new_person'
-        self.helper.help_text_as_placeholder = True
-        
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-class NewRevisionForm(forms.Form):
-    version = forms.ModelChoiceField(queryset=Version.objects.all())
-    software_stack = forms.ModelMultipleChoiceField(queryset=SoftwareStack.objects.all())
-    
-    def __init__(self, *args, **kwargs):
-        super(NewRevisionForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'id-new-project-revision-form'
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'new_revision'
         self.helper.help_text_as_placeholder = True
         
         self.helper.add_input(Submit('submit', 'Submit'))

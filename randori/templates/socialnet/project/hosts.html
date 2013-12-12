@@ -1,0 +1,42 @@
+{% extends "socialnet/project/base.html" %}
+
+{% block content %}
+
+<style>
+    #hosts-tabs
+    {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3>Hosts</h3></div>
+
+        <ul class="nav nav-tabs" id="hosts-tabs">
+
+            {% if view == 'graph_hosts' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=graph_hosts">Graph</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=graph_hosts">Graph</a></li>
+            {% endif %}
+
+            {% if view == 'tree_hosts' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=tree_hosts">Tree</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=tree_hosts">Tree</a></li>
+            {% endif %}
+
+        </ul>
+        
+        {% if view == 'graph_hosts' %}
+            {% include "socialnet/project/graph_hosts.html"%}
+        {% elif view == 'tree_hosts' %}
+            {% include "socialnet/project/tree_hosts.html"%}
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+    
