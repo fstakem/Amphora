@@ -31,8 +31,7 @@ views = set([ 'info',
               'people',
               'add_person',
               'person_requests',
-              'graph_hosts',
-              'tree_hosts',
+              'hosts',
               'data',
               'analysis',
               'settings',
@@ -79,12 +78,9 @@ def project(request, user_name, project_name):
         elif view == 'people':
             return peopleView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
-        elif view == 'graph_hosts':
-            return graphHostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
-
-        elif view == 'tree_hosts':
-            return treeHostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
-        
+        elif view == 'hosts':
+            return hostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
+ 
         elif view == 'data':
             return dataView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
@@ -271,30 +267,82 @@ def getPersonalInformation(user, owner):
 
     return data
 
-def graphHostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
-    data = { 'user_name': project_owner.username,
-             'first_name': project_owner.first_name,
-             'last_name': project_owner.last_name,
-             'view_type': view_type,
-             'viewer_name': viewer.username,
-             'project_name':  project_to_be_viewed.name,
-             'view': 'graph_hosts' }
-    
-    if view_type == view_types['owner'] or view_type == view_types['contributor']:
-        pass
-    elif view_type == view_types['public']:
-        pass
-    
-    return render_to_response('./socialnet/project/hosts.html', data)
+def hostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    data_view = []
+    tree_data = [ 
+                    { 'title': 'Node 1', 'key': '1' }, 
+                    { 'title': 'Node 2', 'key': '2', "folder": "true", "children":
+                        [
+                            { 'title': 'Node 3', 'key': '3' },
+                            { 'title': 'Node 4', 'key': '4' }
+                        ]
+                    } 
+                ]
+    data_sets = Data.objects.filter(revision__id=project_to_be_viewed.current_revision.id)
+    hosts = []
+    locations = set()
 
-def treeHostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    for d in data_sets:
+        locations.add( Location.objects.filter(collected_data__id=d.id)[0] )
+
+    locations = list(locations)
+
+    t = []
+    index = 1
+    for l in locations:
+        loc_tree = { 'title': l.name, 'key': str(index), 'folder': 'true'}
+        index += 1
+        children = []
+        t.append(loc_tree)
+
+        hosts = Host.objects.filter(last_location__id=l.id)
+        host_data = []
+
+        for host in hosts:
+            host_tree = { 'title': host.name, 'key': str(index), 'folder': 'true' }
+            index += 1
+            grand_children = []
+            children.append(host_tree)
+
+            data_sets = Data.objects.filter(host__id=host.id)
+            d = []
+
+            for ds in data_sets:
+                data_tree = { 'title': ds.name, 'key': str(index) }
+                index += 1
+                grand_children.append(data_tree)
+
+                d.append(ds.name)
+
+            host_data.append( [host.name, host.id, d] )
+
+            if len(grand_children) > 0:
+                host_tree['children'] = grand_children
+
+        if len(children) > 0:
+            loc_tree['children'] = children
+            
+        data_view.append( [l.name, l.id, host_data] )
+       
+    data_detail = simplejson.dumps(data_view)
+    tree_data = simplejson.dumps(t)
+
+    import json 
+    x = json.loads(data_detail)
+    print json.dumps(x, indent=4, sort_keys=True)
+
+    x = json.loads(tree_data)
+    print json.dumps(x, indent=4, sort_keys=True)
+
     data = { 'user_name': project_owner.username,
              'first_name': project_owner.first_name,
              'last_name': project_owner.last_name,
              'view_type': view_type,
              'viewer_name': viewer.username,
              'project_name':  project_to_be_viewed.name,
-             'view': 'tree_hosts' }
+             'data_detail': data_detail,
+             'tree_data': tree_data,
+             'view': 'hosts' }
     
     if view_type == view_types['owner'] or view_type == view_types['contributor']:
         pass

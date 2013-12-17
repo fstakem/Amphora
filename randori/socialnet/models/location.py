@@ -24,6 +24,7 @@ class Location(models.Model):
     description = models.TextField(blank=True, null=True)
 
     # Relationships
+    # remove for time being but in future need to add tree sort of structure
     sub_location = models.ManyToManyField("self", blank=True, null=True, related_name='parent_location')
     address = models.ForeignKey('Address', blank=True, null=True, related_name='location')
 

@@ -26,9 +26,9 @@
       {% endif %}
 
       {% if view == 'Hosts' %}
-          <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=graph_hosts">Hosts</a></li>
+          <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=hosts">Hosts</a></li>
       {% else %}
-          <li><a href="{% url 'views.project' user_name project_name %}?view=graph_hosts">Hosts</a></li>          
+          <li><a href="{% url 'views.project' user_name project_name %}?view=hosts">Hosts</a></li>          
       {% endif %}
 
       {% if view == 'Data' or view == 'New Data' %}

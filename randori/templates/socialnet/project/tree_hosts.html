@@ -1,0 +1,95 @@
+<style type="text/css">
+    #detail-row
+    {
+
+    }
+
+    #tree-col
+    {
+        
+         border-right: 1px solid #ccc;
+    }
+</style>
+
+<div class="panel-group" id="accordion_2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion_2" href="#collapseTwo">
+                <h3>Details</h3>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in">
+            <div class="panel-body">
+
+                <div class="row" id="detail-row">
+
+                    <div class="col-md-3" id="tree-col">
+                        
+                    </div>
+
+
+                    <div class="col-md-9">
+                        <p>test</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(function($) 
+    {
+        /*
+        var tree_col = $('#tree-col')
+        treeModel = [{"data":"Confirm Application","attr":{"id":"10"},"children":null},{"data":"Things","attr":{"id":"20"},"children":[{"data":"Thing 1","attr":{"id":"21"},"children":null},{"data":"Thing 2","attr":{"id":"22"},"children":null},{"data":"Thing 3","attr":{"id":"23"},"children":null},{"data":"Thing 4","attr":{"id":"24"},"children":[{"data":"Thing 4.1","attr":{"id":"241"},"children":null},{"data":"Thing 4.2","attr":{"id":"242"},"children":null},{"data":"Thing 4.3","attr":{"id":"243"},"children":null}]}]},{"data":"Colors","attr":{"id":"40"},"children":[{"data":"Red","attr":{"id":"41"},"children":null},{"data":"Green","attr":{"id":"42"},"children":null},{"data":"Blue","attr":{"id":"43"},"children":null},{"data":"Yellow","attr":{"id":"44"},"children":null}]}];
+        tree_col.jstree({
+                            "core": {},
+                            "plugins" : [ "themes", "json_data", "ui" ],
+                            "json_data" : 
+                                        {
+                                            "data" : treeModel
+                                        },
+                            "themes" : 
+                                        {
+                                            "theme" : "default",
+                                            "dots" : true,
+                                            "icons" : true,
+                                            "url" : "themes/default/style.css"
+                                        },
+                        })
+                        .bind("loaded.jstree", function (event, data){alert("TREE IS LOADED");});
+    */
+
+    var tree_data = jQuery.parseJSON('{{ tree_data|safe }}');
+
+    $("#tree-col").fancytree(
+                {
+                    onActivate: function (node) 
+                    {
+                        // A DynaTreeNode object is passed to the activation handler
+
+                        // Note: we also get this event, if persistence is on, and the 
+                         //  age is reloaded.
+                        alert("You activated " + node.data.title);
+                    },
+                    source: tree_data
+                });
+        
+
+
+
+
+        
+
+        
+      
+        //console.log(tree_col.jstree("get_theme"))
+        //tree_col.jstree("set_theme","apple");
+        //console.log(tree_col.jstree("get_theme"))
+    });
+</script>
+

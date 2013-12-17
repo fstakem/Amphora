@@ -1,10 +1,35 @@
-<div id="chart" style="margin:20px"></div>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                <h3>Map</h3>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body" id="chart-panel">
+                <div id="chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <style type="text/css">
+    
+   #chart-panel
+   {
+        margin-left: -15px;
+        margin-right: -15px;
+        margin-bottom: -15px;
+   }
 
     #chart
     {
-        border: 2px solid grey;
+        background-color: white;
     }
 
     .link 
@@ -100,20 +125,8 @@
 
     // Initial data
     // --------------------------------------------------------------------------------------------------
-    nodes = [
-                {id: 0, name: "GaTech", short_name: "", node_type: "location", open: true, fixed: true, x: 100, y: 100},
-                {id: 1, name: "Host 1", short_name: "", node_type: "host", open: true, fixed: false, x: 200, y: 200},
-                {id: 2, name: "Host 2", short_name: "", node_type: "host", open: true, fixed:false, x: 300, y: 300},
-                {id: 3, name: "Lab", short_name: "", node_type: "location", open: true, fixed: true, x: 300, y: 100},
-                {id: 4, name: "Host 3", short_name: "", node_type: "host", open: true, fixed: false, x: 400, y: 200},
-                {id: 5, name: "Host 4", short_name: "", node_type: "host", open: true, fixed:false, x: 400, y: 300}
-            ];
-    links = [
-                {source: nodes[0], target: nodes[1]},
-                {source: nodes[0], target: nodes[2]},
-                {source: nodes[3], target: nodes[4]},
-                {source: nodes[3], target: nodes[5]}
-            ];
+    nodes = [];
+    links = [];
 
 
     // D3 and svg setup
@@ -131,12 +144,12 @@
 
     var svg = d3.select('#chart')
                 .append('svg')
-                .attr('viewBox', "0 0 1000 400")
+                .attr('viewBox', "0 0 600 400")
                 .attr('width', "100%")
                 .attr('height', 400);
 
     var link_element = svg.selectAll(".link");
-    var node_element = svg.selectAll(".node")
+    var node_element = svg.selectAll(".node");
 
     force.nodes(nodes)
          .links(links);
@@ -159,8 +172,8 @@
         console.log("Updating the data and UI.");
 
         // Data join
-        link_element = link_element.data(links);
-        node_element = node_element.data(nodes);
+        link_element = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
+        node_element = svg.selectAll(".node").data(nodes, function(d) { return d.id;});
 
         // Update
         // ?
@@ -186,6 +199,12 @@
         // Exit
         link_element.exit().remove();
         node_element.exit().remove();
+
+        force.nodes(nodes)
+            .links(links);
+
+        //force.on("tick", tick);
+        //force.drag().on("dragstart", dragstart);
 
         // Run simulation
         force.start()
@@ -246,7 +265,7 @@
                                   .text(
                                     function(d) 
                                     {
-                                        return d.name; 
+                                        return d.short_name; 
                                     }
                                   );
     }
@@ -274,7 +293,7 @@
                                   .text(
                                     function(d) 
                                     {
-                                        return d.id; 
+                                        return d.short_name; 
                                     }
                                   );
 
@@ -296,13 +315,44 @@
         //d3.select(this).classed("fixed", true);
     }
 
-    
     // Main
     // --------------------------------------------------------------------------------------------------
     $(document).ready(function () 
     {
+        var node_data = jQuery.parseJSON('{{ data_detail|safe }}');
+        var str_max_length = 7;
+
+        for(var i = 0; i < node_data.length; i++)
+        {
+            var location = node_data[i];
+            
+            var id = "loc-" + (location[1]).toString();
+            var name = location[0];
+            var short_name = location[0].slice(0,str_max_length);
+            var x = i * 50 + 200;
+            var y = i * 50 + 100;
+            var location_data = {id: id, name: name, short_name: short_name, node_type: "location", open: true, fixed: true, x: x, y: y};
+            nodes.push(location_data)
+
+            for(var j = 0; j < location[2].length; j++)
+            {
+                var host = location[2][j];
+                console.log(host)
+                
+                var id = "host-" + (host[1]).toString();
+                var name = host[0];
+                var short_name = (j+1).toString();
+                var x = j * 50 + 150;
+                var y = j * 50 + 150;
+                var host_data = {id: id, name: name, short_name: short_name, node_type: "host", open: true, fixed: true, x: x, y: y};
+                nodes.push(host_data)
+
+                var link_data = {source: location_data, target: host_data};
+                links.push(link_data)
+            }
+        }
+
         update();
     });
-
     
 </script>
