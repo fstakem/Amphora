@@ -1,0 +1,38 @@
+<style type="text/css">
+    #tree-col
+    {
+        
+         border-right: 1px solid #ccc;
+    }
+</style>
+
+<div class="row" id="detail-row">
+
+    <div class="col-md-4" id="tree-col">
+        
+    </div>
+
+
+    <div class="col-md-8">
+        <p>test</p>
+    </div>
+
+</div>
+
+<script>
+    jQuery(function($) 
+    {
+    
+        var tree_data = jQuery.parseJSON('{{ detail_data|safe }}');
+
+        $("#tree-col").fancytree(
+                    {
+                        source: tree_data
+                    });
+        $("#tree-col").fancytree("getRootNode").visit(function(node){
+        node.setExpanded(true);
+      });
+        
+    });
+</script>
+

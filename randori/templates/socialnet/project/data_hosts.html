@@ -1,0 +1,342 @@
+
+<div id="chart"></div>
+
+
+<style type="text/css">
+    
+   #chart-panel
+   {
+        margin-left: -15px;
+        margin-right: -15px;
+        margin-bottom: -15px;
+   }
+
+    #chart
+    {
+        background-color: white;
+    }
+
+    .link 
+    {
+        stroke: #000;
+        stroke-width: 2.0px;
+    }
+
+    .link .symbol
+    {
+        stroke: #000;
+        stroke-width: 2.0px;
+    }
+
+    .node 
+    {
+        cursor: move;
+    }
+
+    .location
+    {
+          
+    }
+
+    .location .condensed
+    {
+        
+    }
+    
+    .location .symbol
+    {
+        fill: #ccc;
+        stroke: black;
+        stroke-width: 1.8px;
+    }
+
+    .location .condensed-symbol
+    {
+        fill: red;
+        stroke: black;
+        stroke-width: 1.8px;
+    }
+
+    .location .label
+    {
+        font-family: Verdana, sans-serif;
+        font-size: 12pt;
+        font color: black;
+        font-style: normal;
+        font-weight: lighter;
+    }
+    
+    .host .symbol
+    {
+        fill: blue;
+        stroke: #000;
+        stroke-width: 1.5px;
+    }
+
+    .host .label
+    {
+        stroke: white;
+        font-family: Verdana, sans-serif;
+        font-size: 8pt;
+        font color: white;
+        font-style: normal;
+        font-weight: lighter;
+    }
+
+</style>
+
+<script src="/static/js/sprintf.js"></script>
+
+<script type="text/javascript">
+
+    // Graphic parameters
+    // --------------------------------------------------------------------------------------------------
+    var width  = 600;
+    var height = 400;
+
+    var nodes = [];
+    var links = [];
+
+    var link_distance = 40;
+    var node_charge = -500;
+
+    var location_height = 30;
+    var location_width = 80;
+
+    var host_inner_radius = 0;
+    var host_outer_radius = 10;
+
+
+    // Initial data
+    // --------------------------------------------------------------------------------------------------
+    nodes = [];
+    links = [];
+
+
+    // D3 and svg setup
+    // --------------------------------------------------------------------------------------------------
+    var force = d3.layout.force()
+                  .size([width, height])
+                  .nodes(nodes)
+                  .links(links)
+                  .charge(node_charge)
+                  .linkDistance(link_distance)
+                  .on("tick", tick);
+
+    var drag = force.drag()
+                    .on("dragstart", dragstart);
+
+    var svg = d3.select('#chart')
+                .append('svg')
+                .attr('viewBox', "0 0 600 400")
+                .attr('width', "100%")
+                .attr('height', 400);
+
+    var link_element = svg.selectAll(".link");
+    var node_element = svg.selectAll(".node");
+
+    force.nodes(nodes)
+         .links(links);
+    
+
+    // Simulation functions
+    // --------------------------------------------------------------------------------------------------
+    function tick()
+    {
+        link_element.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+                            
+       node_element.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    }
+
+    function update()
+    {
+        console.log("Updating the data and UI.");
+
+        // Data join
+        link_element = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
+        node_element = svg.selectAll(".node").data(nodes, function(d) { return d.id;});
+
+        // Update
+        // ?
+
+        // Enter
+        link_element.enter().append("line")
+                            .attr("class", "link");
+                            
+        node_element.enter().append("g")
+                            .attr("class", "node")
+                            .call(drag)
+                            .attr('x', function(d){return d.x})
+                            .attr('y', function(d){return d.y})
+                            .append("g")
+                            .attr("class", function(d) { return d.node_type });
+
+        createLocations();
+        createHosts();
+
+        // Enter + update
+        // ?
+
+        // Exit
+        link_element.exit().remove();
+        node_element.exit().remove();
+
+        force.nodes(nodes)
+            .links(links);
+
+        //force.on("tick", tick);
+        //force.drag().on("dragstart", dragstart);
+
+        // Run simulation
+        force.start()
+    }
+
+
+    // Graphic helper functions     
+    // --------------------------------------------------------------------------------------------------                  
+    var createLine = d3.svg.line()
+                         .x(function(d) { return d.x; })
+                         .y(function(d) { return d.y; })
+                         .interpolate("linear");
+
+    var createCircle = d3.svg.arc()
+                             .startAngle(0)
+                             .endAngle(6.28318531)
+                             .innerRadius(host_inner_radius)
+                             .outerRadius(host_outer_radius);
+     
+
+    // Graphic functions for svg elements     
+    // --------------------------------------------------------------------------------------------------   
+    function createLocations()
+    {
+        console.log("Creating locations.");
+
+        var location = svg.selectAll(".location");
+
+        location.on("dblclick", function(d) { toggleHosts(d); });
+        
+        var symbol = location.append('path')
+                                  .attr("class", "symbol")
+                                  .attr('d', 
+                                        function(d)
+                                        {
+                                            h = location_height;
+                                            w = location_width;
+                                            x = -w/2;
+                                            y = -h/2;
+
+                                            var points = [ 
+                                                            {"x": x, "y": y},
+                                                            {"x": x + w, "y": y},
+                                                            {"x": x + w, "y": y + h},
+                                                            {"x": x, "y": y + h}, 
+                                                            {"x": x, "y": y} 
+                                                         ];
+
+                                            return createLine(points); 
+                                        }
+                                   );
+
+        var label = location.append("text")
+                                  .attr("class", "label")
+                                  .attr("dx", 0)
+                                  .attr("dy", ".25em")
+                                  .attr("text-anchor", "middle")
+                                  .text(
+                                    function(d) 
+                                    {
+                                        return d.short_name; 
+                                    }
+                                  );
+    }
+
+    function createHosts()
+    {
+        console.log("Creating hosts.");
+
+        var host = svg.selectAll(".host");
+
+        var symbol = host.append('path')
+                              .attr("class", "symbol")
+                              .attr('d', 
+                                function(d)
+                                {
+                                    return createCircle(); 
+                                }
+                              );
+
+        var label = host.append("text")
+                                  .attr("class", "label")
+                                  .attr("dx", 0)
+                                  .attr("dy", ".25em")
+                                  .attr("text-anchor", "middle")
+                                  .text(
+                                    function(d) 
+                                    {
+                                        return d.short_name; 
+                                    }
+                                  );
+
+        var title = host.append('svg:title')
+                        .text(function(d) { return d.name; });
+    }
+
+
+    // UI events
+    // --------------------------------------------------------------------------------------------------
+    function toggleHosts(d)
+    {
+        console.log("Double click bro: toggle");
+    }
+
+    function dragstart(d) 
+    {
+        //d.fixed = true;
+        //d3.select(this).classed("fixed", true);
+    }
+
+    // Main
+    // --------------------------------------------------------------------------------------------------
+    $(document).ready(function () 
+    {
+        var node_data = jQuery.parseJSON('{{ location_map|safe }}');
+        var str_max_length = 7;
+
+        for(var i = 0; i < node_data.length; i++)
+        {
+            var location = node_data[i];
+            
+            var id = "loc-" + (location[1]).toString();
+            var name = location[0];
+            var short_name = location[0].slice(0,str_max_length);
+            var x = i * 50 + 200;
+            var y = i * 50 + 100;
+            var location_data = {id: id, name: name, short_name: short_name, node_type: "location", open: true, fixed: true, x: x, y: y};
+            nodes.push(location_data)
+
+            for(var j = 0; j < location[2].length; j++)
+            {
+                var host = location[2][j];
+                console.log(host)
+                
+                var id = "host-" + (host[1]).toString();
+                var name = host[0];
+                var short_name = (j+1).toString();
+                var x = j * 50 + 150;
+                var y = j * 50 + 150;
+                var host_data = {id: id, name: name, short_name: short_name, node_type: "host", open: true, fixed: true, x: x, y: y};
+                nodes.push(host_data)
+
+                var link_data = {source: location_data, target: host_data};
+                links.push(link_data)
+            }
+        }
+
+        update();
+    });
+    
+</script>

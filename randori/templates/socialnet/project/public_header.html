@@ -35,10 +35,10 @@
             {% endif %}
 
 			{% if view == 'Data' %}
-				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>
-			{% else %}
-				<li><a href="{% url 'views.project' user_name project_name %}?view=data">Data</a></li>		
-			{% endif %}
+                <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data_hosts">Data</a></li>
+            {% else %}
+                <li><a href="{% url 'views.project' user_name project_name %}?view=data_hosts">Data</a></li>          
+            {% endif %}
 
 			{% if view == 'Analysis' %}
 				<li class="active"><a href="{% url 'views.project' user_name project_name %}?view=analysis">Analysis</a></li>

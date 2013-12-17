@@ -1,12 +1,50 @@
 {% extends "socialnet/project/base.html" %}
 
 {% block content %}
-	
-	<div class="container">
-		<div class="panel panel-default" id="content-formatting">
-	        <div class="panel-heading"><h3>{{ view }}</h3></div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</div>
-	</div>
+
+<style>
+    #data-tabs
+    {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3>Data</h3></div>
+
+        <ul class="nav nav-tabs" id="data-tabs">
+
+            {% if view == 'data_hosts' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data_hosts">Hosts</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=data_hosts">Hosts</a></li>
+            {% endif %}
+
+            {% if view == 'data_timeline' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data_timeline">Timeline</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=data_timeline">Timeline</a></li>
+            {% endif %}
+
+            {% if view == 'data_detail' %}
+            <li class="active"><a href="{% url 'views.project' user_name project_name %}?view=data_detail">Detail</a></li>
+            {% else %}
+            <li><a href="{% url 'views.project' user_name project_name %}?view=data_detail">Detail</a></li>
+            {% endif %}
+
+        </ul>
+        
+        {% if view == 'data_hosts' %}
+            {% include "socialnet/project/data_hosts.html"%}
+        {% elif view == 'data_timeline' %}
+            {% include "socialnet/project/data_timeline.html"%}
+        {% elif view == 'data_detail' %}
+            {% include "socialnet/project/data_detail.html"%}
+        {% endif %}
+
+    </div>
+</div>
 
 {% endblock %}
+    

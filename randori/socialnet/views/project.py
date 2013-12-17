@@ -31,12 +31,12 @@ views = set([ 'info',
               'people',
               'add_person',
               'person_requests',
-              'hosts',
-              'data',
+              'data_hosts',
+              'data_timeline',
+              'data_detail',
               'analysis',
               'settings',
               'new_revision',
-              'new_data',
               'new_analysis' ])
 
 def project(request, user_name, project_name):
@@ -78,11 +78,14 @@ def project(request, user_name, project_name):
         elif view == 'people':
             return peopleView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
-        elif view == 'hosts':
-            return hostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
- 
-        elif view == 'data':
-            return dataView(project_owner, project_to_be_viewed, view, view_type, viewer)
+        elif view == 'data_hosts':
+            return dataHostsView(project_owner, project_to_be_viewed, view, view_type, viewer)
+
+        elif view == 'data_timeline':
+            return dataTimelineView(project_owner, project_to_be_viewed, view, view_type, viewer)
+
+        elif view == 'data_detail':
+            return dataDetailView(project_owner, project_to_be_viewed, view, view_type, viewer)
         
         elif view == 'analysis':
             return analysisView(project_owner, project_to_be_viewed, view, view_type, viewer)
@@ -96,9 +99,6 @@ def project(request, user_name, project_name):
 
         elif view == 'person_requests' and view_type == view_types['owner']:
             return personRequestView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
-        
-        elif view == 'new_data' and (view_type == view_types['owner'] or view_type == view_types['contributor']):
-            return newDataView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
         
         elif view == 'new_analysis' and (view_type == view_types['owner'] or view_type == view_types['contributor']):
             return newAnalysisView(request, project_owner, project_to_be_viewed, view, view_type, viewer)
@@ -267,6 +267,123 @@ def getPersonalInformation(user, owner):
 
     return data
 
+def dataHostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    location_map = []
+    hosts = []
+    locations = set()
+
+    host_data = Data.objects.filter(revision__id=project_to_be_viewed.current_revision.id)
+    for d in host_data:
+        locations.add( Location.objects.filter(collected_data__id=d.id)[0] )
+
+    locations = list(locations)
+    for l in locations:
+        hosts = Host.objects.filter(last_location__id=l.id)
+        host_map = []
+
+        for host in hosts:
+            host_data = Data.objects.filter(host__id=host.id)
+            data_map = []
+
+            for d in host_data:
+                data_map.append(d.name)
+
+            host_map.append( [host.name, host.id, data_map] )
+
+            
+        location_map.append( [l.name, l.id, host_map] )
+       
+    location_map = simplejson.dumps(location_map)
+ 
+    data = { 'user_name': project_owner.username,
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'location_map': location_map,
+             'view': 'data_hosts' }
+    
+    if view_type == view_types['owner'] or view_type == view_types['contributor']:
+        pass
+    elif view_type == view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/data.html', data)
+
+def dataTimelineView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    data = { 'user_name': project_owner.username,
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'view': 'data_timeline' }
+    
+    if view_type == view_types['owner'] or view_type == view_types['contributor']:
+        pass
+    elif view_type == view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/data.html', data)
+
+def dataDetailView(project_owner, project_to_be_viewed, view, view_type, viewer):
+    detail_data = []
+    hosts = []
+    locations = set()
+
+    host_data = Data.objects.filter(revision__id=project_to_be_viewed.current_revision.id)
+    for d in host_data:
+        locations.add( Location.objects.filter(collected_data__id=d.id)[0] )
+
+    locations = list(locations)
+    index = 1
+    for l in locations:
+        location_tree = { 'title': l.name, 'key': str(index), 'folder': 'true'}
+        index += 1
+        children = []
+        detail_data.append(location_tree)
+
+        hosts = Host.objects.filter(last_location__id=l.id)
+        for host in hosts:
+            host_tree = { 'title': host.name, 'key': str(index), 'folder': 'true' }
+            index += 1
+            grand_children = []
+            children.append(host_tree)
+
+            host_data = Data.objects.filter(host__id=host.id)
+            for d in host_data:
+                host_data_tree = { 'title': d.name, 'key': str(index) }
+                index += 1
+                grand_children.append(host_data_tree)
+
+            if len(grand_children) > 0:
+                host_tree['children'] = grand_children
+
+        if len(children) > 0:
+            location_tree['children'] = children
+            
+    detail_data = simplejson.dumps(detail_data)
+
+
+    data = { 'user_name': project_owner.username,
+             'first_name': project_owner.first_name,
+             'last_name': project_owner.last_name,
+             'view_type': view_type,
+             'viewer_name': viewer.username,
+             'project_name':  project_to_be_viewed.name,
+             'detail_data': detail_data,
+             'view': 'data_detail' }
+    
+    if view_type == view_types['owner'] or view_type == view_types['contributor']:
+        pass
+    elif view_type == view_types['public']:
+        pass
+    
+    return render_to_response('./socialnet/project/data.html', data)
+
+
+# Get rid of this once refactoring is done
 def hostsView(project_owner, project_to_be_viewed, view, view_type, viewer):
     data_view = []
     tree_data = [ 
@@ -460,28 +577,6 @@ def personRequestView(request, project_owner, project_to_be_viewed, view, view_t
     
     return render_to_response('./socialnet/project/private_people.html', data)
         
-def newDataView(request, project_owner, project_to_be_viewed, view, view_type, viewer):
-    form = NewDataForm(request.POST or None)
-    
-    data = { 'user_name': project_owner.username,
-             'first_name': project_owner.first_name,
-             'last_name': project_owner.last_name,
-             'view_type': view_type,
-             'viewer_name': viewer.username,
-             'project_name':  project_to_be_viewed.name,
-             'new_project_data_form': form,
-             'view': 'new_data' }
-    
-    if request.POST and form.is_valid():
-        print 'POST form bro'
-        #user = form.login(request)
-        #if user:
-        #    auth.login(request, user)
-        #    return HttpResponseRedirect("/" + user.username)
-
-    
-    return render(request, './socialnet/project/new_data.html', data)
-
 def newAnalysisView(request, project_owner, project_to_be_viewed, view, view_type, viewer):
     form = NewAnalysisForm(request.POST or None)
     
