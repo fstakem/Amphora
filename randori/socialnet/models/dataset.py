@@ -1,6 +1,6 @@
 # +++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++
 # 
-#       File: analysis.py
+#       File: dataset.py
 #       By: Fred Stakem
 #       For: Private Research
 #       Date: 1.7.14
@@ -13,9 +13,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # App imports
+from helper import *
 
 # Main
-class Analysis(models.Model):
+class DataSet(models.Model):
 
     class Meta():
         app_label = 'socialnet'
@@ -27,9 +28,8 @@ class Analysis(models.Model):
     description = models.TextField(blank=True, null=True)
 
     # Relationships
-    creator = models.ForeignKey(User, related_name='analysis')
-    project = models.ForeignKey('Project', related_name='analysis')
-    data = models.ManyToManyField('Data', blank=True, null=True, related_name='analysis')
+    project = models.ForeignKey('DataSet', related_name='data_set')
+    creator = models.ForeignKey(User, related_name='data_set')
 
     def __unicode__(self):
         return self.name
