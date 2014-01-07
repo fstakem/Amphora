@@ -1,6 +1,6 @@
 # +++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++---+++
 # 
-#       File: user.py
+#       File: helper.py
 #       By: Fred Stakem
 #       For: Private Research
 #       Date: 12.5.13
@@ -9,11 +9,12 @@
 
 
 # Librarys
-from django.contrib.auth.models import User
-
 
 # App imports
-from ..models import UserProfile, Project, Analysis, DataSet, Data, Location, Host
-from helper import isUsersPageAndLoggedIn
 
 # Main
+def isUsersPageAndLoggedIn(viewer, user_to_be_viewed):
+    if viewer.is_authenticated() and viewer.username == user_to_be_viewed.username:
+        return True
+    else:
+        return False
