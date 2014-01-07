@@ -31,7 +31,7 @@ class Project(models.Model):
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_project')
     contributor = models.ManyToManyField(User, blank=True, null=True, related_name='contributed_project')
-    pending_contributor = models.ManyToManyField(User, blank=True, null=True, related_name='contributed_project')
+    pending_contributor = models.ManyToManyField(User, blank=True, null=True, related_name='pending_contributed_project')
     host = models.ManyToManyField('Host', blank=True, null=True, related_name='project')
 
     def __unicode__(self):
