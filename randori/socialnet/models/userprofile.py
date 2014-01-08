@@ -31,7 +31,7 @@ class UserProfile(models.Model):
     join_date = models.DateTimeField(auto_now_add=True)
 
     # Relationships
-    location = models.ForeignKey(User, related_name='user_live_here')
+    location = models.ForeignKey('Location', related_name='user_live_here')
     user = models.OneToOneField(User, related_name='additional_info')
     followed = models.ManyToManyField(User, blank=True, null=True, related_name='follower')
 

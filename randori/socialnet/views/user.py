@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 # App imports
-from ..models import UserProfile, Project, Analysis, DataSet, Data, Location, Host
+from ..models import UserProfile, Project, Analysis, Data, Location, Host
 from helper import isUsersPageAndLoggedIn
 
 # Main

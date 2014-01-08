@@ -141,6 +141,9 @@ INSTALLED_APPS = (
 
     # Local 
     'localflavor',
+
+    # tagging
+    'taggit',
 )
 
 AUTHENTICATION_BACKENDS = (

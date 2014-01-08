@@ -12,6 +12,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from taggit.managers import TaggableManager
+
 # App imports
 from helper import *
 
@@ -29,10 +31,11 @@ class Data(models.Model):
     last_activity = models.DateTimeField(auto_now=True)
     description = models.TextField(blank=True, null=True)
     raw_data = models.FileField(upload_to=getDataPath, blank=True, null=True)
+    tags = TaggableManager(blank=True)
 
     # Relationships
     owner = models.ForeignKey(User, related_name='collected_data')
-    data_set = models.ForeignKey('DataSet', related_name='data')
+    project = models.ForeignKey('Project', related_name='data')
     location = models.ForeignKey('Location', blank=True, null=True, related_name='collected_data')
     host = models.ForeignKey('Host', blank=True, null=True, related_name='collected_data')
 

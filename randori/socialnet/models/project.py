@@ -12,6 +12,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from taggit.managers import TaggableManager
+
 # App imports
 
 # Main
@@ -27,6 +29,7 @@ class Project(models.Model):
     public = models.BooleanField()
     description = models.TextField(blank=True, null=True)
     website = models.URLField(max_length=200, blank=True, null=True)
+    tags = TaggableManager(blank=True)
 
     # Relationships
     owner = models.ForeignKey(User, related_name='owned_project')

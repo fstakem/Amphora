@@ -1,0 +1,66 @@
+Aug 12 07:55:32 ubuntu rsyslogd: [origin software="rsyslogd" swVersion="5.8.11" x-pid="523" x-info="http://www.rsyslog.com"] rsyslogd was HUPed
+Aug 12 07:55:32 ubuntu anacron[20257]: Job `cron.daily' terminated
+Aug 12 07:55:32 ubuntu anacron[20257]: Job `cron.weekly' started
+Aug 12 07:55:32 ubuntu anacron[21023]: Updated timestamp for job `cron.weekly' to 2013-08-12
+Aug 12 07:55:42 ubuntu anacron[20257]: Job `cron.weekly' terminated
+Aug 12 07:55:42 ubuntu anacron[20257]: Job `cron.monthly' started
+Aug 12 07:55:42 ubuntu anacron[20257]: Job `cron.monthly' terminated
+Aug 12 07:55:42 ubuntu anacron[20257]: Normal exit (3 jobs run)
+Aug 12 07:55:42 ubuntu anacron[21043]: Updated timestamp for job `cron.monthly' to 2013-08-12
+Aug 12 08:03:29 ubuntu dhclient: DHCPREQUEST of 10.211.55.10 on eth0 to 10.211.55.1 port 67 (xid=0xa2afd16)
+Aug 12 08:03:29 ubuntu dhclient: DHCPACK of 10.211.55.10 from 10.211.55.1
+Aug 12 08:03:29 ubuntu dhclient: bound to 10.211.55.10 -- renewal in 748 seconds.
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info> (eth0): DHCPv4 state changed renew -> renew
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info>   address 10.211.55.10
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info>   prefix 24 (255.255.255.0)
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info>   gateway 10.211.55.1
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info>   nameserver '10.211.55.1'
+Aug 12 08:03:29 ubuntu NetworkManager[891]: <info>   domain name 'localdomain'
+Aug 12 08:03:29 ubuntu dbus[543]: [system] Activating service name='org.freedesktop.nm_dispatcher' (using servicehelper)
+Aug 12 08:03:29 ubuntu dbus[543]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Aug 12 08:15:57 ubuntu dhclient: DHCPREQUEST of 10.211.55.10 on eth0 to 10.211.55.1 port 67 (xid=0xa2afd16)
+Aug 12 08:15:57 ubuntu dhclient: DHCPACK of 10.211.55.10 from 10.211.55.1
+Aug 12 08:15:57 ubuntu dhclient: bound to 10.211.55.10 -- renewal in 782 seconds.
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info> (eth0): DHCPv4 state changed renew -> renew
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info>   address 10.211.55.10
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info>   prefix 24 (255.255.255.0)
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info>   gateway 10.211.55.1
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info>   nameserver '10.211.55.1'
+Aug 12 08:15:57 ubuntu NetworkManager[891]: <info>   domain name 'localdomain'
+Aug 12 08:15:57 ubuntu dbus[543]: [system] Activating service name='org.freedesktop.nm_dispatcher' (using servicehelper)
+Aug 12 08:15:57 ubuntu dbus[543]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Aug 12 08:17:01 ubuntu CRON[21447]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Aug 12 08:28:59 ubuntu dhclient: DHCPREQUEST of 10.211.55.10 on eth0 to 10.211.55.1 port 67 (xid=0xa2afd16)
+Aug 12 08:28:59 ubuntu dhclient: DHCPACK of 10.211.55.10 from 10.211.55.1
+Aug 12 08:28:59 ubuntu dhclient: bound to 10.211.55.10 -- renewal in 821 seconds.
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info> (eth0): DHCPv4 state changed renew -> renew
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info>   address 10.211.55.10
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info>   prefix 24 (255.255.255.0)
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info>   gateway 10.211.55.1
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info>   nameserver '10.211.55.1'
+Aug 12 08:28:59 ubuntu NetworkManager[891]: <info>   domain name 'localdomain'
+Aug 12 08:28:59 ubuntu dbus[543]: [system] Activating service name='org.freedesktop.nm_dispatcher' (using servicehelper)
+Aug 12 08:28:59 ubuntu dbus[543]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Aug 12 08:38:25 ubuntu NetworkManager[891]: <info> (eth0): carrier now OFF (device state 100, deferring action for 4 seconds)
+Aug 12 08:38:25 ubuntu kernel: [490939.340371] e1000: eth0 NIC Link is Down
+Aug 12 08:38:29 ubuntu NetworkManager[891]: <info> (eth0): device state change: activated -> unavailable (reason 'carrier-changed') [100 20 40]
+Aug 12 08:38:29 ubuntu NetworkManager[891]: <info> (eth0): deactivating device (reason 'carrier-changed') [40]
+Aug 12 08:38:29 ubuntu NetworkManager[891]: <info> (eth0): canceled DHCP transaction, DHCP client pid 19583
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Withdrawing address record for 10.211.55.10 on eth0.
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Leaving mDNS multicast group on interface eth0.IPv4 with address 10.211.55.10.
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Interface eth0.IPv4 no longer relevant for mDNS.
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Withdrawing address record for fdb2:2c26:f4e4:0:21c:42ff:fec8:6f66 on eth0.
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Leaving mDNS multicast group on interface eth0.IPv6 with address fdb2:2c26:f4e4:0:21c:42ff:fec8:6f66.
+Aug 12 08:38:29 ubuntu NetworkManager[891]: <info> Writing DNS information to /sbin/resolvconf
+Aug 12 08:38:29 ubuntu dnsmasq[1613]: setting upstream servers from DBus
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Joining mDNS multicast group on interface eth0.IPv6 with address fe80::21c:42ff:fec8:6f66.
+Aug 12 08:38:29 ubuntu avahi-daemon[625]: Registering new address record for fe80::21c:42ff:fec8:6f66 on eth0.*.
+Aug 12 08:38:33 ubuntu dbus[543]: [system] Activating service name='org.freedesktop.nm_dispatcher' (using servicehelper)
+Aug 12 08:38:33 ubuntu dbus[543]: [system] Successfully activated service 'org.freedesktop.nm_dispatcher'
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> (eth0): carrier now ON (device state 20)
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> (eth0): device state change: unavailable -> disconnected (reason 'carrier-changed') [20 30 40]
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> Auto-activating connection 'Wired connection 1'.
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> Activation (eth0) starting connection 'Wired connection 1'
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> (eth0): device state change: disconnected -> prepare (reason 'none') [30 40 0]
+Aug 12 08:38:35 ubuntu NetworkManager[891]: <info> Activation (eth0) Stage 1 of 5 (Device Prepare) scheduled...
+Aug 12 08:38:35 ubuntu kernel: [490949.360793] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX

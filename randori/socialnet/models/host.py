@@ -11,6 +11,8 @@
 # Librarys
 from django.db import models
 
+from taggit.managers import TaggableManager
+
 # App imports
 
 # Main
@@ -22,6 +24,7 @@ class Host(models.Model):
     # Attributes
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    tags = TaggableManager(blank=True)
 
     # Relationships
     last_location = models.ForeignKey('Location', blank=True, null=True, related_name='current_host')

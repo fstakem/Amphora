@@ -14,7 +14,7 @@ from django.http import HttpResponse
 
 
 # App imports
-from ..models import UserProfile, Project, Analysis, DataSet, Data, Location, Host
+from ..models import UserProfile, Project, Analysis, Data, Location, Host
 
 # Main
 def analysis(request, user_name):

@@ -1,5 +1,4 @@
 from analysis import Analysis 
-from dataset import DataSet
 from data import Data 
 from host import Host 
 from location import Location 

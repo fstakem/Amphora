@@ -12,6 +12,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from taggit.managers import TaggableManager
+
 # App imports
 
 # Main
@@ -25,6 +27,7 @@ class Analysis(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_activity = models.DateTimeField(auto_now=True)
     description = models.TextField(blank=True, null=True)
+    tags = TaggableManager(blank=True)
 
     # Relationships
     creator = models.ForeignKey(User, related_name='analysis')
