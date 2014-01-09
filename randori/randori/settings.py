@@ -144,6 +144,9 @@ INSTALLED_APPS = (
 
     # tagging
     'taggit',
+
+    # command extensions
+    'django_extensions',
 )
 
 AUTHENTICATION_BACKENDS = (
