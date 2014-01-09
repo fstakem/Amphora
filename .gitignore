@@ -27,7 +27,6 @@ project.properties
 # Config files #
 ################
 local.properties
-local_settings.py
 
 # VM files #
 ############
