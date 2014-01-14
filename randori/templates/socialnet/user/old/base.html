@@ -43,12 +43,10 @@
 		{% endif %}
 
 		{% if view_type == 'public' %}
-			{% include "socialnet/revision/public_header.html"%}
+			{% include "socialnet/user/public_header.html"%}
 		{% else%}
-			{% include "socialnet/revision/private_header.html"%}
+			{% include "socialnet/user/private_header.html"%}
 		{% endif %}
-
-		
 
 		<div id="page-body">
 		    {% block content %}
@@ -81,8 +79,3 @@
 
 
 	￼
-
-
-
-
-￼

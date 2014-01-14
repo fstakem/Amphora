@@ -1,20 +1,24 @@
 {% extends "socialnet/user/base.html" %}
 
 {% block content %}
-	
-	<div class="container">
-		<div class="panel panel-default">
-	        <div class="panel-heading"><h3>{{ view }}</h3></div>
-	    	</br>
-	    	<div id="user-projects">
-				<ul>
-				{% for project in projects %}
-					<li><a href="{% url 'views.project' user_name project.name %}">{{ project.name }}</a></li>
-				{% endfor %}
-				</br>
-				</ul>
-			</div>
-		</div>
-	</div>
+
+    <div class="container">
+        <div class="panel panel-default" id="content-formatting">
+            <div class="panel-heading"><h3>{{ view }}</h3></div>
+            <div class="row">
+                
+                <div class="col-md-10">
+                </div>
+
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary">New Project</button>
+                </div>
+            </div>
+
+            {% for project in project_data %}
+                {% include "socialnet/user/project.html"%}
+            {% endfor %}
+        </div>
+    </div>
 
 {% endblock %}

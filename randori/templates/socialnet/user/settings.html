@@ -1,12 +1,50 @@
 {% extends "socialnet/user/base.html" %}
 
+
+<style>
+    #settings
+    {
+        margin-top: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
 {% block content %}
-	
-	<div class="container">
-		<div class="panel panel-default" id="content-formatting">
-	        <div class="panel-heading"><h3>{{ view }}</h3></div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</div>
-	</div>
+
+    <div class="container">
+        <div class="panel panel-default" id="content-formatting">
+            <div class="panel-heading"><h3>{{ view }}</h3></div>
+            <ul class="nav nav-tabs">
+                {% if sub_view == 'personal' %}
+                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=settings_personal">Personal Info</a></li>
+                {% else%}
+                <li><a href="{% url 'views.user' viewer_name %}?view=settings_personal">Personal Info</a></li>
+                {% endif %}
+
+                {% if sub_view == 'account' %}
+                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=settings_account">Account Info</a></li>
+                {% else%}
+                <li><a href="{% url 'views.user' viewer_name %}?view=settings_account">Account Info</a></li>
+                {% endif %}
+            </ul>
+            <div class="row" id="settings">
+                <div class="col-md-1"></div>
+
+                <div class="col-md-10">
+                    {% if sub_view == 'personal' %}
+                    {% include "socialnet/user/personal_settings.html"%}
+                    {% elif sub_view == 'account' %}
+                    {% include "socialnet/user/account_settings.html"%}
+                    {% else %}
+                    <p>Settings Error</p>
+                    {% endif %}
+                </div>
+        
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

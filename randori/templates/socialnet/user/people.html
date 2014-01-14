@@ -1,0 +1,55 @@
+{% extends "socialnet/user/base.html" %}
+
+
+<style>
+    #people
+    {
+        margin-top: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+{% block content %}
+
+    <div class="container">
+        <div class="panel panel-default" id="content-formatting">
+            <div class="panel-heading"><h3>{{ view }}</h3></div>
+            <ul class="nav nav-tabs">
+                {% if sub_view == 'following' %}
+                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=people_following">Following</a></li>
+                {% else%}
+                <li><a href="{% url 'views.user' viewer_name %}?view=people_following">Following</a></li>
+                {% endif %}
+
+                {% if sub_view == 'followers' %}
+                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=people_followers">Followers</a></li>
+                {% else%}
+                <li><a href="{% url 'views.user' viewer_name %}?view=people_followers">Followers</a></li>
+                {% endif %}
+
+                {% if sub_view == 'contributors' %}
+                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=people_contributors">Contributors</a></li>
+                {% else%}
+                <li><a href="{% url 'views.user' viewer_name %}?view=people_contributors">Contributors</a></li>
+                {% endif %}
+            </ul>
+            <div class="row" id="people">
+                
+                <div class="col-md-6">
+                    {% for person in people_left %}
+                        {% include "socialnet/user/person.html"%}
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    {% for person in people_right %}
+                        {% include "socialnet/user/person.html"%}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
