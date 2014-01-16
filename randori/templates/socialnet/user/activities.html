@@ -1,0 +1,14 @@
+{% extends "socialnet/user/base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="panel panel-default" id="content-formatting">
+            <div class="panel-heading"><h3>{{ view }}</h3></div>
+            {% for activity in activity_data %}
+                {% include "socialnet/user/activity.html"%}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

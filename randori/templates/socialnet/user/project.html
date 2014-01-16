@@ -11,7 +11,14 @@
 
     #heading-column
     {
-       padding-left: 23px; 
+        padding-top: 5px;
+        padding-left: 25px; 
+    }
+
+    #heading-title
+    {
+        margin-right: 10px;
+        font-size: 135%;
     }
 
     #button-column
@@ -19,35 +26,78 @@
         padding-top: 2px;
         padding-right: 20px;
     }
-    
+
+    #description_row
+    {
+        margin-top: 10px;
+    }
+
+    #analysis_row
+    {
+        margin-bottom: 10px;
+    }
+
+    .attribute-label
+    {
+        
+    }
+ 
 </style>
 
 <div class="project">
     <div class="row">
-        <div class="col-md-9" id="heading-column">
+        <div class="col-md-8" id="heading-column">
             <a href="{% url 'views.user' project.0 %}?view=activity">
-                <h4 class="person-heading">{{project.0}}</h4>
+                <span id="heading-title">{{project.0}} </span>
             </a>
-           
+            
+            {% if project.3 == True %}
+                <i class="fa fa-unlock"></i>
+            {% else %}
+                <i class="fa fa-lock"></i>
+            {% endif %}
+
+            {% if project.4 == True %}
+                <i class="fa fa-user"></i>
+            {% else %}
+                <i class="fa fa-group"></i>
+            {% endif %}
+            
         </div>
-        <div class="col-md-3" id="timestamp-column">
-            <span>Last Activity: {{project.1}}</span>
+    
+        <div class="col-md-4">
+            <button type="button" class="close" aria-hidden="true"><i class="fa fa-times-circle fa"></i></button>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="description_row">
         <div class="col-md-1"></div>
-
-        <div class="col-md-1">Description:</div>
-
-        <div class="col-md-9">{{project.2}}</div>
-        
+        <div class="col-md-10"><span class="attribute-label">Description:</span> {{project.2}}</div>
         <div class="col-md-1"></div>
     </div>
 
-    <div class="row">
-        <div class="col-md-9"></div>
-        
-        <div class="col-md-3">Files: ??  Analysis: ??</div>
+    <div class="row" id="last_activity_row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10"><span class="attribute-label">Last activity:</span> {{project.1}}</div>
+        <div class="col-md-1"></div>
     </div>
+    
+    <div class="row" id="hosts_row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10"><span class="attribute-label">Hosts:</span> {{project.5}}</div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row" id="data_row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10"><span class="attribute-label">Data files:</span> {{project.6}}</div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row" id="analysis_row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10"><span class="attribute-label">Analysis:</span> {{project.7}}</div>
+        <div class="col-md-1"></div>
+    </div>
+
 </div>

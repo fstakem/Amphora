@@ -11,7 +11,11 @@
 # Librarys
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
+from django import forms
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Button
 
 # App imports
 from ..models import UserProfile, Project, Analysis, Data, Location, Host
@@ -19,7 +23,7 @@ from helper import isUsersPageAndLoggedIn
 
 # Main
 user_view_types = {'public': 'public', 'private': 'private'}
-user_views = set([ 'activity',
+user_views = set([ 'activities',
                    'projects_all',
                    'projects_new',
                    'people_following',
@@ -30,7 +34,7 @@ user_views = set([ 'activity',
                     ])
 
 def user(request, user_name):
-    view = 'activity'
+    view = 'activities'
     view_type = user_view_types['public']
     
     try:
@@ -58,45 +62,56 @@ def user(request, user_name):
         if len(views) > 1:
             sub_view = views[1]
         
-        if view_base == 'activity':
-            return activity(user_to_be_viewed, view_type, viewer)
+        if view_base == 'activities':
+            return activities(request, user_to_be_viewed, view_type, viewer)
 
         elif view_base == 'projects':
-            return projects(sub_view, user_to_be_viewed, view_type, viewer)
+            return projects(request, sub_view, user_to_be_viewed, view_type, viewer)
         
         elif view_base == 'people':
-            return people(sub_view, user_to_be_viewed, view_type, viewer)
+            return people(request, sub_view, user_to_be_viewed, view_type, viewer)
 
         elif view_base == 'settings' and view_type == user_view_types['private']:
-            return settings(sub_view, user_to_be_viewed, view_type, viewer)
+            return settings(request, sub_view, user_to_be_viewed, view_type, viewer)
         
         else:
             return HttpResponse(status=404)
     
     return HttpResponse(status=404)
 
-def activity(user_to_be_viewed, view_type, viewer):
+def activities(request, user_to_be_viewed, view_type, viewer):
+    activities = []
+
+
+
+    activity_data = getActivityData(activities)
+
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
                     'last_name': user_to_be_viewed.last_name,
                     'viewer_name': viewer.username,
                     'view_type': view_type,
-                    'view': 'Activity'
+                    'view': 'Activity',
+                    'activity_data': activity_data
                 }
     
-    return render_to_response('./socialnet/user/activity.html', page_data)
+    return render_to_response('./socialnet/user/activities.html', page_data)
 
-def projects(sub_view, user_to_be_viewed, view_type, viewer):
+def projects(request, sub_view, user_to_be_viewed, view_type, viewer):
     if sub_view == 'new':
-        return newProject(user_to_be_viewed, view_type, viewer)
+        return newProject(request, user_to_be_viewed, view_type, viewer)
     else:
         return allProjects(user_to_be_viewed, view_type, viewer)
 
 def allProjects(user_to_be_viewed, view_type, viewer):
-    projects = list(Project.objects.filter(owner__id=user_to_be_viewed.id))
+    projects = set(Project.objects.filter(owner__id=user_to_be_viewed.id))
+    contrib_projects = list(Project.objects.filter(contributor__id=user_to_be_viewed.id))
+    projects.update(contrib_projects)
+
+    projects = list(projects)
     projects.sort(key=lambda x: x.last_activity, reverse=True)
-    project_data = getProjectData(projects)
+    project_data = getProjectData(projects, user_to_be_viewed)
 
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -110,19 +125,29 @@ def allProjects(user_to_be_viewed, view_type, viewer):
 
     return render_to_response('./socialnet/user/projects.html', page_data)
 
-def newProject(user_to_be_viewed, view_type, viewer):
+def newProject(request, user_to_be_viewed, view_type, viewer):
+    form = NewProjectForm(request.POST or None)
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
                     'last_name': user_to_be_viewed.last_name,
                     'viewer_name': viewer.username,
                     'view_type': view_type,
-                    'view': 'Projects'
+                    'view': 'Projects',
+                    'new_project_form': form,
                 }
 
-    return render_to_response('./socialnet/user/new_project.html', page_data)
+    if request.POST and form.is_valid():
+        print 'POST form bro'
+        #user = form.login(request)
+        #if user:
+        #    auth.login(request, user)
+        #    return HttpResponseRedirect("/" + user.username)
 
-def people(sub_view, user_to_be_viewed, view_type, viewer):
+    
+    return render(request, './socialnet/user/new_project.html', page_data)
+
+def people(request, sub_view, user_to_be_viewed, view_type, viewer):
     people = []
     
     if sub_view == 'followers':
@@ -148,7 +173,7 @@ def people(sub_view, user_to_be_viewed, view_type, viewer):
 
     return render_to_response('./socialnet/user/people.html', page_data)
 
-def settings(sub_view, user_to_be_viewed, view_type, viewer):
+def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
@@ -202,15 +227,49 @@ def getPersonalData(people):
 
     return personal_data
 
-def getProjectData(projects):
+def getProjectData(projects, user_to_be_viewed):
     project_data = []
 
     for project in projects:
         last_activity = project.last_activity.strftime("%B %d")
-        print last_activity
-        project_data.append([project.name, last_activity, project.description, project.website, project.public])
+        hosts = len(Host.objects.filter(project__id=project.id))
+        data_files = len(Data.objects.filter(project__id=project.id))
+        analysis = len(Analysis.objects.filter(project__id=project.id))
+        owner = False
+        if project.owner.id == user_to_be_viewed.id:
+            owner = True
+        project_data.append([project.name, last_activity, project.description, project.public, owner, hosts, data_files, analysis])
 
     return project_data
+
+def getActivityData(activities):
+    activity_data = []
+
+    for activity in activities:
+        activity_data.append(['Test', 'Test', 'Test', 'Test'])
+
+    return activity_data
+
+class NewProjectForm(forms.Form):
+    name = forms.CharField(max_length=200)
+    public = forms.BooleanField()
+    description = forms.CharField(max_length=400)
+    #website = forms.
+    #tags = forms.
+    
+    def __init__(self, *args, **kwargs):
+        super(NewProjectForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-new-project-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-4'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'new_project'
+        self.helper.help_text_as_placeholder = True
+        
+        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Button('cancel', 'Cancel'))
 
 
 

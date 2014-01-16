@@ -2,22 +2,39 @@
 
 {% block content %}
 
+<style>
+    #top-spacer
+    {
+        margin-top: 40px;
+    }
+
+    #bottom-spacer
+    {
+        margin-bottom: 40px;
+    }
+</style>
+
     <div class="container">
         <div class="panel panel-default" id="content-formatting">
             <div class="panel-heading"><h3>{{ view }}</h3></div>
+
+            <div class="row" id="top-spacer"></div>
+
             <div class="row">
                 
                 <div class="col-md-10">
                 </div>
 
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-primary">New Project</button>
+                    <a class="btn btn-primary" href="{% url 'views.user' viewer_name %}?view=projects_new">New Project</a>
                 </div>
             </div>
 
             {% for project in project_data %}
                 {% include "socialnet/user/project.html"%}
             {% endfor %}
+
+            <div class="row" id="bottom-spacer"></div>
         </div>
     </div>
 

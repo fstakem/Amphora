@@ -25,7 +25,12 @@
     #button-column
     {
         padding-top: 2px;
-        padding-right: 20px;
+        padding-right: 15px;
+    }
+
+    .person-heading
+    {
+        font-size: 135%;
     }
     
 </style>
@@ -40,21 +45,28 @@
         </div>
 
         <div class="col-md-9" id="heading-column">
-            <a href="{% url 'views.user' person.0 %}?view=activity">
-                <h4 class="person-heading">{{person.0}}</h4>
-            </a>
-           <span>{{person.1}}</span>
+            <div class="row">
+                <div class="col-md-5">
+                    <a href="{% url 'views.user' person.0 %}?view=activity">
+                        <span class="person-heading">{{person.0}}</span>
+                    </a>
+                </div>
+                <div class="col-md-7"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">{{person.1}}</div>
+                <div class="col-md-4"></div>
+            </div>
+
         </div>
 
         <div class="col-md-1" id="button-column">
-            {% if view == 'people' %}
+            {% if sub_view == 'following' %}
             <button type="button" class="close" aria-hidden="true"><i class="fa fa-times-circle fa"></i></button>
-            {% elif view == 'person_requests' %}
-            <button type="button" class="close" aria-hidden="true"><i class="fa fa-check-circle fa"></i></button>
-            {% elif view == 'add_person' %}
-            <button type="button" class="close" aria-hidden="true"><i class="fa fa-plus-circle fa"></i></button>
             {% endif %}
         </div>
 
     </div>
+
+
 </div>

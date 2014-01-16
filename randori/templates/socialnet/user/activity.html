@@ -1,12 +1,53 @@
-{% extends "socialnet/user/base.html" %}
+<style>
+    .activity
+    {
+        margin-left: 40px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-right: 40px;
+        border: #d9e0ea 1px solid;
+        padding-right: 6px;
+    }
 
-{% block content %}
+    #heading-column
+    {
+       padding-left: 23px; 
+    }
 
-    <div class="container">
-        <div class="panel panel-default" id="content-formatting">
-            <div class="panel-heading"><h3>{{ view }}</h3></div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    #button-column
+    {
+        padding-top: 2px;
+        padding-right: 20px;
+    }
+    
+</style>
+
+<div class="activity">
+    <div class="row">
+        <div class="col-md-9" id="heading-column">
+            <a href="{% url 'views.user' project.0 %}?view=activity">
+                <h4 class="person-heading">{{project.0}}</h4>
+            </a>
+           
+        </div>
+        <div class="col-md-3" id="timestamp-column">
+            <span>Last Activity: {{project.1}}</span>
         </div>
     </div>
 
-{% endblock %}
+    <div class="row">
+        <div class="col-md-1"></div>
+
+        <div class="col-md-1">Description:</div>
+
+        <div class="col-md-9">{{project.2}}</div>
+        
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9"></div>
+        
+        <div class="col-md-3">Files: ??  Analysis: ??</div>
+    </div>
+</div>
