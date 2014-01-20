@@ -104,12 +104,19 @@ class RegistrationForm(forms.Form):
 
 # Authentication
 def login(request):
-    form = LoginForm(request.POST or None)
-    if request.POST and form.is_valid():
-        user = form.login(request)
-        if user:
+    if request.POST:
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username = username, password = password)      
+
+        if user is not None:
             auth.login(request, user)
-            return HttpResponseRedirect("/" + user.username)
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            return HttpResponseRedirect('/')
+    else:
+        pass
+        #form = LoginForm(request.POST or None)
 
     return render(request, './randori/login.html', {'login_form': form})
 
