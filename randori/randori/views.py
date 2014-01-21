@@ -7,13 +7,22 @@ from django.shortcuts import render
 from django.conf import settings
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout
+from  crispy_forms.bootstrap import StrictButton
 
 
 # Landing
 def landing(request):
-    data = { 'view': 'Home' } 
-    return render_to_response('./randori/landing.html', data)
+    print "Landing"
+    if request.POST:
+        print "POST"
+    else:
+        print "GET"
+
+    page_data = {}
+    page_data.update(csrf(request))
+
+    return render_to_response('./randori/landing.html', page_data)
 
 # Misc
 def features(request):
@@ -46,6 +55,26 @@ class LoginForm(forms.Form):
                                label="Username")
     password = forms.CharField(widget=forms.PasswordInput, 
                                label="Password")
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-login-form'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'authenticate'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-4'
+        self.helper.field_class = 'col-md-8'
+        self.helper.help_text_as_placeholder = True
+
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            StrictButton('Sign in', css_class="btn-primary"),
+        )
+
+        #self.helper.add_input(Submit('submit', 'Submit'))
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -83,9 +112,20 @@ class RegistrationForm(forms.Form):
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
         self.helper.form_action = 'register'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-4'
+        self.helper.field_class = 'col-md-8'
         self.helper.help_text_as_placeholder = True
 
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.layout = Layout(
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password_a',
+            'password_b',
+            StrictButton('Register', css_class="btn-primary"),
+        )
 
     def clean_username(self):
         return self.cleaned_data['username']
@@ -105,20 +145,28 @@ class RegistrationForm(forms.Form):
 # Authentication
 def login(request):
     if request.POST:
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username = username, password = password)      
-
-        if user is not None:
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('home'))
-        else:
-            return HttpResponseRedirect('/')
+        return attemptAuthentication(request)
     else:
-        pass
-        #form = LoginForm(request.POST or None)
+        form = LoginForm(request.POST or None)
+        return render(request, './randori/login.html', {'login_form': form, 'view': 'Login'})
 
-    return render(request, './randori/login.html', {'login_form': form})
+
+def authentication(request):
+    if request.POST:
+        return attemptAuthentication(request)
+
+    return HttpResponseRedirect("/")
+
+def attemptAuthentication(request):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None:
+        auth.login(request, user)
+        return HttpResponseRedirect('/' + username)
+    else:
+        return HttpResponseRedirect('/login')
 
 def logout(request):
     auth.logout(request)
