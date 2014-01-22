@@ -13,12 +13,6 @@ from  crispy_forms.bootstrap import StrictButton
 
 # Landing
 def landing(request):
-    print "Landing"
-    if request.POST:
-        print "POST"
-    else:
-        print "GET"
-
     page_data = {}
     page_data.update(csrf(request))
 
@@ -62,7 +56,7 @@ class LoginForm(forms.Form):
         self.helper.form_id = 'id-login-form'
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'authenticate'
+        self.helper.form_action = 'login'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-md-4'
         self.helper.field_class = 'col-md-8'
@@ -71,10 +65,8 @@ class LoginForm(forms.Form):
         self.helper.layout = Layout(
             'username',
             'password',
-            StrictButton('Sign in', css_class="btn-primary"),
+            Submit('login', 'Sign in', css_class="btn-primary"),
         )
-
-        #self.helper.add_input(Submit('submit', 'Submit'))
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -83,12 +75,6 @@ class LoginForm(forms.Form):
         if not user or not user.is_active:
             raise forms.ValidationError("Sorry, that login was invalid. Please try again.")
         return self.cleaned_data
-
-    def login(self, request):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        user = auth.authenticate(username=username, password=password)
-        return user
 
 class RegistrationForm(forms.Form):
     username = forms.RegexField(regex=r'^[\w.@+-]+$',
@@ -124,7 +110,7 @@ class RegistrationForm(forms.Form):
             'email',
             'password_a',
             'password_b',
-            StrictButton('Register', css_class="btn-primary"),
+            Submit('register', 'Register', css_class="btn-primary"),
         )
 
     def clean_username(self):
@@ -144,29 +130,21 @@ class RegistrationForm(forms.Form):
 
 # Authentication
 def login(request):
-    if request.POST:
-        return attemptAuthentication(request)
-    else:
-        form = LoginForm(request.POST or None)
-        return render(request, './randori/login.html', {'login_form': form, 'view': 'Login'})
-
-
-def authentication(request):
-    if request.POST:
-        return attemptAuthentication(request)
-
-    return HttpResponseRedirect("/")
-
-def attemptAuthentication(request):
+    form = LoginForm(request.POST or None)
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     user = auth.authenticate(username=username, password=password)
 
-    if user is not None:
+    page_data = {
+                  'login_form': form,
+                  'view': 'Login'
+                }
+
+    if request.POST and user is not None:
         auth.login(request, user)
         return HttpResponseRedirect('/' + username)
-    else:
-        return HttpResponseRedirect('/login')
+ 
+    return render(request, './randori/login.html', page_data)
 
 def logout(request):
     auth.logout(request)
@@ -174,12 +152,27 @@ def logout(request):
 
 def register(request):
     form = RegistrationForm(request.POST or None)
-    if request.POST and form.is_valid:
-        # Save the user to the db
+    username = request.POST.get('username', '')
+    password_a = request.POST.get('password_a', '')
+    password_b = request.POST.get('password_b', '')
 
-        return HttpResponseRedirect("/")# Redirect to a success page.
+    page_data = {
+                  'registration_form': form,
+                  'view': 'Register'
+                }
 
-    return render(request, './randori/register.html', {'registration_form': form, 'view': 'Register'})
+    if request.POST and form.is_valid and password_a == password_b:
+        #form.is_valid
+        #form.save()
+        user = auth.authenticate(username=username, password=password_a)
+        
+        if user is not None:
+            auth.login(request, user)
+            return HttpResponseRedirect('/' + username)
+
+        return HttpResponseRedirect('/login')
+            
+    return render(request, './randori/register.html', page_data)
 
 
 

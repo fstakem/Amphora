@@ -24,7 +24,6 @@ urlpatterns = patterns('',
 
     # Authentication
     url(r'^login$', views.login, name='randori.views.login'),
-    url(r'^authentication$', views.authentication, name='randori.views.authentication'),
     url(r'^logout$', views.logout, name='randori.views.logout'),
     url(r'^register$', views.register, name='randori.views.register'),
 
