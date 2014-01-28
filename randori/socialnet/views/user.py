@@ -10,9 +10,10 @@
 
 # Librarys
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django import forms
+from django.core.context_processors import csrf
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Button
@@ -170,14 +171,30 @@ def newProject(request, user_to_be_viewed, view_type, viewer):
 def people(request, sub_view, user_to_be_viewed, view_type, viewer):
     people = []
     
+    action = request.GET.get('action', '')
+    item = request.GET.get('item', '')
+
+    if view_type == user_view_types['private']:
+        if action == 'delete':
+            follower = list( User.objects.filter(username=item) )[0]
+            user_to_be_viewed.additional_info.followed.remove(follower)
+            return HttpResponseRedirect('/' + user_to_be_viewed.username + '/?view=people_' + sub_view)
+
+        elif action == 'follow':
+            user = list( User.objects.filter(username=item) )[0]
+            user_to_be_viewed.additional_info.followed.add(user)
+            return HttpResponseRedirect('/' + user_to_be_viewed.username + '/?view=people_' + sub_view)
+
+    following = User.objects.filter(follower__id=user_to_be_viewed.id)
+    
     if sub_view == 'followers':
         people = User.objects.filter(additional_info__followed__id=user_to_be_viewed.id)
     elif sub_view == 'contributors':
         people = getContributors(user_to_be_viewed)
     else:
-        people = User.objects.filter(follower__id=user_to_be_viewed.id)
+        people = following
 
-    people_left, people_right = separateIntoColumns(people, 2)
+    people_left, people_right = separateIntoColumns(people, following, 2)
         
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -222,7 +239,7 @@ def getContributors(user_to_be_viewed):
 
     return contributors
 
-def separateIntoColumns(people, num_of_cols):
+def separateIntoColumns(people, following, num_of_cols):
     columns = []
 
     for i in range(num_of_cols):
@@ -231,7 +248,7 @@ def separateIntoColumns(people, num_of_cols):
     if len(people) > 0:
         people = list(people)
         people.sort(key=lambda x: x.username)
-        people_data = getPersonalData(people)
+        people_data = getPersonalData(people, following)
 
         for i, data in enumerate(people_data):
             r = i % num_of_cols
@@ -239,11 +256,15 @@ def separateIntoColumns(people, num_of_cols):
 
     return columns
 
-def getPersonalData(people):
+def getPersonalData(people, following):
     personal_data = []
+    following = set(following)
 
     for person in people:
-        personal_data.append( [person.username, person.additional_info.title, person.additional_info.profile_photo.url] )
+        if person in following:
+            personal_data.append( [person.username, person.additional_info.title, person.additional_info.profile_photo.url, True] )
+        else:
+            personal_data.append( [person.username, person.additional_info.title, person.additional_info.profile_photo.url, False] )
 
     return personal_data
 
