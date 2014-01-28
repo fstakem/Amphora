@@ -80,11 +80,31 @@ def user(request, user_name):
     return HttpResponse(status=404)
 
 def activities(request, user_to_be_viewed, view_type, viewer):
+    activities_per_page = 10
     activities = []
 
+    projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id).order_by('-date_created') )
+    data = list( Data.objects.filter(owner__id=user_to_be_viewed.id).order_by('-date_uploaded') )
+    analysis = list( Analysis.objects.filter(creator__id=user_to_be_viewed.id).order_by('-date_created') )
 
+    if view_type == user_view_types['public']:
+        tmp_data = []
+        for d in data:
+            data_project = list( Project.objects.filter(id=d.project.id) )[0]
+            if data_project.public:
+                tmp_data.append(d)
 
-    activity_data = getActivityData(activities)
+        data = tmp_data
+
+        tmp_analysis = []
+        for a in analysis:
+            analysis_project = list( Project.objects.filter(id=a.project.id) )[0]
+            if analysis_project.public:
+                tmp_analysis.append(a)
+
+        analysis = tmp_analysis
+
+    activity_data = getActivityData(projects, data, analysis)
 
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -242,11 +262,22 @@ def getProjectData(projects, user_to_be_viewed):
 
     return project_data
 
-def getActivityData(activities):
+def getActivityData(projects, data, analysis):
     activity_data = []
 
-    for activity in activities:
-        activity_data.append(['Test', 'Test', 'Test', 'Test'])
+    for project in projects:
+        created = project.date_created.strftime("%B %d at %I:%M %p")
+        activity_data.append(['project', project.name, created])
+            
+    for d in data:
+        created = d.date_uploaded.strftime("%B %d at %I:%M %p")
+        activity_data.append(['data', d.name, created])
+
+    for a in analysis:
+        created = a.date_created.strftime("%B %d at %I:%M %p")
+        activity_data.append(['analysis', a.name, created])
+
+    activity_data.sort(key=lambda x: x[2], reverse=True)
 
     return activity_data
 

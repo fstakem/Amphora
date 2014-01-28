@@ -161,7 +161,7 @@ def register(request):
                   'view': 'Register'
                 }
 
-    if request.POST and form.is_valid and password_a == password_b:
+    if request.POST and form.is_valid and password_a != '' and password_a == password_b:
         #form.is_valid
         #form.save()
         user = auth.authenticate(username=username, password=password_a)

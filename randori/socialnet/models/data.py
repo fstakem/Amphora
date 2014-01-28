@@ -27,6 +27,7 @@ class Data(models.Model):
     name = models.CharField(max_length=200)
     date_started_collection = models.DateTimeField()
     date_ended_collection = models.DateTimeField()
+    # Rename date created to be the same as other objects
     date_uploaded = models.DateTimeField(auto_now_add=True)
     last_activity = models.DateTimeField(auto_now=True)
     description = models.TextField(blank=True, null=True)

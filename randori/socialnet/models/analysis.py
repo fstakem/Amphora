@@ -30,6 +30,7 @@ class Analysis(models.Model):
     tags = TaggableManager(blank=True)
 
     # Relationships
+    # Rename to owner to mesh with other models
     creator = models.ForeignKey(User, related_name='analysis')
     project = models.ForeignKey('Project', related_name='analysis')
     data = models.ManyToManyField('Data', blank=True, null=True, related_name='analysis')
