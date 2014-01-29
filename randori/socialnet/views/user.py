@@ -16,7 +16,7 @@ from django import forms
 from django.core.context_processors import csrf
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Button
+from crispy_forms.layout import Submit, Button, Layout, Div, Field
 
 # App imports
 from ..models import UserProfile, Project, Analysis, Data, Location, Host
@@ -211,6 +211,8 @@ def people(request, sub_view, user_to_be_viewed, view_type, viewer):
     return render_to_response('./socialnet/user/people.html', page_data)
 
 def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
+    user_profile = UserProfile.objects.filter(user__id=user_to_be_viewed.id)[0]
+    form = ChangeSettingsForm(user_to_be_viewed, user_profile, request.POST or None)
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
@@ -219,10 +221,13 @@ def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
                     'view_type': view_type,
                     'view': 'Settings',
                     'sub_view': sub_view,
+                    'change_settings_form': form,
                 }
+
+    if request.POST and form.is_valid():
+        print 'POST form bro'
     
     return render_to_response('./socialnet/user/settings.html', page_data)
-
 
 def getContributors(user_to_be_viewed):
     contributors = set()
@@ -322,6 +327,47 @@ class NewProjectForm(forms.Form):
         
         self.helper.add_input(Submit('submit', 'Submit'))
         self.helper.add_input(Button('cancel', 'Cancel'))
+
+class ChangeSettingsForm(forms.Form):
+    first_name = forms.CharField(max_length=200)
+    last_name = forms.CharField(max_length=200)
+    email = forms.EmailField(max_length=200)
+    personal_website = forms.URLField(max_length=200)
+    github_page = forms.URLField(max_length=200)
+    profile_photo = forms.ImageField(required=False)
+    cover_photo = forms.ImageField(required=False)
+    title = forms.CharField(max_length=200)
+    bio = forms.CharField(widget=forms.Textarea)
+    
+    def __init__(self, user, user_profile, *args, **kwargs):
+        super(ChangeSettingsForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-change-settings-form'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-6'
+        self.helper.field_class = 'col-lg-6'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'change_settings'
+        self.helper.help_text_as_placeholder = True
+        
+        self.helper.layout = Layout(
+            Field('first_name', title="First name", value=user.first_name),
+            Field('last_name', title="Last name", value=user.last_name),
+            Field('email', title="Email", value=user.email),
+            Field('personal_website', title="Personal website", value=user_profile.personal_website),
+            Field('github_page', title="Github page", value=user_profile.github_page),
+            Field('title', title="Title", value=user_profile.title),
+            Field('profile_photo', title="Profile photo"),
+            Field('cover_photo', title="Cover photo"),
+            Field('bio', title="Bio", initial=user_profile.bio, ),
+            Div( 
+                Submit('update', 'Update', css_class="btn-success"),
+                css_class='col-lg-offset-6 col-lg-6' 
+                ),
+        )
+
+
+
 
 
 
