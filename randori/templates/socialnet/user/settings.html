@@ -38,16 +38,16 @@
             <div class="row" id="top-spacer"></div>
 
             <ul class="nav nav-tabs" id="x">
-                {% if sub_view == 'personal' %}
-                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=settings_personal">Personal Info</a></li>
+                {% if subview == 'personal' %}
+                <li class="active"><a href="{% url 'views.settings' viewer_name %}?view=personal">Personal Info</a></li>
                 {% else%}
-                <li><a href="{% url 'views.user' viewer_name %}?view=settings_personal">Personal Info</a></li>
+                <li><a href="{% url 'views.settings' viewer_name %}?view=personal">Personal Info</a></li>
                 {% endif %}
 
-                {% if sub_view == 'account' %}
-                <li class="active"><a href="{% url 'views.user' viewer_name %}?view=settings_account">Account Info</a></li>
+                {% if subview == 'account' %}
+                <li class="active"><a href="{% url 'views.settings' viewer_name %}?view=account">Account Info</a></li>
                 {% else%}
-                <li><a href="{% url 'views.user' viewer_name %}?view=settings_account">Account Info</a></li>
+                <li><a href="{% url 'views.settings' viewer_name %}?view=account">Account Info</a></li>
                 {% endif %}
             </ul>
 

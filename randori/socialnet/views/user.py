@@ -14,6 +14,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django import forms
 from django.core.context_processors import csrf
+from django.core.urlresolvers import reverse
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Button, Layout, Div, Field, Reset
@@ -24,24 +25,28 @@ from helper import isUsersPageAndLoggedIn
 
 # Main
 user_view_types = {'public': 'public', 'private': 'private'}
-user_views = set([ 'activities',
-                   'projects_all',
-                   'projects_new',
-                   'people_following',
-                   'people_followers',
-                   'people_contributors',
-                   'settings_personal',
-                   'settings_account'
-                    ])
 
-def user(request, user_name):
-    view = 'activities'
+people_subviews = set([ 
+                        'following',
+                        'followers',
+                        'contributors',
+                      ])
+settings_subviews = set([ 
+                          'personal',
+                          'account'
+                      ])
+subviews = set.union(people_subviews, settings_subviews)
+                  
+                
+
+def getParameters(request, user_name):
+    subview = ''
     view_type = user_view_types['public']
     
     try:
         view_param = request.GET['view']
-        if view_param in user_views:
-            view = view_param
+        if view_param in subviews:
+            subview = view_param
     except KeyError:
         pass
     
@@ -56,34 +61,20 @@ def user(request, user_name):
         else:
             view_type = user_view_types['public']
 
-        views = view.split('_')
-        view_base = views[0]
-        sub_view = ''
+        return [subview, view_type, viewer, user_to_be_viewed]
 
-        if len(views) > 1:
-            sub_view = views[1]
-        
-        if view_base == 'activities':
-            return activities(request, user_to_be_viewed, view_type, viewer)
+    else:
+        return []
 
-        elif view_base == 'projects':
-            return projects(request, sub_view, user_to_be_viewed, view_type, viewer)
-        
-        elif view_base == 'people':
-            return people(request, sub_view, user_to_be_viewed, view_type, viewer)
+def user(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    location = '/' + user_to_be_viewed.username + '/activities'
+    return HttpResponseRedirect(location)
 
-        elif view_base == 'settings' and view_type == user_view_types['private']:
-            return settings(request, sub_view, user_to_be_viewed, view_type, viewer)
-        
-        else:
-            return HttpResponse(status=404)
-    
-    return HttpResponse(status=404)
+def activities(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
 
-def activities(request, user_to_be_viewed, view_type, viewer):
-    activities_per_page = 10
     activities = []
-
     projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id).order_by('-date_created') )
     data = list( Data.objects.filter(owner__id=user_to_be_viewed.id).order_by('-date_uploaded') )
     analysis = list( Analysis.objects.filter(creator__id=user_to_be_viewed.id).order_by('-date_created') )
@@ -119,13 +110,9 @@ def activities(request, user_to_be_viewed, view_type, viewer):
     
     return render_to_response('./socialnet/user/activities.html', page_data)
 
-def projects(request, sub_view, user_to_be_viewed, view_type, viewer):
-    if sub_view == 'new':
-        return newProject(request, user_to_be_viewed, view_type, viewer)
-    else:
-        return allProjects(user_to_be_viewed, view_type, viewer)
+def projects(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
 
-def allProjects(user_to_be_viewed, view_type, viewer):
     projects = set(Project.objects.filter(owner__id=user_to_be_viewed.id))
     contrib_projects = list(Project.objects.filter(contributor__id=user_to_be_viewed.id))
     projects.update(contrib_projects)
@@ -146,7 +133,9 @@ def allProjects(user_to_be_viewed, view_type, viewer):
 
     return render_to_response('./socialnet/user/projects.html', page_data)
 
-def newProject(request, user_to_be_viewed, view_type, viewer):
+def new_project(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+
     form = NewProjectForm(request.POST or None)
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -154,7 +143,7 @@ def newProject(request, user_to_be_viewed, view_type, viewer):
                     'last_name': user_to_be_viewed.last_name,
                     'viewer_name': viewer.username,
                     'view_type': view_type,
-                    'view': 'Projects',
+                    'view': 'New Project',
                     'new_project_form': form,
                 }
 
@@ -168,31 +157,37 @@ def newProject(request, user_to_be_viewed, view_type, viewer):
     
     return render(request, './socialnet/user/new_project.html', page_data)
 
-def people(request, sub_view, user_to_be_viewed, view_type, viewer):
+def people(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
     people = []
     
     action = request.GET.get('action', '')
     item = request.GET.get('item', '')
 
     if view_type == user_view_types['private']:
+        location = '/' + user_to_be_viewed.username + '/people?view=' + subview
+
         if action == 'delete':
             follower = list( User.objects.filter(username=item) )[0]
             user_to_be_viewed.additional_info.followed.remove(follower)
-            return HttpResponseRedirect('/' + user_to_be_viewed.username + '/?view=people_' + sub_view)
+            return HttpResponseRedirect(location)
 
         elif action == 'follow':
             user = list( User.objects.filter(username=item) )[0]
             user_to_be_viewed.additional_info.followed.add(user)
-            return HttpResponseRedirect('/' + user_to_be_viewed.username + '/?view=people_' + sub_view)
+            return HttpResponseRedirect(location)
 
     following = User.objects.filter(follower__id=user_to_be_viewed.id)
-    
-    if sub_view == 'followers':
+
+    if subview == 'followers':
         people = User.objects.filter(additional_info__followed__id=user_to_be_viewed.id)
-    elif sub_view == 'contributors':
+    elif subview == 'contributors':
         people = getContributors(user_to_be_viewed)
-    else:
+    elif subview == 'following':
         people = following
+    else:
+        location = '/' + user_to_be_viewed.username + '/people?view=following'
+        return HttpResponseRedirect(location)
 
     people_left, people_right = separateIntoColumns(people, following, 2)
         
@@ -203,20 +198,24 @@ def people(request, sub_view, user_to_be_viewed, view_type, viewer):
                     'viewer_name': viewer.username,
                     'view_type': view_type,
                     'view': 'People',
-                    'sub_view': sub_view,
+                    'subview': subview,
                     'people_left': people_left,
                     'people_right': people_right
                 }
 
     return render_to_response('./socialnet/user/people.html', page_data)
 
-def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
-    if sub_view == 'account':
-        return accountSettings(request, sub_view, user_to_be_viewed, view_type, viewer)
-    else:
-        return personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer)
+def settings(request, user_name):
+    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
 
-def personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
+    if subview == 'account':
+        return accountSettings(request, subview, user_to_be_viewed, view_type, viewer)
+    elif subview == 'personal':
+        return personalSettings(request, subview, user_to_be_viewed, view_type, viewer)
+    else:
+        return personalSettings(request, subview, user_to_be_viewed, view_type, viewer)
+
+def personalSettings(request, subview, user_to_be_viewed, view_type, viewer):
     user_profile = UserProfile.objects.filter(user__id=user_to_be_viewed.id)[0]
     print '-----HERE-------'
     #print request.POST.get('first_name', '')
@@ -231,7 +230,7 @@ def personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
                     'viewer_name': viewer.username,
                     'view_type': view_type,
                     'view': 'Settings',
-                    'sub_view': sub_view,
+                    'subview': subview,
                     'change_settings_form': form,
                 }
 
@@ -240,7 +239,7 @@ def personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
     
     return render_to_response('./socialnet/user/personal_settings.html', page_data)
 
-def accountSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
+def accountSettings(request, subview, user_to_be_viewed, view_type, viewer):
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
@@ -248,7 +247,7 @@ def accountSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
                     'viewer_name': viewer.username,
                     'view_type': view_type,
                     'view': 'Settings',
-                    'sub_view': sub_view,
+                    'subview': subview,
                 }
 
     return render_to_response('./socialnet/user/account_settings.html', page_data)
