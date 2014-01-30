@@ -21,9 +21,11 @@ from crispy_forms.layout import Submit, Button, Layout, Div, Field, Reset
 
 # App imports
 from ..models import UserProfile, Project, Analysis, Data, Location, Host
-from helper import isUsersPageAndLoggedIn
+from helper import is_users_page_and_logged_in
 
 # Main
+reserved_words = [ 'activities', 'projects', 'new_project', 'people', 'settings' ]
+
 user_view_types = {'public': 'public', 'private': 'private'}
 
 people_subviews = set([ 
@@ -37,9 +39,10 @@ settings_subviews = set([
                       ])
 subviews = set.union(people_subviews, settings_subviews)
                   
-                
+def filter_username(user_name):
+    return user_name.lower()
 
-def getParameters(request, user_name):
+def get_parameters(request, user_name):
     subview = ''
     view_type = user_view_types['public']
     
@@ -52,11 +55,11 @@ def getParameters(request, user_name):
     
     viewer = request.user
     user_to_be_viewed = list( User.objects.filter(username=user_name) )
-    
+ 
     if user_to_be_viewed:
         user_to_be_viewed = user_to_be_viewed[0]
         
-        if isUsersPageAndLoggedIn(viewer, user_to_be_viewed):
+        if is_users_page_and_logged_in(viewer, user_to_be_viewed):
             view_type = user_view_types['private']
         else:
             view_type = user_view_types['public']
@@ -67,12 +70,14 @@ def getParameters(request, user_name):
         return []
 
 def user(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
     location = '/' + user_to_be_viewed.username + '/activities'
     return HttpResponseRedirect(location)
 
 def activities(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
 
     activities = []
     projects = list( Project.objects.filter(owner__id=user_to_be_viewed.id).order_by('-date_created') )
@@ -96,7 +101,7 @@ def activities(request, user_name):
 
         analysis = tmp_analysis
 
-    activity_data = getActivityData(projects, data, analysis)
+    activity_data = get_activity_data(projects, data, analysis)
 
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -111,7 +116,8 @@ def activities(request, user_name):
     return render_to_response('./socialnet/user/activities.html', page_data)
 
 def projects(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
 
     projects = set(Project.objects.filter(owner__id=user_to_be_viewed.id))
     contrib_projects = list(Project.objects.filter(contributor__id=user_to_be_viewed.id))
@@ -119,7 +125,7 @@ def projects(request, user_name):
 
     projects = list(projects)
     projects.sort(key=lambda x: x.last_activity, reverse=True)
-    project_data = getProjectData(projects, user_to_be_viewed)
+    project_data = get_project_data(projects, user_to_be_viewed)
 
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -134,7 +140,8 @@ def projects(request, user_name):
     return render_to_response('./socialnet/user/projects.html', page_data)
 
 def new_project(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
 
     form = NewProjectForm(request.POST or None)
     page_data = {
@@ -148,7 +155,15 @@ def new_project(request, user_name):
                 }
 
     if request.POST and form.is_valid():
-        print 'POST form bro'
+        print '------------ POST form bro'
+        name = request.POST.get('name', '')
+        public = request.POST.get('public', '')
+        description = request.POST.get('description', '')
+
+        print name
+        print public
+        print description
+        
         #user = form.login(request)
         #if user:
         #    auth.login(request, user)
@@ -158,7 +173,8 @@ def new_project(request, user_name):
     return render(request, './socialnet/user/new_project.html', page_data)
 
 def people(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
     people = []
     
     action = request.GET.get('action', '')
@@ -182,14 +198,14 @@ def people(request, user_name):
     if subview == 'followers':
         people = User.objects.filter(additional_info__followed__id=user_to_be_viewed.id)
     elif subview == 'contributors':
-        people = getContributors(user_to_be_viewed)
+        people = get_contributors(user_to_be_viewed)
     elif subview == 'following':
         people = following
     else:
         location = '/' + user_to_be_viewed.username + '/people?view=following'
         return HttpResponseRedirect(location)
 
-    people_left, people_right = separateIntoColumns(people, following, 2)
+    people_left, people_right = separate_into_columns(people, following, 2)
         
     page_data = {
                     'user_name': user_to_be_viewed.username,
@@ -206,16 +222,17 @@ def people(request, user_name):
     return render_to_response('./socialnet/user/people.html', page_data)
 
 def settings(request, user_name):
-    subview, view_type, viewer, user_to_be_viewed = getParameters(request, user_name)
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
 
     if subview == 'account':
-        return accountSettings(request, subview, user_to_be_viewed, view_type, viewer)
+        return account_settings(request, subview, user_to_be_viewed, view_type, viewer)
     elif subview == 'personal':
-        return personalSettings(request, subview, user_to_be_viewed, view_type, viewer)
+        return personal_settings(request, subview, user_to_be_viewed, view_type, viewer)
     else:
-        return personalSettings(request, subview, user_to_be_viewed, view_type, viewer)
+        return personal_settings(request, subview, user_to_be_viewed, view_type, viewer)
 
-def personalSettings(request, subview, user_to_be_viewed, view_type, viewer):
+def personal_settings(request, subview, user_to_be_viewed, view_type, viewer):
     user_profile = UserProfile.objects.filter(user__id=user_to_be_viewed.id)[0]
     print '-----HERE-------'
     #print request.POST.get('first_name', '')
@@ -239,7 +256,7 @@ def personalSettings(request, subview, user_to_be_viewed, view_type, viewer):
     
     return render_to_response('./socialnet/user/personal_settings.html', page_data)
 
-def accountSettings(request, subview, user_to_be_viewed, view_type, viewer):
+def account_settings(request, subview, user_to_be_viewed, view_type, viewer):
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
@@ -252,7 +269,7 @@ def accountSettings(request, subview, user_to_be_viewed, view_type, viewer):
 
     return render_to_response('./socialnet/user/account_settings.html', page_data)
 
-def getContributors(user_to_be_viewed):
+def get_contributors(user_to_be_viewed):
     contributors = set()
     projects = Project.objects.filter(owner__id=user_to_be_viewed.id)
 
@@ -267,7 +284,7 @@ def getContributors(user_to_be_viewed):
 
     return contributors
 
-def separateIntoColumns(people, following, num_of_cols):
+def separate_into_columns(people, following, num_of_cols):
     columns = []
 
     for i in range(num_of_cols):
@@ -276,7 +293,7 @@ def separateIntoColumns(people, following, num_of_cols):
     if len(people) > 0:
         people = list(people)
         people.sort(key=lambda x: x.username)
-        people_data = getPersonalData(people, following)
+        people_data = get_personal_data(people, following)
 
         for i, data in enumerate(people_data):
             r = i % num_of_cols
@@ -284,7 +301,7 @@ def separateIntoColumns(people, following, num_of_cols):
 
     return columns
 
-def getPersonalData(people, following):
+def get_personal_data(people, following):
     personal_data = []
     following = set(following)
 
@@ -296,7 +313,7 @@ def getPersonalData(people, following):
 
     return personal_data
 
-def getProjectData(projects, user_to_be_viewed):
+def get_project_data(projects, user_to_be_viewed):
     project_data = []
 
     for project in projects:
@@ -311,7 +328,7 @@ def getProjectData(projects, user_to_be_viewed):
 
     return project_data
 
-def getActivityData(projects, data, analysis):
+def get_activity_data(projects, data, analysis):
     activity_data = []
 
     for project in projects:
@@ -332,24 +349,43 @@ def getActivityData(projects, data, analysis):
 
 class NewProjectForm(forms.Form):
     name = forms.CharField(max_length=200)
-    public = forms.BooleanField()
-    description = forms.CharField(max_length=400)
-    #website = forms.
-    #tags = forms.
+    public = forms.BooleanField(required=False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'cols': 20, 'rows': 5}))
     
     def __init__(self, *args, **kwargs):
         super(NewProjectForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'id-new-project-form'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-3'
         self.helper.form_method = 'post'
         self.helper.form_action = 'new_project'
         self.helper.help_text_as_placeholder = True
         
-        self.helper.add_input(Submit('submit', 'Submit'))
-        self.helper.add_input(Button('cancel', 'Cancel'))
+        self.helper.layout = Layout(
+            Field('name', title="Name", value='', placeholder='New project name'),
+            Field('public', title="Last name"),
+            Field('description', title="Description", placeholder='This is a software development project.'),
+            Div( 
+                Reset('cancel', 'Cancel', css_class="button-default"),
+                Submit('submit', 'Submit', css_class="btn-primary"),
+                css_class='col-lg-offset-2 col-lg-6' 
+                ),
+        )
+
+    def clean_name(self):
+        data = self.cleaned_data['name']
+
+        print '---CLEANING----'
+        print 'Data: ' + data
+
+        projects = Project.objects.filter(name=data)
+        if len(projects) > 0:
+            raise forms.ValidationError('Project name is taken.')
+        
+
+        return data
 
 class ChangeSettingsForm(forms.Form):
     first_name = forms.CharField(max_length=200)

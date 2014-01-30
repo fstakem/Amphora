@@ -1,8 +1,6 @@
 from django.conf.urls import patterns, include, url
 import views
 
-reserved_words = [ 'activities', 'projects', 'new_project', 'people', 'settings' ]
-
 urlpatterns = patterns('',
                         url(r'^/$', views.user, name='views.user'),
                         url(r'^/activities$', views.activities, name='views.activities'),
