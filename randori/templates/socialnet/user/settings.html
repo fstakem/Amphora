@@ -1,7 +1,7 @@
 {% extends "socialnet/user/base.html" %}
 
 
-{% block content %}
+{% block main_page %}
 
 <style>
     #settings
@@ -52,13 +52,9 @@
             </ul>
 
             <div class="row" id="settings">
-                {% if sub_view == 'personal' %}
-                {% include "socialnet/user/personal_settings.html"%}
-                {% elif sub_view == 'account' %}
-                {% include "socialnet/user/account_settings.html"%}
-                {% else %}
-                <p>Settings Error</p>
-                {% endif %}
+                {% block main_content %}
+                This is the content area
+                {% endblock %}
             </div>
 
             <div class="row" id="bottom-spacer"></div>

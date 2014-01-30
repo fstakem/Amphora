@@ -16,7 +16,7 @@ from django import forms
 from django.core.context_processors import csrf
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Button, Layout, Div, Field
+from crispy_forms.layout import Submit, Button, Layout, Div, Field, Reset
 
 # App imports
 from ..models import UserProfile, Project, Analysis, Data, Location, Host
@@ -211,8 +211,19 @@ def people(request, sub_view, user_to_be_viewed, view_type, viewer):
     return render_to_response('./socialnet/user/people.html', page_data)
 
 def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
+    if sub_view == 'account':
+        return accountSettings(request, sub_view, user_to_be_viewed, view_type, viewer)
+    else:
+        return personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer)
+
+def personalSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
     user_profile = UserProfile.objects.filter(user__id=user_to_be_viewed.id)[0]
+    print '-----HERE-------'
+    #print request.POST.get('first_name', '')
+    #print request.POST.get('last_name', '')
     form = ChangeSettingsForm(user_to_be_viewed, user_profile, request.POST or None)
+    #print request.POST.get('first_name', '')
+    #print request.POST.get('last_name', '')
     page_data = {
                     'user_name': user_to_be_viewed.username,
                     'first_name': user_to_be_viewed.first_name,
@@ -227,7 +238,20 @@ def settings(request, sub_view, user_to_be_viewed, view_type, viewer):
     if request.POST and form.is_valid():
         print 'POST form bro'
     
-    return render_to_response('./socialnet/user/settings.html', page_data)
+    return render_to_response('./socialnet/user/personal_settings.html', page_data)
+
+def accountSettings(request, sub_view, user_to_be_viewed, view_type, viewer):
+    page_data = {
+                    'user_name': user_to_be_viewed.username,
+                    'first_name': user_to_be_viewed.first_name,
+                    'last_name': user_to_be_viewed.last_name,
+                    'viewer_name': viewer.username,
+                    'view_type': view_type,
+                    'view': 'Settings',
+                    'sub_view': sub_view,
+                }
+
+    return render_to_response('./socialnet/user/account_settings.html', page_data)
 
 def getContributors(user_to_be_viewed):
     contributors = set()
@@ -337,18 +361,21 @@ class ChangeSettingsForm(forms.Form):
     profile_photo = forms.ImageField(required=False)
     cover_photo = forms.ImageField(required=False)
     title = forms.CharField(max_length=200)
-    bio = forms.CharField(widget=forms.Textarea)
+    # Dont know how to initialize field
+    #bio = forms.CharField(widget=forms.Textarea(attrs={'cols': 20, 'rows': 5}))
     
     def __init__(self, user, user_profile, *args, **kwargs):
         super(ChangeSettingsForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'id-change-settings-form'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-6'
-        self.helper.field_class = 'col-lg-6'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-4'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'change_settings'
+        self.helper.form_action = 'settings'
         self.helper.help_text_as_placeholder = True
+
+        #ChangeSettingsForm.__dict__['base_fields']['bio'].initial = user_profile.bio
         
         self.helper.layout = Layout(
             Field('first_name', title="First name", value=user.first_name),
@@ -359,10 +386,11 @@ class ChangeSettingsForm(forms.Form):
             Field('title', title="Title", value=user_profile.title),
             Field('profile_photo', title="Profile photo"),
             Field('cover_photo', title="Cover photo"),
-            Field('bio', title="Bio", initial=user_profile.bio, ),
+            #Field('bio', title="Bio", initial=user_profile.bio),
             Div( 
+                Reset('cancel', 'Cancel', css_class="button-default"),
                 Submit('update', 'Update', css_class="btn-success"),
-                css_class='col-lg-offset-6 col-lg-6' 
+                css_class='col-lg-offset-2 col-lg-6' 
                 ),
         )
 

@@ -1,9 +1,11 @@
+{% extends "socialnet/user/settings.html" %}
+
+{% block main_content %}
 
 {% load crispy_forms_tags %}
+{% crispy change_settings_form %}
 
-<div class="col-lg-6">
-    {% crispy change_settings_form %}
-</div>
-<div class="col-lg-6"></div>
+{% endblock %}
+
 
  
