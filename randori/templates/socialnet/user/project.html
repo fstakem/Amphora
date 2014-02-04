@@ -46,7 +46,7 @@
  
 </style>
 
-<div class="project">
+<div class="project" id="{{project.0}}">
     <div class="row">
         <div class="col-md-8" id="heading-column">
             <a href="{% url 'views.project' user_name project.0 %}?view=activity">
@@ -69,10 +69,10 @@
     
         <div class="col-md-4">
             {% if project.4 == True %}
-            <button type="button" class="close xx" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#delete-project-modal">     <i class="fa fa-times fa"></i>
+            <button type="button" class="close delete-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#delete-project-modal">     <i class="fa fa-times fa"></i>
             </button>
             {% else %}
-            <button type="button" class="close yy" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#leave-project-modal">     <i class="fa fa-sign-out fa"></i>
+            <button type="button" class="close leave-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#leave-project-modal">     <i class="fa fa-sign-out fa"></i>
             </button>
             {% endif %}
 
