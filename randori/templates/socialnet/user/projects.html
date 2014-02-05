@@ -75,7 +75,7 @@
 
         $('#leave-button-accept').on('click', function (e) 
         {
-            window.location.replace("{% url 'views.leave_project' viewer_name %}?name=" + project);
+            window.location.replace("{% url 'views.leave_project' user_name %}?name=" + project);
         })
 
         $('#delete-button-accept').on('click', function (e) 
@@ -88,7 +88,7 @@
             }
             else
             {
-                window.location.replace("{% url 'views.delete_project' viewer_name %}?name=" + project);
+                window.location.replace("{% url 'views.delete_project' user_name %}?name=" + project);
             }
         })
     });
@@ -107,7 +107,9 @@
             </div>
 
             <div class="col-md-2">
-                <a class="btn btn-primary" href="{% url 'views.new_project' viewer_name %}">New Project</a>
+                {% if view_type != 'public' %}
+                <a class="btn btn-primary" href="{% url 'views.new_project' user_name %}">New Project</a>
+                {% endif %}
             </div>
         </div>
 

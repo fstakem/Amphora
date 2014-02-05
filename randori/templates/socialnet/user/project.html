@@ -68,15 +68,15 @@
         </div>
     
         <div class="col-md-4">
-            {% if project.4 == True %}
-            <button type="button" class="close delete-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#delete-project-modal">     <i class="fa fa-times fa"></i>
-            </button>
-            {% else %}
-            <button type="button" class="close leave-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#leave-project-modal">     <i class="fa fa-sign-out fa"></i>
-            </button>
+            {% if view_type != 'public' %}
+                {% if project.4 == True %}
+                <button type="button" class="close delete-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#delete-project-modal">     <i class="fa fa-times fa"></i>
+                </button>
+                {% else %}
+                <button type="button" class="close leave-button" aria-hidden="true" data-id="{{ project.0 }}" data-toggle="modal" data-target="#leave-project-modal">     <i class="fa fa-sign-out fa"></i>
+                </button>
+                {% endif %}
             {% endif %}
-
-            
         </div>
     </div>
 

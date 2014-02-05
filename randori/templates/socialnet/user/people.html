@@ -39,21 +39,21 @@
 
             <ul class="nav nav-tabs" id="x">
                 {% if subview == 'following' %}
-                <li class="active"><a href="{% url 'views.people' viewer_name %}?view=following">Following</a></li>
+                <li class="active"><a href="{% url 'views.people' user_name %}?view=following">Following</a></li>
                 {% else%}
-                <li><a href="{% url 'views.people' viewer_name %}?view=following">Following</a></li>
+                <li><a href="{% url 'views.people' user_name %}?view=following">Following</a></li>
                 {% endif %}
 
                 {% if subview == 'followers' %}
-                <li class="active"><a href="{% url 'views.people' viewer_name %}?view=followers">Followers</a></li>
+                <li class="active"><a href="{% url 'views.people' user_name %}?view=followers">Followers</a></li>
                 {% else%}
-                <li><a href="{% url 'views.people' viewer_name %}?view=followers">Followers</a></li>
+                <li><a href="{% url 'views.people' user_name %}?view=followers">Followers</a></li>
                 {% endif %}
 
                 {% if subview == 'contributors' %}
-                <li class="active"><a href="{% url 'views.people' viewer_name %}?view=contributors">Contributors</a></li>
+                <li class="active"><a href="{% url 'views.people' user_name %}?view=contributors">Contributors</a></li>
                 {% else%}
-                <li><a href="{% url 'views.people' viewer_name %}?view=contributors">Contributors</a></li>
+                <li><a href="{% url 'views.people' user_name %}?view=contributors">Contributors</a></li>
                 {% endif %}
             </ul>
 

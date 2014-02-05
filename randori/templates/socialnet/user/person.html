@@ -61,15 +61,17 @@
         </div>
 
         <div class="col-md-1" id="button-column">
-            {% if subview == 'following' %}
-            <a href="{% url 'views.people' user_name %}?view=following&amp;action=delete&amp;item={{person.0}}">
-                <button type="button" data'cool' class="close" aria-hidden="true"><i class="fa fa-times fa"></i></button>
-            </a>
-            {% else %}
-                {% if person.3 == False %}
-                <a href="{% url 'views.people' user_name %}?view={{subview}}&amp;action=follow&amp;item={{person.0}}">
-                    <button type="button" data'cool' class="close" aria-hidden="true"><i class="fa fa-plus fa"></i></button>
+            {% if view_type != 'public' %}
+                {% if subview == 'following' %}
+                <a href="{% url 'views.people' user_name %}?view=following&amp;action=delete&amp;item={{person.0}}">
+                    <button type="button" data'cool' class="close" aria-hidden="true"><i class="fa fa-times fa"></i></button>
                 </a>
+                {% else %}
+                    {% if person.3 == False %}
+                    <a href="{% url 'views.people' user_name %}?view={{subview}}&amp;action=follow&amp;item={{person.0}}">
+                        <button type="button" data'cool' class="close" aria-hidden="true"><i class="fa fa-plus fa"></i></button>
+                    </a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>

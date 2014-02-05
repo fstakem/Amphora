@@ -12,6 +12,7 @@
 
           		{% if viewer_name == '' %}
           			<li><a href="{% url 'randori.views.landing' %}"><i class="fa fa-home"></i></a></li>
+                <li><a href="{% url 'randori.views.login'%}"><i class="fa fa-sign-in"></i></a></li> 
           		{% else %}
           			<li><a href="{% url 'views.activities' viewer_name %}"><i class="fa fa-home"></i></a></li>
                 <li><a href="{% url 'views.projects' viewer_name %}"><i class="fa fa-folder-open"></i></a></li>

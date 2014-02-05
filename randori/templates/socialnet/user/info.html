@@ -1,0 +1,121 @@
+{% extends "socialnet/user/base.html" %}
+
+{% block main_page %}
+
+<style>
+
+    .info
+    {
+        
+    }
+
+    .person-label
+    {
+        font-size:120%
+    }
+
+    .person-data
+    {
+        font-size:120%
+    }
+    
+    #top-spacer
+    {
+        margin-top: 40px;
+    }
+
+    #bottom-spacer
+    {
+        margin-bottom: 40px;
+    }
+
+</style>
+
+    <div class="container">
+        <div class="panel panel-default" id="content-formatting">
+            <div class="panel-heading"><h3>{{ view }}</h3></div>
+            
+            <div class="row" id="top-spacer"></div>
+
+            <div class="info">
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>First name</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{first_name}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Last name</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{last_name}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Email</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{email}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Title</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{title}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Website</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{personal_website}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Github page</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{github_page}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 person-label text-right">
+                        <span><strong>Bio</strong></span>
+                    </div>
+
+                    <div class="col-md-10 person-data">
+                        <span>{{bio}}</span>
+                    </div>
+                </div>
+                
+                
+            </div>
+
+            
+
+            <div class="row" id="bottom-spacer"></div>
+
+        </div>
+    </div>
+
+{% endblock %}

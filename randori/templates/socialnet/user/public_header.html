@@ -21,41 +21,38 @@
 				<a href="{% url 'views.user' user_name %}?view=activity" class="navbar-brand">{{ first_name }} {{ last_name }}</a>
 
 				<ul class="nav navbar-nav pull-right">
-					{% if view == 'Info' %}
-						<li class="active"><a href="{% url 'views.user' user_name %}?view=info">Info</a></li>
+					{% if view == 'Activity' %}
+						<li class="active"><a href="{% url 'views.activities' user_name %}">Activity</a></li>
 					{% else %}
-						<li><a href="{% url 'views.user' user_name %}?view=info">Info</a></li>
+						<li><a href="{% url 'views.activities' user_name %}">Activity</a></li>
 					{% endif %}
 
 					{% if view == 'Projects' %}
-						<li class="active"><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+						<li class="active"><a href="{% url 'views.projects' user_name %}">Projects</a></li>
 					{% else %}
-						<li><a href="{% url 'views.user' user_name %}?view=projects">Projects</a></li>
+						<li><a href="{% url 'views.projects' user_name %}">Projects</a></li>
 					{% endif %}
 
-					{% if view == 'Friends' %}
-						<li class="active"><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+					{% if view == 'People' %}
+						<li class="active"><a href="{% url 'views.people' user_name %}?view=following">People</a></li>
 					{% else %}
-						<li><a href="{% url 'views.user' user_name %}?view=friends">Friends</a></li>
+						<li><a href="{% url 'views.people' user_name %}?view=following">People</a></li>
 					{% endif %}
 
-					{% if view == 'Data' %}
-						<li class="active"><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-					{% else %}
-						<li><a href="{% url 'views.user' user_name %}?view=data">Data</a></li>
-					{% endif %}
-
-					{% if view == 'Analysis' %}
-						<li class="active"><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
-					{% else %}
-						<li><a href="{% url 'views.user' user_name %}?view=analysis">Analysis</a></li>
-					{% endif %}
+                    {% if view == 'Info' %}
+                        <li class="active"><a href="{% url 'views.info' user_name %}">Info</a></li>
+                    {% else %}
+                        <li><a href="{% url 'views.info' user_name %}">Info</a></li>
+                    {% endif %}
 			    </ul>
 			</div>
 		</div>
 	</div>
 
 </div> <!-- /container -->
+
+
+
 
 
 

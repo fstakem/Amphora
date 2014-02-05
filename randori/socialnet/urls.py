@@ -10,6 +10,7 @@ urlpatterns = patterns('',
                         url(r'^/leave_project$', views.leave_project, name='views.leave_project'),
                         url(r'^/people$', views.people, name='views.people'),
                         url(r'^/settings$', views.settings, name='views.settings'),
+                        url(r'^/info$', views.info, name='views.info'),
                         url(r'^/(?P<project_name>[\w\-]+)/$', views.project, name='views.project'),
                         url(r'^/(?P<project_name>[\w\-]+)/analysis/(?P<analysis_name>[\w\-]+)/$', views.analysis, name='views.analysis'),
                       )

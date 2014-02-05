@@ -78,6 +78,28 @@ def user(request, user_name):
     location = '/' + user_to_be_viewed.username + '/activities'
     return HttpResponseRedirect(location)
 
+def info(request, user_name):
+    user_name = filter_username(user_name)
+    subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
+
+    user_profile = UserProfile.objects.filter(user__id=user_to_be_viewed.id)[0]
+
+    page_data = {
+                    'user_name': user_to_be_viewed.username,
+                    'first_name': user_to_be_viewed.first_name,
+                    'last_name': user_to_be_viewed.last_name,
+                    'viewer_name': viewer.username,
+                    'view_type': view_type,
+                    'view': 'Info',
+                    'email': user_to_be_viewed.email,
+                    'personal_website': user_profile.personal_website,
+                    'github_page': user_profile.github_page,
+                    'title': user_profile.title,
+                    'bio': user_profile.bio,
+                }
+    
+    return render_to_response('./socialnet/user/info.html', page_data)
+
 def activities(request, user_name):
     user_name = filter_username(user_name)
     subview, view_type, viewer, user_to_be_viewed = get_parameters(request, user_name)
@@ -126,7 +148,13 @@ def projects(request, user_name):
     contrib_projects = list(Project.objects.filter(contributor__id=user_to_be_viewed.id))
     projects.update(contrib_projects)
 
-    projects = list(projects)
+    tmp_projects = []
+    if view_type == user_view_types['public']:
+        tmp_projects = [project for project in projects if project.public]
+    else:
+        tmp_projects = projects
+
+    projects = list(tmp_projects)
     projects.sort(key=lambda x: x.last_activity, reverse=True)
     project_data = get_project_data(projects, user_to_be_viewed)
 
@@ -424,7 +452,7 @@ def get_activity_data(projects, data, analysis):
         created = a.date_created.strftime("%B %d at %I:%M %p")
         activity_data.append(['analysis', a.name, created])
 
-    activity_data.sort(key=lambda x: x[2], reverse=True)
+    activity_data.sort(key=lambda x: x[2], reverse=False)
 
     return activity_data
 
